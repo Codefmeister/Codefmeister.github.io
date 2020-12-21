@@ -97,6 +97,34 @@ Example： 二维默认情况下： A = np.array([[1,2],[3,4]]) print(A) print(A
     </item>
     
     <item>
+      <title>np.unique()解读</title>
+      <link>https://Codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</link>
+      <pubDate>Sat, 21 Nov 2020 09:40:49 +0800</pubDate>
+      
+      <guid>https://Codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</guid>
+      <description>np.unique()官方文档分析以及举例 1.1 官方文档及解读 numpy.unique 语法：numpy.unique(ar, return_index=False, return_inverse=False, return_counts=False, axis=None)
+作用：找到array中不重复（独一无二）的元素
+返回值：默认返回不重复元素的sorted排好序的从小到大的数组。可选的返回值有：
+ 输入数组提供不重复值(unique)元素的索引下标(如果有多个返回第一个) 利用unique数组重构原有的input数组所需要的的索引下标 该unique元素在input数组中的出现次数，相当于count  Parameter
+  ar：array like
+输入的数组，除非特别指定axis，数组将被展平为1-D形式进行处理。
+  return_index: bool, optional
+如果为True，返回输入数组提供不重复值(unique)元素的索引下标(如果有多个返回第一个)
+  return_inverse: bool, optional
+如果为True，返回利用unique数组重构原有的input数组所需要的的索引下标
+  axis: int or None, optional
+进行操作的维度。如果为None，数组将被展平作为一维数组处理，如果指定了axis，则以该维索引构成的子数组作为元素，将整个数组视为一维数组进行处理。如果axis被使用，则不支持Object Array以及structured arrays。
+  Returns
+  unique: ndarray
+排好序(从小到大)的unique值
+  unique_indices: ndarray, optional
+unique数组中对应位置的value值第一次在input数组中出现的下标值。当return_index = True时返回。
+  unique_inverse: ndarray, optional
+利用unique数组重构源输入input数组所需要的索引下标。当return_inverse = True的时候返回。
+  unique_count: ndarray, optional 每个unique values在原数组中出现的次数，当return_counts=True时返回。</description>
+    </item>
+    
+    <item>
       <title>MatrixCookBook Chapter1:矩阵的基础知识</title>
       <link>https://Codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
       <pubDate>Sun, 15 Nov 2020 09:40:49 +0800</pubDate>
@@ -136,44 +164,6 @@ Example： 二维默认情况下： A = np.array([[1,2],[3,4]]) print(A) print(A
 在评估模式下，batchNorm层，dropout层等用于优化训练而添加的网络层会被关闭，从而使得评估时不会发生偏移。
 总结 在对模型进行评估时，应该配合使用with torch.no_grad() 与 model.eval()：
  loop: model.train() # 切换至训练模式 train…… model.eval() with torch.no_grad(): Evaluation end loop </description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://Codefmeister.github.io/p/</guid>
-      <description>NDT Matlab代码阅读时发现的问题与存在的困惑 1.发现的问题 1.1 c1, c2 的计算问题 Question: 为什么c1和c2能这么算？
-1.2 omega的计算问题 Question: $\Omega$的计算公式应该是$ \Omega = V{\Lambda^{&#39;}}V^{-1}$。对于$\Lambda^{&#39;}$论文中并没有取修正后的特征值倒数。代码中是:diag(1./D) </description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://Codefmeister.github.io/p/</guid>
-      <description>np.unique()官方文档分析以及举例 1.1 官方文档及解读 numpy.unique 语法：numpy.unique(ar, return_index=False, return_inverse=False, return_counts=False, axis=None)
-作用：找到array中不重复（独一无二）的元素
-返回值：默认返回不重复元素的sorted排好序的从小到大的数组。可选的返回值有：
- 输入数组提供不重复值(unique)元素的索引下标(如果有多个返回第一个) 利用unique数组重构原有的input数组所需要的的索引下标 该unique元素在input数组中的出现次数，相当于count  Parameter
-  ar：array like
-输入的数组，除非特别指定axis，数组将被展平为1-D形式进行处理。
-  return_index: bool, optional
-如果为True，返回输入数组提供不重复值(unique)元素的索引下标(如果有多个返回第一个)
-  return_inverse: bool, optional
-如果为True，返回利用unique数组重构原有的input数组所需要的的索引下标
-  axis: int or None, optional
-进行操作的维度。如果为None，数组将被展平作为一维数组处理，如果指定了axis，则以该维索引构成的子数组作为元素，将整个数组视为一维数组进行处理。如果axis被使用，则不支持Object Array以及structured arrays。
-  Returns
-  unique: ndarray
-排好序(从小到大)的unique值
-  unique_indices: ndarray, optional
-unique数组中对应位置的value值第一次在input数组中出现的下标值。当return_index = True时返回。
-  unique_inverse: ndarray, optional
-利用unique数组重构源输入input数组所需要的索引下标。当return_inverse = True的时候返回。
-  unique_count: ndarray, optional 每个unique values在原数组中出现的次数，当return_counts=True时返回。</description>
     </item>
     
     <item>

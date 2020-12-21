@@ -378,91 +378,11 @@ print(A.shape)
 </description>
         </item>
         <item>
-        <title>MatrixCookBook Chapter1:矩阵的基础知识</title>
-        <link>https://Codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
-        <pubDate>Sun, 15 Nov 2020 09:40:49 +0800</pubDate>
+        <title>np.unique()解读</title>
+        <link>https://Codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</link>
+        <pubDate>Sat, 21 Nov 2020 09:40:49 +0800</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
-        <description>&lt;h1 id=&#34;矩阵的基础知识转置逆迹行列式&#34;&gt;矩阵的基础知识（转置，逆，迹，行列式）&lt;/h1&gt;
-&lt;blockquote&gt;
-&lt;p&gt;References: &lt;code&gt;MatrixCookBook(Version 2012)  Chapter1&lt;/code&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;chapter1-basics&#34;&gt;Chapter1: Basics&lt;/h2&gt;
-&lt;h3 id=&#34;1-basics&#34;&gt;1 Basics&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/MatrixCookBookChapter1_fig1.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;注&lt;/strong&gt;：${A^H}$是A的&lt;code&gt;Transposed and complex conjugated matrix (Hermitian)&lt;/code&gt;，即转置复共轭矩阵。&lt;/p&gt;
-&lt;h3 id=&#34;11-矩阵的迹trace&#34;&gt;1.1 矩阵的迹(&lt;code&gt;Trace&lt;/code&gt;)&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/MatrixCookBookChapter1_fig2.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;式子&lt;code&gt;(11)&lt;/code&gt;表明矩阵的迹是主对角线元素的和。&lt;br&gt;
-式子&lt;code&gt;(12)&lt;/code&gt;表明矩阵的迹是矩阵的特征值的和。&lt;br&gt;
-式子&lt;code&gt;(13)&lt;/code&gt;表明矩阵的迹等于其转置矩阵的迹。&lt;br&gt;
-式子&lt;code&gt;(14)&lt;/code&gt;表明&lt;code&gt;AB&lt;/code&gt;的迹等于&lt;code&gt;BA&lt;/code&gt;的迹。&lt;br&gt;
-式子&lt;code&gt;(15)&lt;/code&gt;表明&lt;code&gt;A+B&lt;/code&gt;的迹等于&lt;code&gt;A&lt;/code&gt;的迹加&lt;code&gt;B&lt;/code&gt;的迹。
-式子&lt;code&gt;(16)&lt;/code&gt;表明&lt;code&gt;ABC&lt;/code&gt;的迹等于&lt;code&gt;BCA&lt;/code&gt;的迹等于&lt;code&gt;CAB&lt;/code&gt;的迹。&lt;br&gt;
-式子&lt;code&gt;(17)&lt;/code&gt;表明一个&lt;code&gt;nx1&lt;/code&gt;的向量&lt;code&gt;a&lt;/code&gt;，&lt;code&gt;a&lt;/code&gt;的转置乘以&lt;code&gt;a&lt;/code&gt;所得的常数等于&lt;code&gt;a&lt;/code&gt;乘以&lt;code&gt;a&lt;/code&gt;的转置所得矩阵的迹。&lt;/p&gt;
-&lt;h3 id=&#34;12-行列式determinant&#34;&gt;1.2 行列式(&lt;code&gt;Determinant&lt;/code&gt;)&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/MatrixCookBookChapter1_fig3.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;前提&lt;/strong&gt;：此处的A是&lt;code&gt;nxn&lt;/code&gt;矩阵。&lt;br&gt;
-式子&lt;code&gt;(18)&lt;/code&gt;表明矩阵的行列式等于特征值的连乘积。&lt;br&gt;
-式子&lt;code&gt;(19)&lt;/code&gt;表明&lt;code&gt;cA&lt;/code&gt;的行列式等于&lt;code&gt;A&lt;/code&gt;的行列式的${c^n}$倍。&lt;br&gt;
-式子&lt;code&gt;(20)&lt;/code&gt;表明矩阵的行列式等于其转置矩阵的行列式。&lt;br&gt;
-式子&lt;code&gt;(21)&lt;/code&gt;表明矩阵&lt;code&gt;AB&lt;/code&gt;的行列式等于矩阵&lt;code&gt;A&lt;/code&gt;的行列式乘以矩阵&lt;code&gt;B&lt;/code&gt;的行列式。&lt;br&gt;
-式子&lt;code&gt;(22)&lt;/code&gt;表明矩阵${A^{-1}}$的行列式等于矩阵&lt;code&gt;A&lt;/code&gt;的倒数。&lt;br&gt;
-式子&lt;code&gt;(23)&lt;/code&gt;表明矩阵${A^n}$的行列式等于矩阵&lt;code&gt;A&lt;/code&gt;的行列式的n次幂。&lt;br&gt;
-式子&lt;code&gt;(24)&lt;/code&gt;表明如果&lt;code&gt;u&lt;/code&gt;和&lt;code&gt;v&lt;/code&gt;是&lt;code&gt;nx1&lt;/code&gt;向量，那么${I+uv^T}$的行列式等于${1+u^Tv}$的值。&lt;br&gt;
-式子&lt;code&gt;(25)&lt;/code&gt;表明如果&lt;code&gt;A&lt;/code&gt;是&lt;code&gt;2x2&lt;/code&gt;矩阵，&lt;code&gt;I+A&lt;/code&gt;的行列式等于${1+det(A)+Tr(A)}$,即1+A的行列式+A的迹。&lt;br&gt;
-式子&lt;code&gt;(26)&lt;/code&gt;表明如果&lt;code&gt;A&lt;/code&gt;是&lt;code&gt;3x3&lt;/code&gt;矩阵，&lt;code&gt;I+A&lt;/code&gt;的行列式等于${1+det(A)+Tr(A)+\frac{1}{2}Tr(A)^2-\frac{1}{2}Tr(A^2)}$。&lt;br&gt;
-式子&lt;code&gt;(27)&lt;/code&gt;不表。&lt;br&gt;
-式子&lt;code&gt;(28)&lt;/code&gt;表示对于微小扰动$\varepsilon$，可以将$\varepsilon A$近似作为2x2形式处理：&lt;/p&gt;
-&lt;h3 id=&#34;13-特例2x2矩阵&#34;&gt;1.3 特例：2x2矩阵&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/MatrixCookBookChapter1_fig4.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;2x2&lt;/code&gt;矩阵有着以上的性质与结论。&lt;/p&gt;
-</description>
-        </item>
-        <item>
-        <title>model.eval()作用分析</title>
-        <link>https://Codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</link>
-        <pubDate>Sat, 14 Nov 2020 09:40:49 +0800</pubDate>
-        
-        <guid>https://Codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</guid>
-        <description>&lt;h2 id=&#34;modeleval&#34;&gt;model.eval()&lt;/h2&gt;
-&lt;p&gt;model.eval() 作用等同于 self.train(False)&lt;br&gt;
-简而言之，就是评估模式。而非训练模式。&lt;br&gt;
-在评估模式下，&lt;code&gt;batchNorm&lt;/code&gt;层，&lt;code&gt;dropout&lt;/code&gt;层等用于优化训练而添加的网络层会被关闭，从而使得评估时不会发生偏移。&lt;/p&gt;
-&lt;h2 id=&#34;总结&#34;&gt;总结&lt;/h2&gt;
-&lt;p&gt;在对模型进行评估时，应该配合使用&lt;code&gt;with torch.no_grad()&lt;/code&gt; 与 &lt;code&gt;model.eval()&lt;/code&gt;：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;    loop:
-        model.train()    # 切换至训练模式
-        train……
-        model.eval()
-        with torch.no_grad():
-            Evaluation
-    end loop
-&lt;/code&gt;&lt;/pre&gt;</description>
-        </item>
-        <item>
-        <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://Codefmeister.github.io/p/</guid>
-        <description>&lt;h1 id=&#34;ndt-matlab代码阅读时发现的问题与存在的困惑&#34;&gt;NDT Matlab代码阅读时发现的问题与存在的困惑&lt;/h1&gt;
-&lt;h2 id=&#34;1发现的问题&#34;&gt;1.发现的问题&lt;/h2&gt;
-&lt;h3 id=&#34;11-c1-c2-的计算问题&#34;&gt;1.1 &lt;code&gt;c1&lt;/code&gt;, &lt;code&gt;c2&lt;/code&gt; 的计算问题&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;1621C56E508842ED8A8E6054F17472E1&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;Question&lt;/code&gt;: 为什么c1和c2能这么算？&lt;/p&gt;
-&lt;h3 id=&#34;12-omega的计算问题&#34;&gt;1.2 &lt;code&gt;omega&lt;/code&gt;的计算问题&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;C020083CC6D347B48E5BBED6D049EC4F&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;Question&lt;/code&gt;: &lt;code&gt;$\Omega$&lt;/code&gt;的计算公式应该是&lt;code&gt;$ \Omega = V{\Lambda^{&#39;}}V^{-1}$&lt;/code&gt;。对于&lt;code&gt;$\Lambda^{&#39;}$&lt;/code&gt;论文中并没有取修正后的特征值倒数。代码中是:&lt;code&gt;diag(1./D)&lt;/code&gt;
-&lt;img src=&#34;522849F0229A4E91BF278BCFB96698A0&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-</description>
-        </item>
-        <item>
-        <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://Codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</guid>
         <description>&lt;h1 id=&#34;npunique官方文档分析以及举例&#34;&gt;np.unique()官方文档分析以及举例&lt;/h1&gt;
 &lt;h2 id=&#34;11-官方文档及解读&#34;&gt;1.1 官方文档及解读&lt;/h2&gt;
 &lt;h3 id=&#34;numpyunique&#34;&gt;&lt;code&gt;numpy.unique&lt;/code&gt;&lt;/h3&gt;
@@ -527,6 +447,69 @@ unique数组中对应位置的value值第一次在input数组中出现的下标�
     x2:[2,3,1,1,1,1,dtype=int64]
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;E53F32B7636B466C9AC5C0EE24AC6805&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
 </description>
+        </item>
+        <item>
+        <title>MatrixCookBook Chapter1:矩阵的基础知识</title>
+        <link>https://Codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
+        <pubDate>Sun, 15 Nov 2020 09:40:49 +0800</pubDate>
+        
+        <guid>https://Codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
+        <description>&lt;h1 id=&#34;矩阵的基础知识转置逆迹行列式&#34;&gt;矩阵的基础知识（转置，逆，迹，行列式）&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;References: &lt;code&gt;MatrixCookBook(Version 2012)  Chapter1&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;chapter1-basics&#34;&gt;Chapter1: Basics&lt;/h2&gt;
+&lt;h3 id=&#34;1-basics&#34;&gt;1 Basics&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/MatrixCookBookChapter1_fig1.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;注&lt;/strong&gt;：${A^H}$是A的&lt;code&gt;Transposed and complex conjugated matrix (Hermitian)&lt;/code&gt;，即转置复共轭矩阵。&lt;/p&gt;
+&lt;h3 id=&#34;11-矩阵的迹trace&#34;&gt;1.1 矩阵的迹(&lt;code&gt;Trace&lt;/code&gt;)&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/MatrixCookBookChapter1_fig2.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;式子&lt;code&gt;(11)&lt;/code&gt;表明矩阵的迹是主对角线元素的和。&lt;br&gt;
+式子&lt;code&gt;(12)&lt;/code&gt;表明矩阵的迹是矩阵的特征值的和。&lt;br&gt;
+式子&lt;code&gt;(13)&lt;/code&gt;表明矩阵的迹等于其转置矩阵的迹。&lt;br&gt;
+式子&lt;code&gt;(14)&lt;/code&gt;表明&lt;code&gt;AB&lt;/code&gt;的迹等于&lt;code&gt;BA&lt;/code&gt;的迹。&lt;br&gt;
+式子&lt;code&gt;(15)&lt;/code&gt;表明&lt;code&gt;A+B&lt;/code&gt;的迹等于&lt;code&gt;A&lt;/code&gt;的迹加&lt;code&gt;B&lt;/code&gt;的迹。
+式子&lt;code&gt;(16)&lt;/code&gt;表明&lt;code&gt;ABC&lt;/code&gt;的迹等于&lt;code&gt;BCA&lt;/code&gt;的迹等于&lt;code&gt;CAB&lt;/code&gt;的迹。&lt;br&gt;
+式子&lt;code&gt;(17)&lt;/code&gt;表明一个&lt;code&gt;nx1&lt;/code&gt;的向量&lt;code&gt;a&lt;/code&gt;，&lt;code&gt;a&lt;/code&gt;的转置乘以&lt;code&gt;a&lt;/code&gt;所得的常数等于&lt;code&gt;a&lt;/code&gt;乘以&lt;code&gt;a&lt;/code&gt;的转置所得矩阵的迹。&lt;/p&gt;
+&lt;h3 id=&#34;12-行列式determinant&#34;&gt;1.2 行列式(&lt;code&gt;Determinant&lt;/code&gt;)&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/MatrixCookBookChapter1_fig3.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;前提&lt;/strong&gt;：此处的A是&lt;code&gt;nxn&lt;/code&gt;矩阵。&lt;br&gt;
+式子&lt;code&gt;(18)&lt;/code&gt;表明矩阵的行列式等于特征值的连乘积。&lt;br&gt;
+式子&lt;code&gt;(19)&lt;/code&gt;表明&lt;code&gt;cA&lt;/code&gt;的行列式等于&lt;code&gt;A&lt;/code&gt;的行列式的${c^n}$倍。&lt;br&gt;
+式子&lt;code&gt;(20)&lt;/code&gt;表明矩阵的行列式等于其转置矩阵的行列式。&lt;br&gt;
+式子&lt;code&gt;(21)&lt;/code&gt;表明矩阵&lt;code&gt;AB&lt;/code&gt;的行列式等于矩阵&lt;code&gt;A&lt;/code&gt;的行列式乘以矩阵&lt;code&gt;B&lt;/code&gt;的行列式。&lt;br&gt;
+式子&lt;code&gt;(22)&lt;/code&gt;表明矩阵${A^{-1}}$的行列式等于矩阵&lt;code&gt;A&lt;/code&gt;的倒数。&lt;br&gt;
+式子&lt;code&gt;(23)&lt;/code&gt;表明矩阵${A^n}$的行列式等于矩阵&lt;code&gt;A&lt;/code&gt;的行列式的n次幂。&lt;br&gt;
+式子&lt;code&gt;(24)&lt;/code&gt;表明如果&lt;code&gt;u&lt;/code&gt;和&lt;code&gt;v&lt;/code&gt;是&lt;code&gt;nx1&lt;/code&gt;向量，那么${I+uv^T}$的行列式等于${1+u^Tv}$的值。&lt;br&gt;
+式子&lt;code&gt;(25)&lt;/code&gt;表明如果&lt;code&gt;A&lt;/code&gt;是&lt;code&gt;2x2&lt;/code&gt;矩阵，&lt;code&gt;I+A&lt;/code&gt;的行列式等于${1+det(A)+Tr(A)}$,即1+A的行列式+A的迹。&lt;br&gt;
+式子&lt;code&gt;(26)&lt;/code&gt;表明如果&lt;code&gt;A&lt;/code&gt;是&lt;code&gt;3x3&lt;/code&gt;矩阵，&lt;code&gt;I+A&lt;/code&gt;的行列式等于${1+det(A)+Tr(A)+\frac{1}{2}Tr(A)^2-\frac{1}{2}Tr(A^2)}$。&lt;br&gt;
+式子&lt;code&gt;(27)&lt;/code&gt;不表。&lt;br&gt;
+式子&lt;code&gt;(28)&lt;/code&gt;表示对于微小扰动$\varepsilon$，可以将$\varepsilon A$近似作为2x2形式处理：&lt;/p&gt;
+&lt;h3 id=&#34;13-特例2x2矩阵&#34;&gt;1.3 特例：2x2矩阵&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/MatrixCookBookChapter1_fig4.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;2x2&lt;/code&gt;矩阵有着以上的性质与结论。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>model.eval()作用分析</title>
+        <link>https://Codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</link>
+        <pubDate>Sat, 14 Nov 2020 09:40:49 +0800</pubDate>
+        
+        <guid>https://Codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</guid>
+        <description>&lt;h2 id=&#34;modeleval&#34;&gt;model.eval()&lt;/h2&gt;
+&lt;p&gt;model.eval() 作用等同于 self.train(False)&lt;br&gt;
+简而言之，就是评估模式。而非训练模式。&lt;br&gt;
+在评估模式下，&lt;code&gt;batchNorm&lt;/code&gt;层，&lt;code&gt;dropout&lt;/code&gt;层等用于优化训练而添加的网络层会被关闭，从而使得评估时不会发生偏移。&lt;/p&gt;
+&lt;h2 id=&#34;总结&#34;&gt;总结&lt;/h2&gt;
+&lt;p&gt;在对模型进行评估时，应该配合使用&lt;code&gt;with torch.no_grad()&lt;/code&gt; 与 &lt;code&gt;model.eval()&lt;/code&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;    loop:
+        model.train()    # 切换至训练模式
+        train……
+        model.eval()
+        with torch.no_grad():
+            Evaluation
+    end loop
+&lt;/code&gt;&lt;/pre&gt;</description>
         </item>
         <item>
         <title></title>

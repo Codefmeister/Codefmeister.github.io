@@ -27,5 +27,33 @@ Example： 二维默认情况下： A = np.array([[1,2],[3,4]]) print(A) print(A
 从截图中可以看出，a.transpose(1,2,0)与np.transpose(a,(1,2,0))效果相同。代码段中给出的axes是(1,2,0)，这决定了transpose后的数组，其shape在第一个维度即shape[0]上是原来的shape[1]，第二维shape[1]是原来的shape[2]，第三维shape[2]是原来的shape[0]。所以原shape为(3,2,4)。新的shape为(2,4,3)。</description>
     </item>
     
+    <item>
+      <title>np.unique()解读</title>
+      <link>https://Codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</link>
+      <pubDate>Sat, 21 Nov 2020 09:40:49 +0800</pubDate>
+      
+      <guid>https://Codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</guid>
+      <description>np.unique()官方文档分析以及举例 1.1 官方文档及解读 numpy.unique 语法：numpy.unique(ar, return_index=False, return_inverse=False, return_counts=False, axis=None)
+作用：找到array中不重复（独一无二）的元素
+返回值：默认返回不重复元素的sorted排好序的从小到大的数组。可选的返回值有：
+ 输入数组提供不重复值(unique)元素的索引下标(如果有多个返回第一个) 利用unique数组重构原有的input数组所需要的的索引下标 该unique元素在input数组中的出现次数，相当于count  Parameter
+  ar：array like
+输入的数组，除非特别指定axis，数组将被展平为1-D形式进行处理。
+  return_index: bool, optional
+如果为True，返回输入数组提供不重复值(unique)元素的索引下标(如果有多个返回第一个)
+  return_inverse: bool, optional
+如果为True，返回利用unique数组重构原有的input数组所需要的的索引下标
+  axis: int or None, optional
+进行操作的维度。如果为None，数组将被展平作为一维数组处理，如果指定了axis，则以该维索引构成的子数组作为元素，将整个数组视为一维数组进行处理。如果axis被使用，则不支持Object Array以及structured arrays。
+  Returns
+  unique: ndarray
+排好序(从小到大)的unique值
+  unique_indices: ndarray, optional
+unique数组中对应位置的value值第一次在input数组中出现的下标值。当return_index = True时返回。
+  unique_inverse: ndarray, optional
+利用unique数组重构源输入input数组所需要的索引下标。当return_inverse = True的时候返回。
+  unique_count: ndarray, optional 每个unique values在原数组中出现的次数，当return_counts=True时返回。</description>
+    </item>
+    
   </channel>
 </rss>
