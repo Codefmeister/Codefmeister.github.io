@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html lang="en-us">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='NDT Matlab代码阅读时发现的问题与存在的困惑 1.发现的问题 1.1 c1, c2 的计算问题 Question: 为什么c1和c2能这么算？
-1.2 omega的计算问题 Question: $\Omega$的计算公式应该是$ \Omega = V{\Lambda^{&#39;}}V^{-1}$。对于$\Lambda^{&#39;}$论文中并没有取修正后的特征值倒数。代码中是:diag(1./D) '><title></title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='numpy.arange() 语法 x = numpy.arange(start,end,step,dtype=None)
+Parameters说明  start: Optional，起始值，默认值为0。 end: 结束值(不含)。 step: Optional，步长，默认值为1。 dtype：Optional，默认为None，从其他输入值中推测。  功能 [start,end)的左闭右开区间内，每隔一个step取一次值。return值是ndarray。 对于浮点数来说，length = ceil((end - start)/step)，由于浮点数的上溢，此条规则可能会导致在浮点数情况下，最后一个element比end长。
+Note 如果使用非整数步长（譬如0.1），结果往往不一致（原因见上），所以在这种情况下推荐使用numpy.linspace。
+Example &amp;gt;&amp;gt;&amp;gt; np.arange(3) array([0, 1, 2]) &amp;gt;&amp;gt;&amp;gt;np.arange(3.0) array([ 0., 1., 2.]) &amp;gt;&amp;gt;&amp;gt;np.arange(3,7) array([3, 4, 5, 6]) &amp;gt;&amp;gt;&amp;gt;np.arange(3,7,2) array([3, 5]) '><title></title>
 
 <link rel='canonical' href='https://Codefmeister.github.io/p/'>
 
 <link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content=''>
-<meta property='og:description' content='NDT Matlab代码阅读时发现的问题与存在的困惑 1.发现的问题 1.1 c1, c2 的计算问题 Question: 为什么c1和c2能这么算？
-1.2 omega的计算问题 Question: $\Omega$的计算公式应该是$ \Omega = V{\Lambda^{&#39;}}V^{-1}$。对于$\Lambda^{&#39;}$论文中并没有取修正后的特征值倒数。代码中是:diag(1./D) '>
+<meta property='og:description' content='numpy.arange() 语法 x = numpy.arange(start,end,step,dtype=None)
+Parameters说明  start: Optional，起始值，默认值为0。 end: 结束值(不含)。 step: Optional，步长，默认值为1。 dtype：Optional，默认为None，从其他输入值中推测。  功能 [start,end)的左闭右开区间内，每隔一个step取一次值。return值是ndarray。 对于浮点数来说，length = ceil((end - start)/step)，由于浮点数的上溢，此条规则可能会导致在浮点数情况下，最后一个element比end长。
+Note 如果使用非整数步长（譬如0.1），结果往往不一致（原因见上），所以在这种情况下推荐使用numpy.linspace。
+Example &amp;gt;&amp;gt;&amp;gt; np.arange(3) array([0, 1, 2]) &amp;gt;&amp;gt;&amp;gt;np.arange(3.0) array([ 0., 1., 2.]) &amp;gt;&amp;gt;&amp;gt;np.arange(3,7) array([3, 4, 5, 6]) &amp;gt;&amp;gt;&amp;gt;np.arange(3,7,2) array([3, 5]) '>
 <meta property='og:url' content='https://Codefmeister.github.io/p/'>
 <meta property='og:site_name' content='Codefmeister'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' />
 <meta name="twitter:title" content="">
-<meta name="twitter:description" content="NDT Matlab代码阅读时发现的问题与存在的困惑 1.发现的问题 1.1 c1, c2 的计算问题 Question: 为什么c1和c2能这么算？
-1.2 omega的计算问题 Question: $\Omega$的计算公式应该是$ \Omega = V{\Lambda^{&#39;}}V^{-1}$。对于$\Lambda^{&#39;}$论文中并没有取修正后的特征值倒数。代码中是:diag(1./D) ">
+<meta name="twitter:description" content="numpy.arange() 语法 x = numpy.arange(start,end,step,dtype=None)
+Parameters说明  start: Optional，起始值，默认值为0。 end: 结束值(不含)。 step: Optional，步长，默认值为1。 dtype：Optional，默认为None，从其他输入值中推测。  功能 [start,end)的左闭右开区间内，每隔一个step取一次值。return值是ndarray。 对于浮点数来说，length = ceil((end - start)/step)，由于浮点数的上溢，此条规则可能会导致在浮点数情况下，最后一个element比end长。
+Note 如果使用非整数步长（譬如0.1），结果往往不一致（原因见上），所以在这种情况下推荐使用numpy.linspace。
+Example &amp;gt;&amp;gt;&amp;gt; np.arange(3) array([0, 1, 2]) &amp;gt;&amp;gt;&amp;gt;np.arange(3.0) array([ 0., 1., 2.]) &amp;gt;&amp;gt;&amp;gt;np.arange(3,7) array([3, 4, 5, 6]) &amp;gt;&amp;gt;&amp;gt;np.arange(3,7,2) array([3, 5]) ">
     </head>
     <body class="">
         <div class="container flex on-phone--column align-items--flex-start extended article-page with-toolbar">
