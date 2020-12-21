@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='DCP论文阅读笔记 论文  Deep Closest Point: Learning Representations for Point Cloud Registration
+Author: Wang, Yue; Solomon, Justin
+ Main Attribution 基于ICP迭代最近点算法，提出基于深度学习的DCP算法。解决了ICP想要采用深度学习方法时遇到的一系列问题。
+我们先回顾一下ICP算法的基本步骤：
+for each iteration: find corresponding relations of points between two scan(using KNN) using SVD to solve Rotation Matrix and Translation vector update cloud Data 概括起来就是： 寻找最近点对关系，使用SVD求解刚体变换。如此循环往复。
+结合论文，个人理解将ICP算法扩展到深度学习存在着以下的难点（可能存在各种问题，笔者深度学习的相关知识很薄弱）：
+ 首先，点对关系如果是确定的话，沿着网络反向传播可能存在问题。 SVD分解求解刚体变换，如何求梯度？(Confirmed by paper)  而文章克服了这些问题，主要有如下贡献：
+ 提出了能够解决传统ICP算法试图推广时存在的困难的一系列子网络架构。 提出了能进行pair-wise配准的网络架构 评估了在采用不同设置的情况下的网络表现 分析了是global feature有用还是local feature对配准更加有用  网络架构 模型包含三个部分：
+(1) 一个将输入点云映射到高维空间embedding的模块，具有扰动不变性（指DGCNN当点云输入时点的前后顺序发生变化，输出不会有任何改变） 或者 刚体变换不变性（指PointNet对于旋转平移具有不变的特性）。该模块的作用是寻找两个输入点云之间的点的对应关系. 可选的模块有PointNet（Focus于全局特征）， DGCNN（结合局部特征和全局特征）。'><title>DCP论文阅读笔记</title>
+
+<link rel='canonical' href='https://codefmeister.github.io/p/dcp%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='DCP论文阅读笔记'>
+<meta property='og:description' content='DCP论文阅读笔记 论文  Deep Closest Point: Learning Representations for Point Cloud Registration
+Author: Wang, Yue; Solomon, Justin
+ Main Attribution 基于ICP迭代最近点算法，提出基于深度学习的DCP算法。解决了ICP想要采用深度学习方法时遇到的一系列问题。
+我们先回顾一下ICP算法的基本步骤：
+for each iteration: find corresponding relations of points between two scan(using KNN) using SVD to solve Rotation Matrix and Translation vector update cloud Data 概括起来就是： 寻找最近点对关系，使用SVD求解刚体变换。如此循环往复。
+结合论文，个人理解将ICP算法扩展到深度学习存在着以下的难点（可能存在各种问题，笔者深度学习的相关知识很薄弱）：
+ 首先，点对关系如果是确定的话，沿着网络反向传播可能存在问题。 SVD分解求解刚体变换，如何求梯度？(Confirmed by paper)  而文章克服了这些问题，主要有如下贡献：
+ 提出了能够解决传统ICP算法试图推广时存在的困难的一系列子网络架构。 提出了能进行pair-wise配准的网络架构 评估了在采用不同设置的情况下的网络表现 分析了是global feature有用还是local feature对配准更加有用  网络架构 模型包含三个部分：
+(1) 一个将输入点云映射到高维空间embedding的模块，具有扰动不变性（指DGCNN当点云输入时点的前后顺序发生变化，输出不会有任何改变） 或者 刚体变换不变性（指PointNet对于旋转平移具有不变的特性）。该模块的作用是寻找两个输入点云之间的点的对应关系. 可选的模块有PointNet（Focus于全局特征）， DGCNN（结合局部特征和全局特征）。'>
+<meta property='og:url' content='https://codefmeister.github.io/p/dcp%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
+<meta property='og:site_name' content='Codefmeister'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2020-12-21T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2020-12-21T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="DCP论文阅读笔记">
+<meta name="twitter:description" content="DCP论文阅读笔记 论文  Deep Closest Point: Learning Representations for Point Cloud Registration
+Author: Wang, Yue; Solomon, Justin
+ Main Attribution 基于ICP迭代最近点算法，提出基于深度学习的DCP算法。解决了ICP想要采用深度学习方法时遇到的一系列问题。
+我们先回顾一下ICP算法的基本步骤：
+for each iteration: find corresponding relations of points between two scan(using KNN) using SVD to solve Rotation Matrix and Translation vector update cloud Data 概括起来就是： 寻找最近点对关系，使用SVD求解刚体变换。如此循环往复。
+结合论文，个人理解将ICP算法扩展到深度学习存在着以下的难点（可能存在各种问题，笔者深度学习的相关知识很薄弱）：
+ 首先，点对关系如果是确定的话，沿着网络反向传播可能存在问题。 SVD分解求解刚体变换，如何求梯度？(Confirmed by paper)  而文章克服了这些问题，主要有如下贡献：
+ 提出了能够解决传统ICP算法试图推广时存在的困难的一系列子网络架构。 提出了能进行pair-wise配准的网络架构 评估了在采用不同设置的情况下的网络表现 分析了是global feature有用还是local feature对配准更加有用  网络架构 模型包含三个部分：
+(1) 一个将输入点云映射到高维空间embedding的模块，具有扰动不变性（指DGCNN当点云输入时点的前后顺序发生变化，输出不会有任何改变） 或者 刚体变换不变性（指PointNet对于旋转平移具有不变的特性）。该模块的作用是寻找两个输入点云之间的点的对应关系. 可选的模块有PointNet（Focus于全局特征）， DGCNN（结合局部特征和全局特征）。">
+    </head>
+    <body class="">
+        <div class="container flex on-phone--column align-items--flex-start extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/Icon_hua25ec96b536dfdbbcc947accbc1cb594_86128_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://codefmeister.github.io">Codefmeister</a></h1>
+        <h2 class="site-description">Major in Computer science</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a href="https://codefmeister.github.io" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/dcp%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">DCP论文阅读笔记</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Dec 21, 2020</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <h1 id="dcp论文阅读笔记">DCP论文阅读笔记</h1>
+<h2 id="论文">论文</h2>
+<blockquote>
+<p>Deep Closest Point: Learning Representations for Point Cloud Registration<br>
+Author: Wang, Yue; Solomon, Justin</p>
+</blockquote>
+<h2 id="main-attribution">Main Attribution</h2>
+<p>基于ICP迭代最近点算法，提出基于深度学习的DCP算法。解决了ICP想要采用深度学习方法时遇到的一系列问题。</p>
+<p>我们先回顾一下ICP算法的基本步骤：</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">each</span> <span class="n">iteration</span><span class="p">:</span>
+    <span class="n">find</span> <span class="n">corresponding</span> <span class="n">relations</span> <span class="n">of</span> <span class="n">points</span> <span class="n">between</span> <span class="n">two</span> <span class="n">scan</span><span class="p">(</span><span class="n">using</span> <span class="n">KNN</span><span class="p">)</span>
+    <span class="n">using</span> <span class="n">SVD</span> <span class="n">to</span> <span class="n">solve</span> <span class="n">Rotation</span> <span class="n">Matrix</span> <span class="ow">and</span> <span class="n">Translation</span> <span class="n">vector</span>
+    <span class="n">update</span> <span class="n">cloud</span> <span class="n">Data</span>
+</code></pre></div><p>概括起来就是： <!-- raw HTML omitted -->寻找最近点对关系，使用SVD求解刚体变换。<!-- raw HTML omitted -->如此循环往复。</p>
+<p>结合论文，个人理解将ICP算法扩展到深度学习存在着以下的难点（可能存在各种问题，笔者深度学习的相关知识很薄弱）：</p>
+<ul>
+<li>首先，点对关系如果是确定的话，沿着网络反向传播可能存在问题。</li>
+<li>SVD分解求解刚体变换，如何求梯度？(Confirmed by paper)</li>
+</ul>
+<p>而文章克服了这些问题，主要有如下贡献：</p>
+<ul>
+<li>提出了能够解决传统ICP算法试图推广时存在的困难的一系列子网络架构。</li>
+<li>提出了能进行<code>pair-wise</code>配准的网络架构</li>
+<li>评估了在采用不同设置的情况下的网络表现</li>
+<li>分析了是<code>global feature</code>有用还是<code>local feature</code>对配准更加有用</li>
+</ul>
+<h2 id="网络架构">网络架构</h2>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig1.png" alt="image"  /></p>
+<p>模型包含三个部分：<br>
+(1) 一个将输入点云映射到高维空间<code>embedding</code>的模块，具有扰动不变性（指DGCNN当点云输入时点的前后顺序发生变化，输出不会有任何改变） 或者 刚体变换不变性（指PointNet对于旋转平移具有不变的特性）。该模块的作用是<!-- raw HTML omitted -->寻找两个输入点云之间的点的对应关系<!-- raw HTML omitted -->. 可选的模块有<!-- raw HTML omitted -->PointNet（Focus于全局特征）， DGCNN（结合局部特征和全局特征）<!-- raw HTML omitted -->。</p>
+<p>(2) 一个基于注意力<code>attention</code>的Pointer网络模块，用于预测两个点云之间的soft matching关系(<!-- raw HTML omitted -->类似于一种基于概率的soft match，之所以soft是由于它并没有显式规定点$x_i$必须与哪个点$x_j$有对应关系，而是通过一个softmax得到的各点和某点$x_i$存在对应关系的概率乘以各点数据，得到一个类似于概率的对应点坐标<!-- raw HTML omitted -->。 该模块采用的是<!-- raw HTML omitted -->Transformer<!-- raw HTML omitted --></p>
+<p>(3) 一个<strong>可微</strong>的<code>SVD</code>分解层，用于输出刚体变换矩阵。</p>
+<h2 id="问题阐述">问题阐述</h2>
+<p>熟悉点云配准的同学应该知道，问题十分清晰。这里直接粘一下原文。<br>
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig2.png" alt="image"  />
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig3.png" alt="image"  /></p>
+<p>值得一提的是，作者分析了一下ICP的算法步骤。和我们上面描述的一样。<!-- raw HTML omitted -->就是用上次更新后的信息寻找最近关系，然后用寻找到的对应关系SVD求解得到$R,t$.<!-- raw HTML omitted --> 所以如果初始值一开始生成的是很差的<code>corresponding relation</code>，那么一下就会陷入局部最优。</p>
+<p>而作者的思路就是：<!-- raw HTML omitted -->使用学习的网络来得到特征，通过特征获得一个更好的对应关系$m(\cdot)$，用这个$m(\cdot)$去计算刚体变换信息。<!-- raw HTML omitted --></p>
+<h2 id="代码分析与对应模块详解">代码分析与对应模块详解</h2>
+<p>我们采用一种<code>Top-Down</code>的视角来分析整个代码。先从整体入手，然后逐渐拆解模块进行分析。</p>
+<h3 id="整体模块">整体模块</h3>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">DCP</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>       <span class="c1"># args 是一个存放各种参数的namespace</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DCP</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emb_dims</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">embdims</span>    <span class="c1"># 欲抽象到的特征维度，default为 512</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">cycle</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">emb_nn</span> <span class="o">==</span> <span class="s1">&#39;pointnet&#39;</span><span class="p">:</span>   <span class="c1"># emb_nn就是上文所说的第一个模块,若选择PointNet</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">emb_nn</span> <span class="o">=</span> <span class="n">PointNet</span><span class="p">(</span><span class="n">emb_dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emb_dims</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">emb_nn</span> <span class="o">==</span> <span class="s1">&#39;dgcnn&#39;</span><span class="p">:</span>    <span class="c1"># 若选择DGCNN</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">emb_nn</span> <span class="o">=</span> <span class="n">DGCNN</span><span class="p">(</span><span class="n">emb_dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emb_dims</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Not implemented&#39;</span><span class="p">)</span>      <span class="c1"># 其他网络尚未实现</span>
+
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">pointer</span> <span class="o">==</span> <span class="s1">&#39;identity&#39;</span><span class="p">:</span>              <span class="c1"># 不使用Transformer, hard match</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span> <span class="o">=</span> <span class="n">Identity</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">pointer</span> <span class="o">==</span> <span class="s1">&#39;transformer&#39;</span><span class="p">:</span>         <span class="c1"># soft matching by tranformer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span> <span class="o">=</span> <span class="n">Transformer</span><span class="p">(</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Not implemented&#39;</span><span class="p">)</span>  
+        
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">head</span> <span class="o">==</span> <span class="s1">&#39;mlp&#39;</span><span class="p">:</span>                      <span class="c1"># 直接用MLP预测输出矩阵</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">MLPHead</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">head</span> <span class="o">==</span> <span class="s1">&#39;svd&#39;</span><span class="p">:</span>                    <span class="c1"># 使用可微的SVD分解层</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">SVDHead</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&#34;Not implemented&#34;</span><span class="p">)</span>
+    
+</code></pre></div>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+    integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+    integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+    crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+    integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.querySelector(`.article-content`));"></script>
+<script>
+var katex_config = {
+    delimiters: 
+    [
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false}
+    ]
+};
+</script>
+<script defer src="https://cdn.bootcss.com/KaTeX/0.11.1/contrib/auto-render.min.js" onload="renderMathInElement(document.body,katex_config)"></script>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "codefmeister" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2020 Codefmeister
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="1.1.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+            </main>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
+    integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin="anonymous"></script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<link rel="stylesheet" href="/css/highlight/light.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="/css/highlight/dark.min.css" media="(prefers-color-scheme: dark)">
+
+    </body>
+</html>

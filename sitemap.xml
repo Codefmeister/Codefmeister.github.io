@@ -33,6 +33,11 @@
   </url>
   
   <url>
+    <loc>https://codefmeister.github.io/p/dcp%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2020-12-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</loc>
     <lastmod>2020-12-16T09:40:49+08:00</lastmod>
   </url>
@@ -95,10 +100,6 @@
   <url>
     <loc>https://codefmeister.github.io/about/</loc>
     <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://codefmeister.github.io/p/</loc>
   </url>
   
   <url>

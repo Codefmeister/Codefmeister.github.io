@@ -185,6 +185,81 @@ PointNet++意识到了PointNet中存在的问题，所以它通过FPS采样，�
 </description>
         </item>
         <item>
+        <title>DCP论文阅读笔记</title>
+        <link>https://codefmeister.github.io/p/dcp%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+        <pubDate>Mon, 21 Dec 2020 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/dcp%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+        <description>&lt;h1 id=&#34;dcp论文阅读笔记&#34;&gt;DCP论文阅读笔记&lt;/h1&gt;
+&lt;h2 id=&#34;论文&#34;&gt;论文&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Deep Closest Point: Learning Representations for Point Cloud Registration&lt;br&gt;
+Author: Wang, Yue; Solomon, Justin&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;main-attribution&#34;&gt;Main Attribution&lt;/h2&gt;
+&lt;p&gt;基于ICP迭代最近点算法，提出基于深度学习的DCP算法。解决了ICP想要采用深度学习方法时遇到的一系列问题。&lt;/p&gt;
+&lt;p&gt;我们先回顾一下ICP算法的基本步骤：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;each&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;iteration&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;find&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;corresponding&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;relations&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;of&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;points&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;between&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;two&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;scan&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;using&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;KNN&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;using&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SVD&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;to&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;solve&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Rotation&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Matrix&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;and&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Translation&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;vector&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;update&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cloud&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Data&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;概括起来就是： &lt;!-- raw HTML omitted --&gt;寻找最近点对关系，使用SVD求解刚体变换。&lt;!-- raw HTML omitted --&gt;如此循环往复。&lt;/p&gt;
+&lt;p&gt;结合论文，个人理解将ICP算法扩展到深度学习存在着以下的难点（可能存在各种问题，笔者深度学习的相关知识很薄弱）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;首先，点对关系如果是确定的话，沿着网络反向传播可能存在问题。&lt;/li&gt;
+&lt;li&gt;SVD分解求解刚体变换，如何求梯度？(Confirmed by paper)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;而文章克服了这些问题，主要有如下贡献：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;提出了能够解决传统ICP算法试图推广时存在的困难的一系列子网络架构。&lt;/li&gt;
+&lt;li&gt;提出了能进行&lt;code&gt;pair-wise&lt;/code&gt;配准的网络架构&lt;/li&gt;
+&lt;li&gt;评估了在采用不同设置的情况下的网络表现&lt;/li&gt;
+&lt;li&gt;分析了是&lt;code&gt;global feature&lt;/code&gt;有用还是&lt;code&gt;local feature&lt;/code&gt;对配准更加有用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;网络架构&#34;&gt;网络架构&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig1.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;模型包含三个部分：&lt;br&gt;
+(1) 一个将输入点云映射到高维空间&lt;code&gt;embedding&lt;/code&gt;的模块，具有扰动不变性（指DGCNN当点云输入时点的前后顺序发生变化，输出不会有任何改变） 或者 刚体变换不变性（指PointNet对于旋转平移具有不变的特性）。该模块的作用是&lt;!-- raw HTML omitted --&gt;寻找两个输入点云之间的点的对应关系&lt;!-- raw HTML omitted --&gt;. 可选的模块有&lt;!-- raw HTML omitted --&gt;PointNet（Focus于全局特征）， DGCNN（结合局部特征和全局特征）&lt;!-- raw HTML omitted --&gt;。&lt;/p&gt;
+&lt;p&gt;(2) 一个基于注意力&lt;code&gt;attention&lt;/code&gt;的Pointer网络模块，用于预测两个点云之间的soft matching关系(&lt;!-- raw HTML omitted --&gt;类似于一种基于概率的soft match，之所以soft是由于它并没有显式规定点$x_i$必须与哪个点$x_j$有对应关系，而是通过一个softmax得到的各点和某点$x_i$存在对应关系的概率乘以各点数据，得到一个类似于概率的对应点坐标&lt;!-- raw HTML omitted --&gt;。 该模块采用的是&lt;!-- raw HTML omitted --&gt;Transformer&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;p&gt;(3) 一个&lt;strong&gt;可微&lt;/strong&gt;的&lt;code&gt;SVD&lt;/code&gt;分解层，用于输出刚体变换矩阵。&lt;/p&gt;
+&lt;h2 id=&#34;问题阐述&#34;&gt;问题阐述&lt;/h2&gt;
+&lt;p&gt;熟悉点云配准的同学应该知道，问题十分清晰。这里直接粘一下原文。&lt;br&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig2.png&#34; alt=&#34;image&#34;  /&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig3.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;值得一提的是，作者分析了一下ICP的算法步骤。和我们上面描述的一样。&lt;!-- raw HTML omitted --&gt;就是用上次更新后的信息寻找最近关系，然后用寻找到的对应关系SVD求解得到$R,t$.&lt;!-- raw HTML omitted --&gt; 所以如果初始值一开始生成的是很差的&lt;code&gt;corresponding relation&lt;/code&gt;，那么一下就会陷入局部最优。&lt;/p&gt;
+&lt;p&gt;而作者的思路就是：&lt;!-- raw HTML omitted --&gt;使用学习的网络来得到特征，通过特征获得一个更好的对应关系$m(\cdot)$，用这个$m(\cdot)$去计算刚体变换信息。&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;h2 id=&#34;代码分析与对应模块详解&#34;&gt;代码分析与对应模块详解&lt;/h2&gt;
+&lt;p&gt;我们采用一种&lt;code&gt;Top-Down&lt;/code&gt;的视角来分析整个代码。先从整体入手，然后逐渐拆解模块进行分析。&lt;/p&gt;
+&lt;h3 id=&#34;整体模块&#34;&gt;整体模块&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;k&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;DCP&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Module&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;fm&#34;&gt;__init__&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;       &lt;span class=&#34;c1&#34;&gt;# args 是一个存放各种参数的namespace&lt;/span&gt;
+        &lt;span class=&#34;nb&#34;&gt;super&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;DCP&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;fm&#34;&gt;__init__&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+        &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;emb_dims&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;embdims&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;# 欲抽象到的特征维度，default为 512&lt;/span&gt;
+        &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cycle&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cycle&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;emb_nn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;pointnet&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;# emb_nn就是上文所说的第一个模块,若选择PointNet&lt;/span&gt;
+            &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;emb_nn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;PointNet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;emb_dims&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;emb_dims&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;elif&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;emb_nn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;dgcnn&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;# 若选择DGCNN&lt;/span&gt;
+            &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;emb_nn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DGCNN&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;emb_dims&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;emb_dims&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+            &lt;span class=&#34;k&#34;&gt;raise&lt;/span&gt; &lt;span class=&#34;ne&#34;&gt;Exception&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Not implemented&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;      &lt;span class=&#34;c1&#34;&gt;# 其他网络尚未实现&lt;/span&gt;
+
+        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pointer&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;identity&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;              &lt;span class=&#34;c1&#34;&gt;# 不使用Transformer, hard match&lt;/span&gt;
+            &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pointer&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Identity&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;elif&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pointer&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;transformer&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;         &lt;span class=&#34;c1&#34;&gt;# soft matching by tranformer&lt;/span&gt;
+            &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pointer&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Transformer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;args&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+            &lt;span class=&#34;k&#34;&gt;raise&lt;/span&gt; &lt;span class=&#34;ne&#34;&gt;Exception&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Not implemented&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;  
+        
+        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;head&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;mlp&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;                      &lt;span class=&#34;c1&#34;&gt;# 直接用MLP预测输出矩阵&lt;/span&gt;
+            &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;head&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MLPHead&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;elif&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;head&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;svd&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;                    &lt;span class=&#34;c1&#34;&gt;# 使用可微的SVD分解层&lt;/span&gt;
+            &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;head&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SVDHead&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+            &lt;span class=&#34;k&#34;&gt;raise&lt;/span&gt; &lt;span class=&#34;ne&#34;&gt;Exception&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;Not implemented&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        </item>
+        <item>
         <title>Conv1d与Conv2d</title>
         <link>https://codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</link>
         <pubDate>Wed, 16 Dec 2020 09:40:49 +0800</pubDate>
@@ -510,14 +585,6 @@ unique数组中对应位置的value值第一次在input数组中出现的下标�
             Evaluation
     end loop
 &lt;/code&gt;&lt;/pre&gt;</description>
-        </item>
-        <item>
-        <title></title>
-        <link>https://codefmeister.github.io/p/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://codefmeister.github.io/p/</guid>
-        <description></description>
         </item>
         <item>
         <title></title>
