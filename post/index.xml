@@ -172,6 +172,15 @@ unique数组中对应位置的value值第一次在input数组中出现的下标�
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codefmeister.github.io/p/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codefmeister.github.io/p/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>numpy.arange() 语法 x = numpy.arange(start,end,step,dtype=None)
 Parameters说明  start: Optional，起始值，默认值为0。 end: 结束值(不含)。 step: Optional，步长，默认值为1。 dtype：Optional，默认为None，从其他输入值中推测。  功能 [start,end)的左闭右开区间内，每隔一个step取一次值。return值是ndarray。 对于浮点数来说，length = ceil((end - start)/step)，由于浮点数的上溢，此条规则可能会导致在浮点数情况下，最后一个element比end长。
 Note 如果使用非整数步长（譬如0.1），结果往往不一致（原因见上），所以在这种情况下推荐使用numpy.linspace。
