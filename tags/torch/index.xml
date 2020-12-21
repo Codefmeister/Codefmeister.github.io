@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>torch on Codefmeister</title>
+    <link>https://Codefmeister.github.io/tags/torch/</link>
+    <description>Recent content in torch on Codefmeister</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 14 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://Codefmeister.github.io/tags/torch/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LeakyReLU函数解析</title>
+      <link>https://Codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Mon, 14 Dec 2020 09:40:49 +0800</pubDate>
+      
+      <guid>https://Codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</guid>
+      <description>LeakyReLU 语法  CLASS torch.nn.LeakyReLU(negative_slope: float = 0.01, inplace: bool = False)
+ 作用 Element-wise
+对于每个x，应用函数如图： 函数图像 </description>
+    </item>
+    
+    <item>
+      <title>np.transpose()详解</title>
+      <link>https://Codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Sat, 21 Nov 2020 09:40:49 +0800</pubDate>
+      
+      <guid>https://Codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</guid>
+      <description>ndarray的转置(transpose) 对于A是由np.ndarray表示的情况：
+可以直接使用命令A.T。
+也可以使用命令A.transpose()。
+A.T 与 A.transpose()对比 结论: 在默认情况下，两者效果相同，但transpose()可以指定交换的axis维度。
+对于一维数组，两者均不改变，返回原数组。
+对于二维数组，默认进行标准的转置操作。
+对于多维数组A,A.shape为(a,b,c,d,...,n)，则转置后的shape为(n,...,d,c,b,a)。
+对于.transpose()，可以指定转置后的维度。语法：A.transpose((axisOrder1,...,axisOrderN))，其效果等同于np.transpose(A,(axisOrder1,...,axisOrderN)),(axisOrder)中是想要得到的索引下标顺序。效果详见例子。
+Example： 二维默认情况下： A = np.array([[1,2],[3,4]]) print(A) print(A.T) print(A.transpose()) 结果如下：
+多维默认情况下： a = np.array([[[1,2,3,4],[4,5,6,7]],[[2,3,4,5],[5,6,7,8]],[[3,4,5,6],[4,5,6,7]]]) print(a.shape) print(a.T.shape) print(a.transpose().shape) 结果如下：
+指定维度情况： a = np.array([[[1,2,3,4],[4,5,6,7]],[[2,3,4,5],[5,6,7,8]],[[3,4,5,6],[4,5,6,7]]]) print(a.shape) print(a.transpose(1,2,0).shape) A = np.transpose(a,(1,2,0)) print(A.shape) 结果如下：
+从截图中可以看出，a.transpose(1,2,0)与np.transpose(a,(1,2,0))效果相同。代码段中给出的axes是(1,2,0)，这决定了transpose后的数组，其shape在第一个维度即shape[0]上是原来的shape[1]，第二维shape[1]是原来的shape[2]，第三维shape[2]是原来的shape[0]。所以原shape为(3,2,4)。新的shape为(2,4,3)。</description>
+    </item>
+    
+    <item>
+      <title>model.eval()作用分析</title>
+      <link>https://Codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</link>
+      <pubDate>Sat, 14 Nov 2020 09:40:49 +0800</pubDate>
+      
+      <guid>https://Codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</guid>
+      <description>model.eval() model.eval() 作用等同于 self.train(False)
+简而言之，就是评估模式。而非训练模式。
+在评估模式下，batchNorm层，dropout层等用于优化训练而添加的网络层会被关闭，从而使得评估时不会发生偏移。
+总结 在对模型进行评估时，应该配合使用with torch.no_grad() 与 model.eval()：
+ loop: model.train() # 切换至训练模式 train…… model.eval() with torch.no_grad(): Evaluation end loop </description>
+    </item>
+    
+  </channel>
+</rss>

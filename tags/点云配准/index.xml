@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>点云配准 on Codefmeister</title>
+    <link>https://Codefmeister.github.io/tags/%E7%82%B9%E4%BA%91%E9%85%8D%E5%87%86/</link>
+    <description>Recent content in 点云配准 on Codefmeister</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 21 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://Codefmeister.github.io/tags/%E7%82%B9%E4%BA%91%E9%85%8D%E5%87%86/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DGCNN论文解读</title>
+      <link>https://Codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
+      <pubDate>Mon, 21 Dec 2020 09:40:49 +0800</pubDate>
+      
+      <guid>https://Codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
+      <description>DGCNN 前言 因为关心的领域主要是配准，对于分类等网络的架构设计分析并没有侧重太多，主要侧重的是EdgeConv的思想。
+论文  Dynamic Graph CNN for Learning on Point Clouds, Wang, Yue and Sun, Yongbin.
+ 核心思想:关于EdgeConv 将点云表征为一个图，${\rm{G}}(V,\xi )$ ,点云的每一个点对应图中的一个结点，而图中的每一条边对应的是点之间的特征feature，称为Edge-feature。举个例子，最简单的情景，可以通过KNN来构建图。Edge Feature用$e_{ij}$来表示，定义为： $$ e_{ij} = h_{\Theta}(x_i,x_j) $$ $$ h_{\Theta}: {R^F} \times {R^F} \to {R^{F&#39;}} $$ $h_{\Theta}$是一个非线性的映射，拥有一系列可学习的参数。
+提出了一个名为EdgeConv的神经网络模块Module，该模块基于卷积神经网络，可以适应在点云上的高阶任务。EdgeConv的对于第i个顶点的输出为：
+其中$□$代表的是一个对称聚合函数，如$\Sigma, max$。
+可以将上述描述类比为在图像上的卷积操作。我们把$x_i$看作是中心像素点，而$x_j:(i,j) \in \xi$可以看做是围绕在点$x_i$周围的像素($x_j$事实上就是和$x_i$之间存在着feature edge的点）。所以类比这样的卷积操作，Edge-Conv可以将n个点的$F$维点云通过“卷积”转换为具有n个点的$F&#39;$维的点云。 所以选择$h$和$□$就变得十分关键。它会直接影响EdgeConv的性能特性。
+一些其他的选择在下一个小part中讨论。在本文中，作者采用的： $$ h_{\Theta}(x_i,x_j) = {\bar h}_{\Theta}(x_i, x_j - x_i) $$
+从这个表达式可以非常明显的看出，既结合了全局形状结构，也结合了局部的结构信息。Global shape structure通过$x_i$捕捉，local neighborhood information通过$x_j - x_i$来捕捉。
+更具体一点的说，通过如下两个公式来计算edge_feature以及x&#39;： $$ e_{ijm}&#39; = ReLU(\theta_m \cdot(x_j - x_i) + \phi_m \cdot x_i) $$ $$ x_{im}&#39; = \mathop {\max }\limits_{j:(i,j) \in \xi }e_{ijm}&#39; $$</description>
+    </item>
+    
+    <item>
+      <title>MATrICP论文解读</title>
+      <link>https://Codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
+      <pubDate>Thu, 03 Dec 2020 09:40:49 +0800</pubDate>
+      
+      <guid>https://Codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
+      <description>MATrICP 论文  Improved techniques for multi-view registration with motion averaging
+Li, Zhongyu Zhu, Jihua Lan, Ke Li, Chen Fang, Chaowei
+ 核心思想 将Trimmed ICP与运动平均算法结合起来，应用到多视角聚类上。
+算法步骤 1. 估算各帧之间的重叠百分比$\xi_{i,j}$ 总的来说，估算各帧之间的重叠百分比主要分为两步：
+(1) 对于每一帧，计算其$d_{threshold}$
+(2) 计算出每一帧的$d_{threshold}$之后，使用该参数计算该帧与其他帧的重叠百分比。
+1.0 背景知识 ObjFunc：
+1.1 计算$d_{threshold}$ 对于第i帧的每一个点，可以在其他所有帧中寻找到N-1个对应点（通过NN），假设第i帧有$N_i$个点，那么一共会有$N_i * (N-1)$个点对与距离。因为我们是要进行多视角配准的，相当于把当前帧作为源scan，其他所有帧组成的模型作为目标模板进行配准。所以将这些所有距离按照从小到大进行排序，然后依次对于每一个距离，计算该距离以及之前所有距离对应的ObjectFunction值。可以使用cumsum操作。结果是得到同样长度的ObjectFunction值的数组，取其中的最小值，该目标函数最小值对应着一个距离$d_i$，这个距离$d_i$就可以作为第i帧的$d_{threshold}$，用于第i帧与其他帧（第j帧）的重叠率估算。
+1.2 计算第i帧与其他帧的重叠百分比 对于第$i$帧，我们现在有其$d_{threshold}$。那么求$\xi_{i,j}$，即为：使用NN寻找点对pair$(P_i,P_j)$，然后从小到大排列，取$d &amp;lt; d_{threshold}$的部分。假设有$N_j^{&#39;}$个点对满足要求。那么重叠百分比$\xi_{i,j} = N_j^{&#39;} / N_j$，$N_j$为第j帧的点。
+2. 根据估算得到的${\xi_{i,j}}$，选择重叠率高的scan pair，应用TrICP算法求解其relative Motion $M_{i,j}$ 2. 应用运动平均算法 在应用Motion Average前，我们已经有了初始的Global Motion以及一系列Relative Motion。
+运动平均的主要思想是，将relative Motion看作是global Motion的某种组合。先求出$\Delta M_{i,j}$，将其转换为李代数对应的6x1的向量。然后通过Average的思想，求出global Motion的变化值。
+2.1 计算relative motion $M_{i,j}$的变化值 通过global motion，可以求出$\Delta M_{i,j}$ $$ \Delta M_{i,j} = M_i^0 M_{i,j} {(M_j^0)}^{-1} $$</description>
+    </item>
+    
+  </channel>
+</rss>

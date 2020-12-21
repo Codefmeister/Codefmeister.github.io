@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>numpy基础 on Codefmeister</title>
+    <link>https://Codefmeister.github.io/tags/numpy%E5%9F%BA%E7%A1%80/</link>
+    <description>Recent content in numpy基础 on Codefmeister</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 21 Nov 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://Codefmeister.github.io/tags/numpy%E5%9F%BA%E7%A1%80/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>np.transpose()详解</title>
+      <link>https://Codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Sat, 21 Nov 2020 09:40:49 +0800</pubDate>
+      
+      <guid>https://Codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</guid>
+      <description>ndarray的转置(transpose) 对于A是由np.ndarray表示的情况：
+可以直接使用命令A.T。
+也可以使用命令A.transpose()。
+A.T 与 A.transpose()对比 结论: 在默认情况下，两者效果相同，但transpose()可以指定交换的axis维度。
+对于一维数组，两者均不改变，返回原数组。
+对于二维数组，默认进行标准的转置操作。
+对于多维数组A,A.shape为(a,b,c,d,...,n)，则转置后的shape为(n,...,d,c,b,a)。
+对于.transpose()，可以指定转置后的维度。语法：A.transpose((axisOrder1,...,axisOrderN))，其效果等同于np.transpose(A,(axisOrder1,...,axisOrderN)),(axisOrder)中是想要得到的索引下标顺序。效果详见例子。
+Example： 二维默认情况下： A = np.array([[1,2],[3,4]]) print(A) print(A.T) print(A.transpose()) 结果如下：
+多维默认情况下： a = np.array([[[1,2,3,4],[4,5,6,7]],[[2,3,4,5],[5,6,7,8]],[[3,4,5,6],[4,5,6,7]]]) print(a.shape) print(a.T.shape) print(a.transpose().shape) 结果如下：
+指定维度情况： a = np.array([[[1,2,3,4],[4,5,6,7]],[[2,3,4,5],[5,6,7,8]],[[3,4,5,6],[4,5,6,7]]]) print(a.shape) print(a.transpose(1,2,0).shape) A = np.transpose(a,(1,2,0)) print(A.shape) 结果如下：
+从截图中可以看出，a.transpose(1,2,0)与np.transpose(a,(1,2,0))效果相同。代码段中给出的axes是(1,2,0)，这决定了transpose后的数组，其shape在第一个维度即shape[0]上是原来的shape[1]，第二维shape[1]是原来的shape[2]，第三维shape[2]是原来的shape[0]。所以原shape为(3,2,4)。新的shape为(2,4,3)。</description>
+    </item>
+    
+  </channel>
+</rss>

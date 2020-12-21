@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>深度学习 on Codefmeister</title>
+    <link>https://Codefmeister.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</link>
+    <description>Recent content in 深度学习 on Codefmeister</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 21 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://Codefmeister.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DGCNN论文解读</title>
+      <link>https://Codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
+      <pubDate>Mon, 21 Dec 2020 09:40:49 +0800</pubDate>
+      
+      <guid>https://Codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
+      <description>DGCNN 前言 因为关心的领域主要是配准，对于分类等网络的架构设计分析并没有侧重太多，主要侧重的是EdgeConv的思想。
+论文  Dynamic Graph CNN for Learning on Point Clouds, Wang, Yue and Sun, Yongbin.
+ 核心思想:关于EdgeConv 将点云表征为一个图，${\rm{G}}(V,\xi )$ ,点云的每一个点对应图中的一个结点，而图中的每一条边对应的是点之间的特征feature，称为Edge-feature。举个例子，最简单的情景，可以通过KNN来构建图。Edge Feature用$e_{ij}$来表示，定义为： $$ e_{ij} = h_{\Theta}(x_i,x_j) $$ $$ h_{\Theta}: {R^F} \times {R^F} \to {R^{F&#39;}} $$ $h_{\Theta}$是一个非线性的映射，拥有一系列可学习的参数。
+提出了一个名为EdgeConv的神经网络模块Module，该模块基于卷积神经网络，可以适应在点云上的高阶任务。EdgeConv的对于第i个顶点的输出为：
+其中$□$代表的是一个对称聚合函数，如$\Sigma, max$。
+可以将上述描述类比为在图像上的卷积操作。我们把$x_i$看作是中心像素点，而$x_j:(i,j) \in \xi$可以看做是围绕在点$x_i$周围的像素($x_j$事实上就是和$x_i$之间存在着feature edge的点）。所以类比这样的卷积操作，Edge-Conv可以将n个点的$F$维点云通过“卷积”转换为具有n个点的$F&#39;$维的点云。 所以选择$h$和$□$就变得十分关键。它会直接影响EdgeConv的性能特性。
+一些其他的选择在下一个小part中讨论。在本文中，作者采用的： $$ h_{\Theta}(x_i,x_j) = {\bar h}_{\Theta}(x_i, x_j - x_i) $$
+从这个表达式可以非常明显的看出，既结合了全局形状结构，也结合了局部的结构信息。Global shape structure通过$x_i$捕捉，local neighborhood information通过$x_j - x_i$来捕捉。
+更具体一点的说，通过如下两个公式来计算edge_feature以及x&#39;： $$ e_{ijm}&#39; = ReLU(\theta_m \cdot(x_j - x_i) + \phi_m \cdot x_i) $$ $$ x_{im}&#39; = \mathop {\max }\limits_{j:(i,j) \in \xi }e_{ijm}&#39; $$</description>
+    </item>
+    
+    <item>
+      <title>Conv1d与Conv2d</title>
+      <link>https://Codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</link>
+      <pubDate>Wed, 16 Dec 2020 09:40:49 +0800</pubDate>
+      
+      <guid>https://Codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</guid>
+      <description>Conv1d与Conv2d 本文分为几个部分来详解Conv2d与Conv1d。主要侧重于Conv2d
+前言 本文记于2020年12月15日，起因是DGCNN中部分卷积使用了二维卷积，部分卷积使用了一维卷积。加之之前对Conv2d与Conv1d属于一种迷迷糊糊的状态，趁着这个机会弄清楚。
+Conv2d原理（二维卷积层） 二维互相关运算 互相关运算与卷积运算 虽然卷积层得名于卷积(convolution)运算，但所有框架在实现卷积层的底层，都采用的是互相关运算。实际上，卷积运算与互相关运算类似，为了得到卷积运算的输出，我们只需要将核数组左右翻转并上下翻转，然后再与输入数组做互相关运算。所以这两种运算虽然类似，但是输出并不相同。
+但是由于深度学习中核数组都是学习得到的，所以卷积层无论使用互相关运算还是卷积运算，都不影响模型预测时的输出。也就是说我们用卷积运算学出的核数组与用互相关运算学出的核数组两者之间可以通过上下翻转，左右翻转来相互转换。所以在框架乃至于绝大部分深度学习文献中，都使用互相关运算来代替了卷积运算。
+互相关运算 在二维卷积层中，一个二维输入数组和一个二维核(kernel)数组通过互相关运算输出一个二维数组。举个例子来解释二维互相关运算：
+假设输入数组的高和宽均为3， 核数组的高和宽均为2，该数组在卷积运算中又称为卷积核或者过滤器(filter)。 19是这样得出的： $19 = 0\times0 + 1\times1 + 3\times2 + 4\times3$ 。
+卷积窗口从输入数组的最左上方开始，按照从左往右，从上往下的顺序，依次在输入数组上滑动。当卷积窗口滑动到某一位置时，窗口中的输入子数组与核数组按元素相乘并求和。得到输出数组中对应位置的元素。
+二维卷积层 二维卷积层将输入和卷积核做互相关运算，并加上一个标量偏差来得到输出。卷积层的模型参数包含了卷积核和标量偏差。我们在训练模型的时候，通常先对卷积层进行随机的初始化，然后不断迭代卷积核和偏差。
+卷积窗口形状为$p \times q$的卷积层称为$p \times q$卷积层。
+特征图与感受野 二维卷积层输出的二维数组可以看做是输入在空间维度上(宽和高)上某一级的表征，也叫特征图(feature map)。影响元素$x$的前向计算的所有可能输入区域(甚至可能大于输入的实际尺寸)叫做$x$的感受野(receptive field)。以上图为例，图中输入的阴影部分的四个元素就是输出数组中阴影部分元素的感受野。如果我们将该输出再和一个$2 \times 2$的核数组做互相关运算，输出单个元素$z$。那么$z$在输入上的感受野包含全部的9个元素。
+可见，我们可以通过更深的卷积神经网络使特征图中单个元素的感受野变得更加广阔，从而捕捉输入上更大尺寸的特征。
+填充与步幅 卷积层的输出形状由输入形状和卷积核窗口形状决定，通过填充与步幅，我们可以改变给定形状的输入和卷积层下的输出形状。
+填充 填充padding是指在输入高和宽的两侧填充元素(通常是0元素)。如下图： 假设输入形状为$n_h \times n_w$， 卷积核窗口形状是$k_h \times k_w$，在高的两侧一共填充$p_h$行，在宽的两侧一共填充$p_w$列，那么输出形状将会是： $$ (n_h - k_h + p_h + 1) \times (n_w - k_w + p_w + 1) $$ 很多情况下我们会设置$p_h = k_h -1$和$p_w = k_w - 1$来使得输入输出具有相同的高和宽。</description>
+    </item>
+    
+    <item>
+      <title>LeakyReLU函数解析</title>
+      <link>https://Codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Mon, 14 Dec 2020 09:40:49 +0800</pubDate>
+      
+      <guid>https://Codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</guid>
+      <description>LeakyReLU 语法  CLASS torch.nn.LeakyReLU(negative_slope: float = 0.01, inplace: bool = False)
+ 作用 Element-wise
+对于每个x，应用函数如图： 函数图像 </description>
+    </item>
+    
+    <item>
+      <title>model.eval()作用分析</title>
+      <link>https://Codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</link>
+      <pubDate>Sat, 14 Nov 2020 09:40:49 +0800</pubDate>
+      
+      <guid>https://Codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</guid>
+      <description>model.eval() model.eval() 作用等同于 self.train(False)
+简而言之，就是评估模式。而非训练模式。
+在评估模式下，batchNorm层，dropout层等用于优化训练而添加的网络层会被关闭，从而使得评估时不会发生偏移。
+总结 在对模型进行评估时，应该配合使用with torch.no_grad() 与 model.eval()：
+ loop: model.train() # 切换至训练模式 train…… model.eval() with torch.no_grad(): Evaluation end loop </description>
+    </item>
+    
+  </channel>
+</rss>
