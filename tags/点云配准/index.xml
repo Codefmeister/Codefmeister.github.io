@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>点云配准 on Codefmeister</title>
-    <link>https://Codefmeister.github.io/tags/%E7%82%B9%E4%BA%91%E9%85%8D%E5%87%86/</link>
+    <link>https://codefmeister.github.io/tags/%E7%82%B9%E4%BA%91%E9%85%8D%E5%87%86/</link>
     <description>Recent content in 点云配准 on Codefmeister</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 21 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://Codefmeister.github.io/tags/%E7%82%B9%E4%BA%91%E9%85%8D%E5%87%86/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 21 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/%E7%82%B9%E4%BA%91%E9%85%8D%E5%87%86/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>DGCNN论文解读</title>
-      <link>https://Codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
+      <link>https://codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
       <pubDate>Mon, 21 Dec 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
+      <guid>https://codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
       <description>DGCNN 前言 因为关心的领域主要是配准，对于分类等网络的架构设计分析并没有侧重太多，主要侧重的是EdgeConv的思想。
 论文  Dynamic Graph CNN for Learning on Point Clouds, Wang, Yue and Sun, Yongbin.
  核心思想:关于EdgeConv 将点云表征为一个图，${\rm{G}}(V,\xi )$ ,点云的每一个点对应图中的一个结点，而图中的每一条边对应的是点之间的特征feature，称为Edge-feature。举个例子，最简单的情景，可以通过KNN来构建图。Edge Feature用$e_{ij}$来表示，定义为： $$ e_{ij} = h_{\Theta}(x_i,x_j) $$ $$ h_{\Theta}: {R^F} \times {R^F} \to {R^{F&#39;}} $$ $h_{\Theta}$是一个非线性的映射，拥有一系列可学习的参数。
@@ -26,10 +26,10 @@
     
     <item>
       <title>MATrICP论文解读</title>
-      <link>https://Codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
+      <link>https://codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
       <pubDate>Thu, 03 Dec 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
+      <guid>https://codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
       <description>MATrICP 论文  Improved techniques for multi-view registration with motion averaging
 Li, Zhongyu Zhu, Jihua Lan, Ke Li, Chen Fang, Chaowei
  核心思想 将Trimmed ICP与运动平均算法结合起来，应用到多视角聚类上。

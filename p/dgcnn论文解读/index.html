@@ -11,7 +11,7 @@
 从这个表达式可以非常明显的看出，既结合了全局形状结构，也结合了局部的结构信息。Global shape structure通过$x_i$捕捉，local neighborhood information通过$x_j - x_i$来捕捉。
 更具体一点的说，通过如下两个公式来计算edge_feature以及x&#39;： $$ e_{ijm}&#39; = ReLU(\theta_m \cdot(x_j - x_i) &#43; \phi_m \cdot x_i) $$ $$ x_{im}&#39; = \mathop {\max }\limits_{j:(i,j) \in \xi }e_{ijm}&#39; $$'><title>DGCNN论文解读</title>
 
-<link rel='canonical' href='https://Codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/'>
+<link rel='canonical' href='https://codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/'>
 
 <link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='DGCNN论文解读'>
 <meta property='og:description' content='DGCNN 前言 因为关心的领域主要是配准，对于分类等网络的架构设计分析并没有侧重太多，主要侧重的是EdgeConv的思想。
@@ -23,7 +23,7 @@
 一些其他的选择在下一个小part中讨论。在本文中，作者采用的： $$ h_{\Theta}(x_i,x_j) = {\bar h}_{\Theta}(x_i, x_j - x_i) $$
 从这个表达式可以非常明显的看出，既结合了全局形状结构，也结合了局部的结构信息。Global shape structure通过$x_i$捕捉，local neighborhood information通过$x_j - x_i$来捕捉。
 更具体一点的说，通过如下两个公式来计算edge_feature以及x&#39;： $$ e_{ijm}&#39; = ReLU(\theta_m \cdot(x_j - x_i) &#43; \phi_m \cdot x_i) $$ $$ x_{im}&#39; = \mathop {\max }\limits_{j:(i,j) \in \xi }e_{ijm}&#39; $$'>
-<meta property='og:url' content='https://Codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/'>
+<meta property='og:url' content='https://codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/'>
 <meta property='og:site_name' content='Codefmeister'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='点云配准' /><meta property='article:tag' content='深度学习' /><meta property='article:published_time' content='2020-12-21T09:40:49&#43;08:00'/><meta property='article:modified_time' content='2020-12-21T09:40:49&#43;08:00'/>
 <meta name="twitter:title" content="DGCNN论文解读">
@@ -64,7 +64,7 @@
                 
             </figure>
         
-        <h1 class="site-name"><a href="https://Codefmeister.github.io">Codefmeister</a></h1>
+        <h1 class="site-name"><a href="https://codefmeister.github.io">Codefmeister</a></h1>
         <h2 class="site-description">Major in Computer science</h2>
     </header>
 
@@ -150,7 +150,7 @@
 
             <main class="main full-width">
     <div id="article-toolbar">
-        <a href="https://Codefmeister.github.io" class="back-home">
+        <a href="https://codefmeister.github.io" class="back-home">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
@@ -430,7 +430,7 @@ var katex_config = {
             return;
         }
         var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.src = '//' + "codefmeister" + '.disqus.com/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
     })();

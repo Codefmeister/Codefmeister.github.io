@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>传统理论 on Codefmeister</title>
-    <link>https://Codefmeister.github.io/tags/%E4%BC%A0%E7%BB%9F%E7%90%86%E8%AE%BA/</link>
+    <link>https://codefmeister.github.io/tags/%E4%BC%A0%E7%BB%9F%E7%90%86%E8%AE%BA/</link>
     <description>Recent content in 传统理论 on Codefmeister</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 03 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://Codefmeister.github.io/tags/%E4%BC%A0%E7%BB%9F%E7%90%86%E8%AE%BA/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 03 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/%E4%BC%A0%E7%BB%9F%E7%90%86%E8%AE%BA/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>MATrICP论文解读</title>
-      <link>https://Codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
+      <link>https://codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
       <pubDate>Thu, 03 Dec 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
+      <guid>https://codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
       <description>MATrICP 论文  Improved techniques for multi-view registration with motion averaging
 Li, Zhongyu Zhu, Jihua Lan, Ke Li, Chen Fang, Chaowei
  核心思想 将Trimmed ICP与运动平均算法结合起来，应用到多视角聚类上。

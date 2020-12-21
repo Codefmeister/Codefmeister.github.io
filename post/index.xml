@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Codefmeister</title>
-    <link>https://Codefmeister.github.io/post/</link>
+    <link>https://codefmeister.github.io/post/</link>
     <description>Recent content in Posts on Codefmeister</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 21 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://Codefmeister.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 21 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://codefmeister.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>DGCNN论文解读</title>
-      <link>https://Codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
+      <link>https://codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
       <pubDate>Mon, 21 Dec 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
+      <guid>https://codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
       <description>DGCNN 前言 因为关心的领域主要是配准，对于分类等网络的架构设计分析并没有侧重太多，主要侧重的是EdgeConv的思想。
 论文  Dynamic Graph CNN for Learning on Point Clouds, Wang, Yue and Sun, Yongbin.
  核心思想:关于EdgeConv 将点云表征为一个图，${\rm{G}}(V,\xi )$ ,点云的每一个点对应图中的一个结点，而图中的每一条边对应的是点之间的特征feature，称为Edge-feature。举个例子，最简单的情景，可以通过KNN来构建图。Edge Feature用$e_{ij}$来表示，定义为： $$ e_{ij} = h_{\Theta}(x_i,x_j) $$ $$ h_{\Theta}: {R^F} \times {R^F} \to {R^{F&#39;}} $$ $h_{\Theta}$是一个非线性的映射，拥有一系列可学习的参数。
@@ -26,10 +26,10 @@
     
     <item>
       <title>Conv1d与Conv2d</title>
-      <link>https://Codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</link>
+      <link>https://codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</link>
       <pubDate>Wed, 16 Dec 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</guid>
+      <guid>https://codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</guid>
       <description>Conv1d与Conv2d 本文分为几个部分来详解Conv2d与Conv1d。主要侧重于Conv2d
 前言 本文记于2020年12月15日，起因是DGCNN中部分卷积使用了二维卷积，部分卷积使用了一维卷积。加之之前对Conv2d与Conv1d属于一种迷迷糊糊的状态，趁着这个机会弄清楚。
 Conv2d原理（二维卷积层） 二维互相关运算 互相关运算与卷积运算 虽然卷积层得名于卷积(convolution)运算，但所有框架在实现卷积层的底层，都采用的是互相关运算。实际上，卷积运算与互相关运算类似，为了得到卷积运算的输出，我们只需要将核数组左右翻转并上下翻转，然后再与输入数组做互相关运算。所以这两种运算虽然类似，但是输出并不相同。
@@ -47,10 +47,10 @@ Conv2d原理（二维卷积层） 二维互相关运算 互相关运算与卷积
     
     <item>
       <title>LeakyReLU函数解析</title>
-      <link>https://Codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</link>
+      <link>https://codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</link>
       <pubDate>Mon, 14 Dec 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</guid>
+      <guid>https://codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</guid>
       <description>LeakyReLU 语法  CLASS torch.nn.LeakyReLU(negative_slope: float = 0.01, inplace: bool = False)
  作用 Element-wise
 对于每个x，应用函数如图： 函数图像 </description>
@@ -58,10 +58,10 @@ Conv2d原理（二维卷积层） 二维互相关运算 互相关运算与卷积
     
     <item>
       <title>MATrICP论文解读</title>
-      <link>https://Codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
+      <link>https://codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
       <pubDate>Thu, 03 Dec 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
+      <guid>https://codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
       <description>MATrICP 论文  Improved techniques for multi-view registration with motion averaging
 Li, Zhongyu Zhu, Jihua Lan, Ke Li, Chen Fang, Chaowei
  核心思想 将Trimmed ICP与运动平均算法结合起来，应用到多视角聚类上。
@@ -78,10 +78,10 @@ Li, Zhongyu Zhu, Jihua Lan, Ke Li, Chen Fang, Chaowei
     
     <item>
       <title>np.transpose()详解</title>
-      <link>https://Codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</link>
+      <link>https://codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</link>
       <pubDate>Sat, 21 Nov 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</guid>
+      <guid>https://codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</guid>
       <description>ndarray的转置(transpose) 对于A是由np.ndarray表示的情况：
 可以直接使用命令A.T。
 也可以使用命令A.transpose()。
@@ -98,10 +98,10 @@ Example： 二维默认情况下： A = np.array([[1,2],[3,4]]) print(A) print(A
     
     <item>
       <title>np.unique()解读</title>
-      <link>https://Codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</link>
+      <link>https://codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</link>
       <pubDate>Sat, 21 Nov 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</guid>
+      <guid>https://codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</guid>
       <description>np.unique()官方文档分析以及举例 1.1 官方文档及解读 numpy.unique 语法：numpy.unique(ar, return_index=False, return_inverse=False, return_counts=False, axis=None)
 作用：找到array中不重复（独一无二）的元素
 返回值：默认返回不重复元素的sorted排好序的从小到大的数组。可选的返回值有：
@@ -126,10 +126,10 @@ unique数组中对应位置的value值第一次在input数组中出现的下标�
     
     <item>
       <title>MatrixCookBook Chapter1:矩阵的基础知识</title>
-      <link>https://Codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
+      <link>https://codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
       <pubDate>Sun, 15 Nov 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
+      <guid>https://codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
       <description>矩阵的基础知识（转置，逆，迹，行列式）  References: MatrixCookBook(Version 2012) Chapter1
  Chapter1: Basics 1 Basics 注：${A^H}$是A的Transposed and complex conjugated matrix (Hermitian)，即转置复共轭矩阵。
 1.1 矩阵的迹(Trace) 式子(11)表明矩阵的迹是主对角线元素的和。
@@ -155,10 +155,10 @@ unique数组中对应位置的value值第一次在input数组中出现的下标�
     
     <item>
       <title>model.eval()作用分析</title>
-      <link>https://Codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</link>
+      <link>https://codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</link>
       <pubDate>Sat, 14 Nov 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</guid>
+      <guid>https://codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</guid>
       <description>model.eval() model.eval() 作用等同于 self.train(False)
 简而言之，就是评估模式。而非训练模式。
 在评估模式下，batchNorm层，dropout层等用于优化训练而添加的网络层会被关闭，从而使得评估时不会发生偏移。
@@ -168,10 +168,10 @@ unique数组中对应位置的value值第一次在input数组中出现的下标�
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>numpy.arange() 语法 x = numpy.arange(start,end,step,dtype=None)
 Parameters说明  start: Optional，起始值，默认值为0。 end: 结束值(不含)。 step: Optional，步长，默认值为1。 dtype：Optional，默认为None，从其他输入值中推测。  功能 [start,end)的左闭右开区间内，每隔一个step取一次值。return值是ndarray。 对于浮点数来说，length = ceil((end - start)/step)，由于浮点数的上溢，此条规则可能会导致在浮点数情况下，最后一个element比end长。
 Note 如果使用非整数步长（譬如0.1），结果往往不一致（原因见上），所以在这种情况下推荐使用numpy.linspace。
@@ -180,19 +180,19 @@ Example &amp;gt;&amp;gt;&amp;gt; np.arange(3) array([0, 1, 2]) &amp;gt;&amp;gt;&
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>numpy </description>
     </item>
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>numpy.repeat() 作用 可以用于重复数组中的元素
 语法 numpy.repeat(a, repeats, axis=None)
 参数解读 Parameters   a : array_like
@@ -203,10 +203,10 @@ The axis along which to repeat values. By default, use the flattened input array
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>numpy.tile 语法 numpy.tile(A,reps)
 作用  Construct an array by repeating A the number of times given by reps.
 If reps has length d, the result will have dimension of max(d, A.ndim).
@@ -215,10 +215,10 @@ If A.ndim &amp;lt; d, A is promoted to be d-dimensional by prepending new axes. 
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>numpy.concatenate 语法 numpy.concatenate((a1,a2,...), axis=0, out=None, dtype=None, casting=&amp;quot;same_kind&amp;quot;)
 作用 将一个数组序列在指定的维度上进行连接join
 Parameter  a1,a2,&amp;hellip; : sequence of array_like   The arrays must have the same shape, except in the dimension corresponding to axis (the first, by default)
@@ -230,10 +230,10 @@ Parameter  a1,a2,&amp;hellip; : sequence of array_like   The arrays must have th
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>numpy求矩阵的特征值与特征向量(np.linalg.eig) 语法 np.linalg.eig(a)
 功能  Compute the eigenvalues and right eigenvectors of a square array.
  求方阵(n x n)的特征值与右特征向量
@@ -244,10 +244,10 @@ Returns  w : (&amp;hellip;, M) array   The eigenvalues, each repeated according 
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>numpy中求矩阵的逆与伪逆 numpy中求矩阵的逆：numpy.linalg.inv()
 numpy中求矩阵的伪逆: numpy.linalg.pinv()
 numpy中求矩阵的逆（numpy.linalg.inv) 使用命令numpy.linalg.inv(Matrix)
@@ -264,10 +264,10 @@ If a is not square or inversion fails.</description>
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>numpy.linalg.norm 语法 numpy.linalg.norm(x,ord=None,axis=None,keepdims=False)
 Parameters  x: array_like   Input array. If axis is None, x must be 1-D or 2-D, unless ord is None. If both axis and ord are None, the 2-norm of x.ravel will be returned.
  X是输入的array, array的情况必须是以下三种情况之一:
@@ -276,10 +276,10 @@ Parameters  x: array_like   Input array. If axis is None, x must be 1-D or 2-D, 
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>python中parse_args以及namespace 声明：本笔记记录的是使用parse_args在函数内部进行传参，并非在命令行进行输入。所有操作均需先进行import argparse。
 通过以下操作，可以在传参时直接传入args这个namespace，而不是具体的某个参数。
 创建argparse对象，设置参数以及默认值 使用argparse.ArgumentParser()创建对象，使用argparser.add_argument()操作设置参数以及默认值。
@@ -292,10 +292,10 @@ args.__setattr__(&#39;cloudArray&#39;,[]) args.cloudArray.append(1024) if args._
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>python如何使得list中的元素是ndarray 在一个代码实现时，会想要类似MATLAB一样，拥有一个struct类型的数组，数组中的每个cell都是一个ndarray。因为在某些维度上shape不同，所以不能整合为一个大的ndarray。
 要实现上述需求，可以进行如下操作:
 targetList = [] targetList.append(ndarray) 这样即可获得由ndarray构成的list，可以进一步对list进行concatenate等操作再次整合。</description>
@@ -303,10 +303,10 @@ targetList = [] targetList.append(ndarray) 这样即可获得由ndarray构成的
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>Python中李群SO(3)与李代数so(3)之间指数映射与实现源码 调用scipy.linalg.expm() 对于李群SE(3)、SO(3)，和与其对应的李代数se(3),so(3)。指数映射是十分重要的。
 在Python中我们可以调用：scipy.linalg.expm()来将李代数$\xi $对应的反对称矩阵${\hat \xi }$映射到其对应的旋转矩阵$R$。
 源码示例 import scipy.linalg.expm as expm def SkewFun(a): &amp;quot;&amp;quot;&amp;quot; got the corresponded antiSymmetric Matrix of the Lie algebra :param a: Lie algebra :return: antiSymmetric Matrix &amp;quot;&amp;quot;&amp;quot; if len(a) == 3: A = np.array([[0, -a[2], a[1]], [a[2], 0, -a[0]], [-a[1], a[0], 0] ]) return A if len(a) == 2: A = np.array([a[1], -a[0]]) return A exit(-1) def so3ToSO3(xi): return expm(SkewFun(xi) </description>
@@ -314,10 +314,10 @@ targetList = [] targetList.append(ndarray) 这样即可获得由ndarray构成的
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>Python判断不可变对象（字符串，整数，浮点数，数组）相等的办法以及其底层实现原理 Python中，判断不可变对象是否相等与Java十分不同。
 结论 Python中判断两个字符串相等：既可以使用&amp;quot;==&amp;quot;，又可以使用&amp;quot;is&amp;quot;。
 判断整数，浮点数以及Tuple时，最好使用&amp;quot;==&amp;quot;
@@ -334,10 +334,10 @@ Tuple 对于元组，虽然其是不可变对象，但在底层实现无intern�
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>python中判断列表为空 判断列表为空是一个非常基础的问题。但是也有很多写法。
 方法1：len() list = [] if len(list) == 0: print(&#39;list is empty&#39;) 方法2：直接使用if判断 list = [] if not list: print(&#39;list is empty&#39;) 直接使用list作为判断标准，则空列表相当于False
 方法3：使用==进行判断 EmptyList = [] list = [] if list==EmptyList: print(&#39;list is empty&#39;) 注意: Python中与Java不同。Java中==用于判断两个变量是否指向同一个对象，即地址是否相同。但是Python中不是，Python中，==用于判断两个变量的值相等。</description>
@@ -345,30 +345,30 @@ Tuple 对于元组，虽然其是不可变对象，但在底层实现无intern�
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>python中怎么表示自然底数e和浮点数精度epsilon 自然底数e可以直接使用math.e表示。
 浮点数精度epsilon可以使用np.spacing(1)来表征epsilon，等效于MATLAB中的eps.</description>
     </item>
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>PyTorch中默认维度 PyTorch中默认维度: B C H W。
 即Batch_size，Channel, Height, Width</description>
     </item>
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>Mechanics of Seq2Seq Models With Attention  Reference: Visualizing A Neural Machine Translation Model (Mechanics of Seq2seq Models With Attention)
  前言 Sequence-to-sequence模型在深度学习领域取得了很多成就。
 这文章真的牛逼。
@@ -377,10 +377,10 @@ Tuple 对于元组，虽然其是不可变对象，但在底层实现无intern�
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>AdaptiveMaxPool AdaptiveMaxPool是PyTorch中提供的自适应池化层。
 其主要特殊的地方在于： 无论输入Input的size是多少，输出的size总为指定的size。
 AdaptiveMaxPool1d() m = nn.AdaptiveMaxPool1d(3) input = torch.randn(4,3,7) output = m(input) # output的size为(4,3,3) AdaptiveMaxPool2d() m = nn.AdaptiveMaxPool2d((3,6)) input = torch.randn(2,64,8,9) output = m(input) # output的size为(2,64,3,6) AdaptiveMaxPool3d() 同理</description>
@@ -388,10 +388,10 @@ AdaptiveMaxPool1d() m = nn.AdaptiveMaxPool1d(3) input = torch.randn(4,3,7) outpu
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>本文参考 lr_scheduler介绍 以及 PyTorch optim文档
  1 概述 1.1 PyTorch文档：torch.optim解读  下图是optim的文档
   TORCH.OPTIM torch.optim is a package implementing various optimization algorithms. Most commonly used methods are already supported, and the interface is general enough, so that more sophisticated ones can be also easily integrated in the future.
@@ -402,10 +402,10 @@ torch.optim是PyTorch实现的一个包，里面有各种各样的优化算法�
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>torch.topk 语法  torch.topk(input, k, dim=None, largest=True, sorted=True, *, out = None)
  作用 返回输入tensorinput中，在给定的维度dim上k个最大的元素。
 如果dim没有给定，那么选择输入input的最后一维。
@@ -424,10 +424,10 @@ Parameters   input (Tensor) &amp;ndash; the input tensor
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>图解Transformer  Reference: The Illustrated Transformer
  本文自译用于加深理解与印象。
 关于注意力机制，可以参考先前的Seq2Seq Model with Attention
@@ -446,10 +446,10 @@ Now We&amp;rsquo;re Encoding 像我们先前提到的，一个编码器接收一
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>为什么要有Tensor.contiguous() Tensor.contiguous()作用  Returns a contiguous in memory tensor containing the same data as self tensor. If self tensor is already in the specified memory format, this function returns the self tensor.
  作用在官方文档里，描述的看似清晰但又模棱两可。例如x是一个Tensor，x.contiguous()的作用就是返回一个在内存中连续的Tensor，其data与Tensorx一致。如果源x本来就在内存中连续的话，那就返回其本身。
 为什么要有Tensor.contiguous()?  Reference: StackOverflow&amp;ndash;Why do we need contiguous?
@@ -462,20 +462,20 @@ Now We&amp;rsquo;re Encoding 像我们先前提到的，一个编码器接收一
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>克罗内克内积 Kronecker product $\otimes$ 1.1 概述 克罗内克内积是一种特殊的张量积。任何两个形状的矩阵都可以进行克罗内克内积操作。
 1.2 定义 Definition $A \otimes B$的定义：A是mxn矩阵，B是pxq矩阵。$A \otimes B$是mp x nq的分块矩阵。 例子： 1.3 性质 1.3.1 双线性结合律 1.3.2 不满足交换律 1.3.3 混合乘积性 </description>
     </item>
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>协方差矩阵详解以及numpy计算协方差矩阵(np.cov) 协方差矩阵详解 均值，标准差与方差 由简单的统计学基础知识，我们有如下公式：
 \bar X{\rm{ = }}\frac{{\sum\limits_{i = 1}^n {{X_i}} }}{{\rm{n}}} S = \sqrt {\frac{{\sum\limits_{i = 1}^n {{{({X_i} - \bar X)}^2}} }}{{n - 1}}} {S^2} = \frac{{\sum\limits_{i = 1}^n {{{({X_i} - \bar X)}^2}} }}{{n - 1}} 其中$\bar X$是样本均值，反映了n个样本观测值的整体大小情况。
 $S$是样本标准差，反应的是样本的离散程度。标准差越大，数据越分散。
@@ -491,10 +491,10 @@ $S^2$是样本方差，是$S$的平方。
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>循环神经网络 前言 我们知道，在n元语法中，时间步$t$的词$w_t$基于前面所有词的条件概率只考虑了最近时间步的$n-1$个词。如果要考虑比$t-(n-1)$更早时间步的词对$w_t$的可能影响，我们需要增大n。
 其下介绍的循环神经网络，它并未刚性地记忆所有固定长度的序列，而是通过隐藏状态来存储之前时间步的信息。
 不含隐藏状态的神经网络 考虑一个含单隐藏层的多层感知机，给定样本数为$n$、输入个数（特征数或者特征向量维度）为$d$的小批量数据样本$X \in R^{n \times d}$，设隐藏层的激活函数为$\phi$，那么隐藏层的输出$H \in R^{n \times h}$计算为：
@@ -506,10 +506,10 @@ H_t = \phi(X_tW_{xh} + H_{t-1}W_{hh} + b_h) 与多层感知机相比，我们在
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>概述 在概率论与统计学中，狄利克雷分布 Dirichlet distribution 常被简记为$Dir(\alpha)$,是基于一个正实数向量$\alpha参数的连续多元概率分布族。狄利克雷分布是对贝塔分布 beta distribution的多元泛化，所以它也被称为多元贝塔分布 multivariate beta distribution(MBD)。
 狄利克雷分布被广泛作为贝叶斯统计的先验分布使用。同时，狄利克雷分布也是分类分布Categorical distribution 和多项分布categorical distribution 的共轭先验。
 狄利克雷分布的无限维推广就是狄利克雷过程Dirichlet process
@@ -518,10 +518,10 @@ H_t = \phi(X_tW_{xh} + H_{t-1}W_{hh} + b_h) 与多层感知机相比，我们在
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>Matrix Differentiation（矩阵求导）  References: Matrix Differentiation,Rabdak J.Barnes 
  注： 本文直接从Matrix Differentiation开始记录，之前的乘法等基础部分不表。
 Convention 3 m维向量对n维向量求导所得的结果是一个mxn矩阵,即Jacobian Matrix。 具体形式见上公式。
@@ -538,10 +538,10 @@ Proof 命题13 Proposition 13 命题12的特例：$y=x$</description>
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>语言模型 前言 DCP用到了Transformer，其很多实现的Motivation都来自于Sq2Sq的启发。所以重新回顾学习语言模型。
 语言模型 语言模型是自然语言处理的重要技术。自然语言处理中最常见的数据是文本数据。 我们可以把一段自然语言文本看做一段离散的时间序列。假设一段长度为T的文本中的词依次为$w_1,w_2,...,w_T$， 那么在离散的时间序列中，$w_t(1 \le t \le T )$可以看做在时间步t的输出。给定一个长度为T的词的序列$w_1,w_2,...,w_T$。语言模型将计算该序列的概率：
 P(w_1,w_2,...,w_T) 语言模型的计算 假设序列$w_1,w_2,...,w_T$中的各个词是依次生成的，我们有：
@@ -553,20 +553,20 @@ P(w_1,w_2,...,w_T) \approx \prod\nolimits_{t=1}^{\rm{T}} {P(w_t|w_{t-(n-1)},...,
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>Reference: Wikipedia:Bayesian_inference
    Bayesian inference is a method of statistical inference in which Bayes&#39; theorem is used to update the probability for a hypothesis as more evidence or information becomes available. Bayesian inference is an important technique in statistics, and especially in mathematical statistics. Bayesian updating is particularly important in the dynamic analysis of a sequence of data. Bayesian inference has found application in a wide range of activities, including science, engineering, philosophy, medicine, sport, and law.</description>
     </item>
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>边际似然函数 统计学中，边际似然函数（marginal likelihood function 或 integrated likelihood）是一种似然函数，其中某些参数变量被边缘化。在贝叶斯统计的背景下，它常常代指证据evidence或模型证据model evidence。
 概念 给定一组独立同分布的数据点$X = ({x_1}, \ldots ,{x_n})$,其中${x_i} \sim p({x_i}|\theta )$,$p({x_i}|\theta )$是一个概率分布，其参数为$\theta$，其中$\theta$本身就是一个随机变量，可以用一个概率分布来描述，即$\theta \sim p(\theta |\alpha )$。而边际似然函数就是求概率$p(X|\alpha)$是多少，其中参数$\theta$被边缘化（marginalized out)而消失:
 p(X|\alpha ) = \int_\theta {p(X|\theta )p(\theta |\alpha )d\theta } 上述定义是在贝叶斯统计下提出的。</description>
@@ -574,10 +574,10 @@ p(X|\alpha ) = \int_\theta {p(X|\theta )p(\theta |\alpha )d\theta } 上述定义
     
     <item>
       <title></title>
-      <link>https://Codefmeister.github.io/p/</link>
+      <link>https://codefmeister.github.io/p/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/</guid>
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>高斯混合模型 混合模型概述  In statistics, a mixture model is a probabilistic model for representing the presence of subpopulations within an overall population, without requiring that an observed data set should identify the sub-population to which an individual observation belongs. Formally a mixture model corresponds to the mixture distribution that represents the probability distribution of observations in the overall population. However, while problems associated with &amp;ldquo;mixture distributions&amp;rdquo; relate to deriving the properties of the overall population from those of the sub-populations, &amp;ldquo;mixture models&amp;rdquo; are used to make statistical inferences about the properties of the sub-populations given only observations on the pooled population, without sub-population identity information.</description>
     </item>
     

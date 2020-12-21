@@ -15,7 +15,7 @@ Conv2d原理（二维卷积层） 二维互相关运算 互相关运算与卷积
 填充与步幅 卷积层的输出形状由输入形状和卷积核窗口形状决定，通过填充与步幅，我们可以改变给定形状的输入和卷积层下的输出形状。
 填充 填充padding是指在输入高和宽的两侧填充元素(通常是0元素)。如下图： 假设输入形状为$n_h \times n_w$， 卷积核窗口形状是$k_h \times k_w$，在高的两侧一共填充$p_h$行，在宽的两侧一共填充$p_w$列，那么输出形状将会是： $$ (n_h - k_h &#43; p_h &#43; 1) \times (n_w - k_w &#43; p_w &#43; 1) $$ 很多情况下我们会设置$p_h = k_h -1$和$p_w = k_w - 1$来使得输入输出具有相同的高和宽。'><title>Conv1d与Conv2d</title>
 
-<link rel='canonical' href='https://Codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/'>
+<link rel='canonical' href='https://codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/'>
 
 <link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='Conv1d与Conv2d'>
 <meta property='og:description' content='Conv1d与Conv2d 本文分为几个部分来详解Conv2d与Conv1d。主要侧重于Conv2d
@@ -31,7 +31,7 @@ Conv2d原理（二维卷积层） 二维互相关运算 互相关运算与卷积
 可见，我们可以通过更深的卷积神经网络使特征图中单个元素的感受野变得更加广阔，从而捕捉输入上更大尺寸的特征。
 填充与步幅 卷积层的输出形状由输入形状和卷积核窗口形状决定，通过填充与步幅，我们可以改变给定形状的输入和卷积层下的输出形状。
 填充 填充padding是指在输入高和宽的两侧填充元素(通常是0元素)。如下图： 假设输入形状为$n_h \times n_w$， 卷积核窗口形状是$k_h \times k_w$，在高的两侧一共填充$p_h$行，在宽的两侧一共填充$p_w$列，那么输出形状将会是： $$ (n_h - k_h &#43; p_h &#43; 1) \times (n_w - k_w &#43; p_w &#43; 1) $$ 很多情况下我们会设置$p_h = k_h -1$和$p_w = k_w - 1$来使得输入输出具有相同的高和宽。'>
-<meta property='og:url' content='https://Codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/'>
+<meta property='og:url' content='https://codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/'>
 <meta property='og:site_name' content='Codefmeister'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='深度学习' /><meta property='article:tag' content='数学原理' /><meta property='article:published_time' content='2020-12-16T09:40:49&#43;08:00'/><meta property='article:modified_time' content='2020-12-16T09:40:49&#43;08:00'/>
 <meta name="twitter:title" content="Conv1d与Conv2d">
@@ -76,7 +76,7 @@ Conv2d原理（二维卷积层） 二维互相关运算 互相关运算与卷积
                 
             </figure>
         
-        <h1 class="site-name"><a href="https://Codefmeister.github.io">Codefmeister</a></h1>
+        <h1 class="site-name"><a href="https://codefmeister.github.io">Codefmeister</a></h1>
         <h2 class="site-description">Major in Computer science</h2>
     </header>
 
@@ -162,7 +162,7 @@ Conv2d原理（二维卷积层） 二维互相关运算 互相关运算与卷积
 
             <main class="main full-width">
     <div id="article-toolbar">
-        <a href="https://Codefmeister.github.io" class="back-home">
+        <a href="https://codefmeister.github.io" class="back-home">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
@@ -327,7 +327,7 @@ var katex_config = {
             return;
         }
         var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.src = '//' + "codefmeister" + '.disqus.com/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
     })();

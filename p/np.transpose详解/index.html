@@ -14,7 +14,7 @@ Example： 二维默认情况下： A = np.array([[1,2],[3,4]]) print(A) print(A
 指定维度情况： a = np.array([[[1,2,3,4],[4,5,6,7]],[[2,3,4,5],[5,6,7,8]],[[3,4,5,6],[4,5,6,7]]]) print(a.shape) print(a.transpose(1,2,0).shape) A = np.transpose(a,(1,2,0)) print(A.shape) 结果如下：
 从截图中可以看出，a.transpose(1,2,0)与np.transpose(a,(1,2,0))效果相同。代码段中给出的axes是(1,2,0)，这决定了transpose后的数组，其shape在第一个维度即shape[0]上是原来的shape[1]，第二维shape[1]是原来的shape[2]，第三维shape[2]是原来的shape[0]。所以原shape为(3,2,4)。新的shape为(2,4,3)。'><title>np.transpose()详解</title>
 
-<link rel='canonical' href='https://Codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/'>
+<link rel='canonical' href='https://codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/'>
 
 <link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='np.transpose()详解'>
 <meta property='og:description' content='ndarray的转置(transpose) 对于A是由np.ndarray表示的情况：
@@ -29,7 +29,7 @@ Example： 二维默认情况下： A = np.array([[1,2],[3,4]]) print(A) print(A
 多维默认情况下： a = np.array([[[1,2,3,4],[4,5,6,7]],[[2,3,4,5],[5,6,7,8]],[[3,4,5,6],[4,5,6,7]]]) print(a.shape) print(a.T.shape) print(a.transpose().shape) 结果如下：
 指定维度情况： a = np.array([[[1,2,3,4],[4,5,6,7]],[[2,3,4,5],[5,6,7,8]],[[3,4,5,6],[4,5,6,7]]]) print(a.shape) print(a.transpose(1,2,0).shape) A = np.transpose(a,(1,2,0)) print(A.shape) 结果如下：
 从截图中可以看出，a.transpose(1,2,0)与np.transpose(a,(1,2,0))效果相同。代码段中给出的axes是(1,2,0)，这决定了transpose后的数组，其shape在第一个维度即shape[0]上是原来的shape[1]，第二维shape[1]是原来的shape[2]，第三维shape[2]是原来的shape[0]。所以原shape为(3,2,4)。新的shape为(2,4,3)。'>
-<meta property='og:url' content='https://Codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/'>
+<meta property='og:url' content='https://codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/'>
 <meta property='og:site_name' content='Codefmeister'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='torch' /><meta property='article:tag' content='numpy基础' /><meta property='article:published_time' content='2020-11-21T09:40:49&#43;08:00'/><meta property='article:modified_time' content='2020-11-21T09:40:49&#43;08:00'/>
 <meta name="twitter:title" content="np.transpose()详解">
@@ -73,7 +73,7 @@ Example： 二维默认情况下： A = np.array([[1,2],[3,4]]) print(A) print(A
                 
             </figure>
         
-        <h1 class="site-name"><a href="https://Codefmeister.github.io">Codefmeister</a></h1>
+        <h1 class="site-name"><a href="https://codefmeister.github.io">Codefmeister</a></h1>
         <h2 class="site-description">Major in Computer science</h2>
     </header>
 
@@ -159,7 +159,7 @@ Example： 二维默认情况下： A = np.array([[1,2],[3,4]]) print(A) print(A
 
             <main class="main full-width">
     <div id="article-toolbar">
-        <a href="https://Codefmeister.github.io" class="back-home">
+        <a href="https://codefmeister.github.io" class="back-home">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
@@ -304,7 +304,7 @@ var katex_config = {
             return;
         }
         var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.src = '//' + "codefmeister" + '.disqus.com/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
     })();

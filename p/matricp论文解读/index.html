@@ -14,7 +14,7 @@ Li, Zhongyu Zhu, Jihua Lan, Ke Li, Chen Fang, Chaowei
 运动平均的主要思想是，将relative Motion看作是global Motion的某种组合。先求出$\Delta M_{i,j}$，将其转换为李代数对应的6x1的向量。然后通过Average的思想，求出global Motion的变化值。
 2.1 计算relative motion $M_{i,j}$的变化值 通过global motion，可以求出$\Delta M_{i,j}$ $$ \Delta M_{i,j} = M_i^0 M_{i,j} {(M_j^0)}^{-1} $$'><title>MATrICP论文解读</title>
 
-<link rel='canonical' href='https://Codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/'>
+<link rel='canonical' href='https://codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/'>
 
 <link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='MATrICP论文解读'>
 <meta property='og:description' content='MATrICP 论文  Improved techniques for multi-view registration with motion averaging
@@ -29,7 +29,7 @@ Li, Zhongyu Zhu, Jihua Lan, Ke Li, Chen Fang, Chaowei
 2. 根据估算得到的${\xi_{i,j}}$，选择重叠率高的scan pair，应用TrICP算法求解其relative Motion $M_{i,j}$ 2. 应用运动平均算法 在应用Motion Average前，我们已经有了初始的Global Motion以及一系列Relative Motion。
 运动平均的主要思想是，将relative Motion看作是global Motion的某种组合。先求出$\Delta M_{i,j}$，将其转换为李代数对应的6x1的向量。然后通过Average的思想，求出global Motion的变化值。
 2.1 计算relative motion $M_{i,j}$的变化值 通过global motion，可以求出$\Delta M_{i,j}$ $$ \Delta M_{i,j} = M_i^0 M_{i,j} {(M_j^0)}^{-1} $$'>
-<meta property='og:url' content='https://Codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/'>
+<meta property='og:url' content='https://codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/'>
 <meta property='og:site_name' content='Codefmeister'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='点云配准' /><meta property='article:tag' content='传统理论' /><meta property='article:published_time' content='2020-12-03T09:40:49&#43;08:00'/><meta property='article:modified_time' content='2020-12-03T09:40:49&#43;08:00'/>
 <meta name="twitter:title" content="MATrICP论文解读">
@@ -73,7 +73,7 @@ Li, Zhongyu Zhu, Jihua Lan, Ke Li, Chen Fang, Chaowei
                 
             </figure>
         
-        <h1 class="site-name"><a href="https://Codefmeister.github.io">Codefmeister</a></h1>
+        <h1 class="site-name"><a href="https://codefmeister.github.io">Codefmeister</a></h1>
         <h2 class="site-description">Major in Computer science</h2>
     </header>
 
@@ -159,7 +159,7 @@ Li, Zhongyu Zhu, Jihua Lan, Ke Li, Chen Fang, Chaowei
 
             <main class="main full-width">
     <div id="article-toolbar">
-        <a href="https://Codefmeister.github.io" class="back-home">
+        <a href="https://codefmeister.github.io" class="back-home">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
@@ -329,7 +329,7 @@ var katex_config = {
             return;
         }
         var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.src = '//' + "codefmeister" + '.disqus.com/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
     })();

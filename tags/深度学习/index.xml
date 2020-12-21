@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>深度学习 on Codefmeister</title>
-    <link>https://Codefmeister.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</link>
+    <link>https://codefmeister.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</link>
     <description>Recent content in 深度学习 on Codefmeister</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 21 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://Codefmeister.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 21 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>DGCNN论文解读</title>
-      <link>https://Codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
+      <link>https://codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
       <pubDate>Mon, 21 Dec 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
+      <guid>https://codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
       <description>DGCNN 前言 因为关心的领域主要是配准，对于分类等网络的架构设计分析并没有侧重太多，主要侧重的是EdgeConv的思想。
 论文  Dynamic Graph CNN for Learning on Point Clouds, Wang, Yue and Sun, Yongbin.
  核心思想:关于EdgeConv 将点云表征为一个图，${\rm{G}}(V,\xi )$ ,点云的每一个点对应图中的一个结点，而图中的每一条边对应的是点之间的特征feature，称为Edge-feature。举个例子，最简单的情景，可以通过KNN来构建图。Edge Feature用$e_{ij}$来表示，定义为： $$ e_{ij} = h_{\Theta}(x_i,x_j) $$ $$ h_{\Theta}: {R^F} \times {R^F} \to {R^{F&#39;}} $$ $h_{\Theta}$是一个非线性的映射，拥有一系列可学习的参数。
@@ -26,10 +26,10 @@
     
     <item>
       <title>Conv1d与Conv2d</title>
-      <link>https://Codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</link>
+      <link>https://codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</link>
       <pubDate>Wed, 16 Dec 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</guid>
+      <guid>https://codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</guid>
       <description>Conv1d与Conv2d 本文分为几个部分来详解Conv2d与Conv1d。主要侧重于Conv2d
 前言 本文记于2020年12月15日，起因是DGCNN中部分卷积使用了二维卷积，部分卷积使用了一维卷积。加之之前对Conv2d与Conv1d属于一种迷迷糊糊的状态，趁着这个机会弄清楚。
 Conv2d原理（二维卷积层） 二维互相关运算 互相关运算与卷积运算 虽然卷积层得名于卷积(convolution)运算，但所有框架在实现卷积层的底层，都采用的是互相关运算。实际上，卷积运算与互相关运算类似，为了得到卷积运算的输出，我们只需要将核数组左右翻转并上下翻转，然后再与输入数组做互相关运算。所以这两种运算虽然类似，但是输出并不相同。
@@ -47,10 +47,10 @@ Conv2d原理（二维卷积层） 二维互相关运算 互相关运算与卷积
     
     <item>
       <title>LeakyReLU函数解析</title>
-      <link>https://Codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</link>
+      <link>https://codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</link>
       <pubDate>Mon, 14 Dec 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</guid>
+      <guid>https://codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</guid>
       <description>LeakyReLU 语法  CLASS torch.nn.LeakyReLU(negative_slope: float = 0.01, inplace: bool = False)
  作用 Element-wise
 对于每个x，应用函数如图： 函数图像 </description>
@@ -58,10 +58,10 @@ Conv2d原理（二维卷积层） 二维互相关运算 互相关运算与卷积
     
     <item>
       <title>model.eval()作用分析</title>
-      <link>https://Codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</link>
+      <link>https://codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</link>
       <pubDate>Sat, 14 Nov 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</guid>
+      <guid>https://codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</guid>
       <description>model.eval() model.eval() 作用等同于 self.train(False)
 简而言之，就是评估模式。而非训练模式。
 在评估模式下，batchNorm层，dropout层等用于优化训练而添加的网络层会被关闭，从而使得评估时不会发生偏移。

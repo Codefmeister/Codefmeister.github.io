@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>数学原理 on Codefmeister</title>
-    <link>https://Codefmeister.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/</link>
+    <link>https://codefmeister.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/</link>
     <description>Recent content in 数学原理 on Codefmeister</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 16 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://Codefmeister.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Conv1d与Conv2d</title>
-      <link>https://Codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</link>
+      <link>https://codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</link>
       <pubDate>Wed, 16 Dec 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</guid>
+      <guid>https://codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</guid>
       <description>Conv1d与Conv2d 本文分为几个部分来详解Conv2d与Conv1d。主要侧重于Conv2d
 前言 本文记于2020年12月15日，起因是DGCNN中部分卷积使用了二维卷积，部分卷积使用了一维卷积。加之之前对Conv2d与Conv1d属于一种迷迷糊糊的状态，趁着这个机会弄清楚。
 Conv2d原理（二维卷积层） 二维互相关运算 互相关运算与卷积运算 虽然卷积层得名于卷积(convolution)运算，但所有框架在实现卷积层的底层，都采用的是互相关运算。实际上，卷积运算与互相关运算类似，为了得到卷积运算的输出，我们只需要将核数组左右翻转并上下翻转，然后再与输入数组做互相关运算。所以这两种运算虽然类似，但是输出并不相同。
@@ -30,10 +30,10 @@ Conv2d原理（二维卷积层） 二维互相关运算 互相关运算与卷积
     
     <item>
       <title>MatrixCookBook Chapter1:矩阵的基础知识</title>
-      <link>https://Codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
+      <link>https://codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
       <pubDate>Sun, 15 Nov 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
+      <guid>https://codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
       <description>矩阵的基础知识（转置，逆，迹，行列式）  References: MatrixCookBook(Version 2012) Chapter1
  Chapter1: Basics 1 Basics 注：${A^H}$是A的Transposed and complex conjugated matrix (Hermitian)，即转置复共轭矩阵。
 1.1 矩阵的迹(Trace) 式子(11)表明矩阵的迹是主对角线元素的和。

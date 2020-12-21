@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Codefmeister</title>
-        <link>https://Codefmeister.github.io/</link>
+        <link>https://codefmeister.github.io/</link>
         <description>Recent content on Codefmeister</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 21 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://Codefmeister.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 21 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://codefmeister.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>DGCNN论文解读</title>
-        <link>https://Codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
+        <link>https://codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
         <pubDate>Mon, 21 Dec 2020 09:40:49 +0800</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
+        <guid>https://codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
         <description>&lt;h1 id=&#34;dgcnn&#34;&gt;DGCNN&lt;/h1&gt;
 &lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
 &lt;p&gt;因为关心的领域主要是配准，对于分类等网络的架构设计分析并没有侧重太多，主要侧重的是EdgeConv的思想。&lt;/p&gt;
@@ -186,10 +186,10 @@ PointNet++意识到了PointNet中存在的问题，所以它通过FPS采样，�
         </item>
         <item>
         <title>Conv1d与Conv2d</title>
-        <link>https://Codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</link>
+        <link>https://codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</link>
         <pubDate>Wed, 16 Dec 2020 09:40:49 +0800</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</guid>
+        <guid>https://codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</guid>
         <description>&lt;h1 id=&#34;conv1d与conv2d&#34;&gt;Conv1d与Conv2d&lt;/h1&gt;
 &lt;p&gt;本文分为几个部分来详解Conv2d与Conv1d。主要侧重于Conv2d&lt;/p&gt;
 &lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
@@ -249,10 +249,10 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>LeakyReLU函数解析</title>
-        <link>https://Codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</link>
+        <link>https://codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</link>
         <pubDate>Mon, 14 Dec 2020 09:40:49 +0800</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</guid>
+        <guid>https://codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</guid>
         <description>&lt;h1 id=&#34;leakyrelu&#34;&gt;LeakyReLU&lt;/h1&gt;
 &lt;h2 id=&#34;语法&#34;&gt;语法&lt;/h2&gt;
 &lt;blockquote&gt;
@@ -268,10 +268,10 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>MATrICP论文解读</title>
-        <link>https://Codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
+        <link>https://codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</link>
         <pubDate>Thu, 03 Dec 2020 09:40:49 +0800</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
+        <guid>https://codefmeister.github.io/p/matricp%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</guid>
         <description>&lt;h1 id=&#34;matricp&#34;&gt;MATrICP&lt;/h1&gt;
 &lt;h2 id=&#34;论文&#34;&gt;论文&lt;/h2&gt;
 &lt;blockquote&gt;
@@ -336,10 +336,10 @@ $$
         </item>
         <item>
         <title>np.transpose()详解</title>
-        <link>https://Codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</link>
+        <link>https://codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</link>
         <pubDate>Sat, 21 Nov 2020 09:40:49 +0800</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</guid>
+        <guid>https://codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</guid>
         <description>&lt;h2 id=&#34;ndarray的转置transpose&#34;&gt;ndarray的转置(transpose)&lt;/h2&gt;
 &lt;p&gt;对于A是由&lt;code&gt;np.ndarray&lt;/code&gt;表示的情况：&lt;br&gt;
 可以直接使用命令&lt;code&gt;A.T&lt;/code&gt;。&lt;br&gt;
@@ -379,10 +379,10 @@ print(A.shape)
         </item>
         <item>
         <title>np.unique()解读</title>
-        <link>https://Codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</link>
+        <link>https://codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</link>
         <pubDate>Sat, 21 Nov 2020 09:40:49 +0800</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</guid>
+        <guid>https://codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</guid>
         <description>&lt;h1 id=&#34;npunique官方文档分析以及举例&#34;&gt;np.unique()官方文档分析以及举例&lt;/h1&gt;
 &lt;h2 id=&#34;11-官方文档及解读&#34;&gt;1.1 官方文档及解读&lt;/h2&gt;
 &lt;h3 id=&#34;numpyunique&#34;&gt;&lt;code&gt;numpy.unique&lt;/code&gt;&lt;/h3&gt;
@@ -450,10 +450,10 @@ unique数组中对应位置的value值第一次在input数组中出现的下标�
         </item>
         <item>
         <title>MatrixCookBook Chapter1:矩阵的基础知识</title>
-        <link>https://Codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
+        <link>https://codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
         <pubDate>Sun, 15 Nov 2020 09:40:49 +0800</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
+        <guid>https://codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
         <description>&lt;h1 id=&#34;矩阵的基础知识转置逆迹行列式&#34;&gt;矩阵的基础知识（转置，逆，迹，行列式）&lt;/h1&gt;
 &lt;blockquote&gt;
 &lt;p&gt;References: &lt;code&gt;MatrixCookBook(Version 2012)  Chapter1&lt;/code&gt;&lt;/p&gt;
@@ -492,10 +492,10 @@ unique数组中对应位置的value值第一次在input数组中出现的下标�
         </item>
         <item>
         <title>model.eval()作用分析</title>
-        <link>https://Codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</link>
+        <link>https://codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</link>
         <pubDate>Sat, 14 Nov 2020 09:40:49 +0800</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</guid>
+        <guid>https://codefmeister.github.io/p/model.eval%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</guid>
         <description>&lt;h2 id=&#34;modeleval&#34;&gt;model.eval()&lt;/h2&gt;
 &lt;p&gt;model.eval() 作用等同于 self.train(False)&lt;br&gt;
 简而言之，就是评估模式。而非训练模式。&lt;br&gt;
@@ -513,10 +513,10 @@ unique数组中对应位置的value值第一次在input数组中出现的下标�
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;numpyarange&#34;&gt;numpy.arange()&lt;/h1&gt;
 &lt;h2 id=&#34;语法&#34;&gt;语法&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;x = numpy.arange(start,end,step,dtype=None)&lt;/code&gt;&lt;/p&gt;
@@ -548,19 +548,19 @@ array([3, 5])
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;numpy&#34;&gt;numpy&lt;/h1&gt;
 </description>
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;numpyrepeat&#34;&gt;numpy.repeat()&lt;/h1&gt;
 &lt;h2 id=&#34;作用&#34;&gt;作用&lt;/h2&gt;
 &lt;p&gt;可以用于重复数组中的元素&lt;/p&gt;
@@ -638,10 +638,10 @@ ValueError: operands could not be broadcast together with shape (8,) (2,)
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;numpytile&#34;&gt;numpy.tile&lt;/h1&gt;
 &lt;h2 id=&#34;语法&#34;&gt;语法&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;numpy.tile(A,reps)&lt;/code&gt;&lt;/p&gt;
@@ -736,10 +736,10 @@ The tiled output array.&lt;/li&gt;
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;numpyconcatenate&#34;&gt;numpy.concatenate&lt;/h1&gt;
 &lt;h2 id=&#34;语法&#34;&gt;语法&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;numpy.concatenate((a1,a2,...), axis=0, out=None, dtype=None, casting=&amp;quot;same_kind&amp;quot;)&lt;/code&gt;&lt;/p&gt;
@@ -815,10 +815,10 @@ The tiled output array.&lt;/li&gt;
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;numpy求矩阵的特征值与特征向量nplinalgeig&#34;&gt;numpy求矩阵的特征值与特征向量(np.linalg.eig)&lt;/h1&gt;
 &lt;h2 id=&#34;语法&#34;&gt;语法&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;np.linalg.eig(a)&lt;/code&gt;&lt;/p&gt;
@@ -966,10 +966,10 @@ array([[1., 0.],
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h2 id=&#34;numpy中求矩阵的逆与伪逆&#34;&gt;numpy中求矩阵的逆与伪逆&lt;/h2&gt;
 &lt;p&gt;numpy中求矩阵的逆：&lt;code&gt;numpy.linalg.inv()&lt;/code&gt;&lt;br&gt;
 numpy中求矩阵的伪逆: &lt;code&gt;numpy.linalg.pinv()&lt;/code&gt;&lt;/p&gt;
@@ -1130,10 +1130,10 @@ True
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;numpylinalgnorm&#34;&gt;numpy.linalg.norm&lt;/h1&gt;
 &lt;h2 id=&#34;语法&#34;&gt;语法&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;numpy.linalg.norm(x,ord=None,axis=None,keepdims=False)&lt;/code&gt;&lt;/p&gt;
@@ -1214,10 +1214,10 @@ F范数只对矩阵存在。其值为对所有元素的绝对值的平方求和�
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;python中parse_args以及namespace&#34;&gt;&lt;code&gt;python&lt;/code&gt;中&lt;code&gt;parse_args&lt;/code&gt;以及&lt;code&gt;namespace&lt;/code&gt;&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;声明&lt;/strong&gt;：本笔记记录的是使用parse_args在函数内部进行传参，并非在命令行进行输入。所有操作均需先进行&lt;code&gt;import argparse&lt;/code&gt;。&lt;br&gt;
 通过以下操作，可以在传参时直接传入&lt;code&gt;args&lt;/code&gt;这个&lt;code&gt;namespace&lt;/code&gt;，而不是具体的某个参数。&lt;/p&gt;
@@ -1245,10 +1245,10 @@ if args.__contains__(&#39;cloudArray&#39;):
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;python如何使得list中的元素是ndarray&#34;&gt;python如何使得&lt;code&gt;list&lt;/code&gt;中的元素是&lt;code&gt;ndarray&lt;/code&gt;&lt;/h1&gt;
 &lt;p&gt;在一个代码实现时，会想要类似MATLAB一样，拥有一个&lt;code&gt;struct&lt;/code&gt;类型的数组，数组中的每个&lt;code&gt;cell&lt;/code&gt;都是一个&lt;code&gt;ndarray&lt;/code&gt;。因为在某些维度上&lt;code&gt;shape&lt;/code&gt;不同，所以不能整合为一个大的&lt;code&gt;ndarray&lt;/code&gt;。&lt;br&gt;
 要实现上述需求，可以进行如下操作:&lt;/p&gt;
@@ -1259,10 +1259,10 @@ targetList.append(ndarray)
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;python中李群so3与李代数so3之间指数映射与实现源码&#34;&gt;Python中李群&lt;code&gt;SO(3)&lt;/code&gt;与李代数&lt;code&gt;so(3)&lt;/code&gt;之间指数映射与实现源码&lt;/h1&gt;
 &lt;h2 id=&#34;调用scipylinalgexpm&#34;&gt;调用&lt;code&gt;scipy.linalg.expm()&lt;/code&gt;&lt;/h2&gt;
 &lt;p&gt;对于李群&lt;code&gt;SE(3)&lt;/code&gt;、&lt;code&gt;SO(3)&lt;/code&gt;，和与其对应的李代数&lt;code&gt;se(3)&lt;/code&gt;,&lt;code&gt;so(3)&lt;/code&gt;。指数映射是十分重要的。&lt;br&gt;
@@ -1294,10 +1294,10 @@ def so3ToSO3(xi):
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;python判断不可变对象字符串整数浮点数数组相等的办法以及其底层实现原理&#34;&gt;Python判断不可变对象（字符串，整数，浮点数，数组）相等的办法以及其底层实现原理&lt;/h1&gt;
 &lt;p&gt;&lt;code&gt;Python&lt;/code&gt;中，判断不可变对象是否相等与&lt;code&gt;Java&lt;/code&gt;十分不同。&lt;/p&gt;
 &lt;h2 id=&#34;结论&#34;&gt;结论&lt;/h2&gt;
@@ -1346,10 +1346,10 @@ print(a is b)
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h2 id=&#34;python中判断列表为空&#34;&gt;python中判断列表为空&lt;/h2&gt;
 &lt;p&gt;判断列表为空是一个非常基础的问题。但是也有很多写法。&lt;/p&gt;
 &lt;h3 id=&#34;方法1len&#34;&gt;方法1：len()&lt;/h3&gt;
@@ -1371,10 +1371,10 @@ if list==EmptyList:
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h2 id=&#34;python中怎么表示自然底数e和浮点数精度epsilon&#34;&gt;python中怎么表示自然底数&lt;code&gt;e&lt;/code&gt;和浮点数精度&lt;code&gt;epsilon&lt;/code&gt;&lt;/h2&gt;
 &lt;p&gt;自然底数&lt;code&gt;e&lt;/code&gt;可以直接使用&lt;code&gt;math.e&lt;/code&gt;表示。&lt;br&gt;
 浮点数精度&lt;code&gt;epsilon&lt;/code&gt;可以使用&lt;code&gt;np.spacing(1)&lt;/code&gt;来表征&lt;code&gt;epsilon&lt;/code&gt;，等效于MATLAB中的&lt;code&gt;eps&lt;/code&gt;.&lt;/p&gt;
@@ -1382,10 +1382,10 @@ if list==EmptyList:
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;pytorch中默认维度&#34;&gt;PyTorch中默认维度&lt;/h1&gt;
 &lt;p&gt;PyTorch中默认维度: B C H W。&lt;/p&gt;
 &lt;p&gt;即&lt;strong&gt;Batch_size，Channel, Height, Width&lt;/strong&gt;&lt;/p&gt;
@@ -1393,10 +1393,10 @@ if list==EmptyList:
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;mechanics-of-seq2seq-models-with-attention&#34;&gt;Mechanics of Seq2Seq Models With Attention&lt;/h1&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Reference: &lt;a class=&#34;link&#34; href=&#34;https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
@@ -1410,10 +1410,10 @@ if list==EmptyList:
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;adaptivemaxpool&#34;&gt;AdaptiveMaxPool&lt;/h1&gt;
 &lt;p&gt;AdaptiveMaxPool是PyTorch中提供的自适应池化层。&lt;/p&gt;
 &lt;p&gt;其主要特殊的地方在于：
@@ -1432,10 +1432,10 @@ output = m(input)   # output的size为(2,64,3,6)
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;blockquote&gt;
 &lt;p&gt;本文参考
 &lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qyhaill/article/details/103043637&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
@@ -1608,10 +1608,10 @@ for epoch in range(100):
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;torchtopk&#34;&gt;torch.topk&lt;/h1&gt;
 &lt;h2 id=&#34;语法&#34;&gt;语法&lt;/h2&gt;
 &lt;blockquote&gt;
@@ -1657,10 +1657,10 @@ True返回最大值，False返回最小值。&lt;/p&gt;
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;图解transformer&#34;&gt;图解Transformer&lt;/h1&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Reference: &lt;a class=&#34;link&#34; href=&#34;https://jalammar.github.io/illustrated-transformer/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
@@ -1799,10 +1799,10 @@ True返回最大值，False返回最小值。&lt;/p&gt;
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;为什么要有tensorcontiguous&#34;&gt;为什么要有Tensor.contiguous()&lt;/h1&gt;
 &lt;h2 id=&#34;tensorcontiguous作用&#34;&gt;Tensor.contiguous()作用&lt;/h2&gt;
 &lt;blockquote&gt;
@@ -1843,10 +1843,10 @@ tensor(0.9181)
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;克罗内克内积-kronecker-product-otimes&#34;&gt;克罗内克内积 Kronecker product &lt;code&gt;$\otimes$&lt;/code&gt;&lt;/h1&gt;
 &lt;h2 id=&#34;11-概述&#34;&gt;1.1 概述&lt;/h2&gt;
 &lt;p&gt;克罗内克内积是一种特殊的张量积。任何两个形状的矩阵都可以进行克罗内克内积操作。&lt;/p&gt;
@@ -1865,10 +1865,10 @@ tensor(0.9181)
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;协方差矩阵详解以及numpy计算协方差矩阵npcov&#34;&gt;协方差矩阵详解以及&lt;code&gt;numpy&lt;/code&gt;计算协方差矩阵(&lt;code&gt;np.cov&lt;/code&gt;)&lt;/h1&gt;
 &lt;h2 id=&#34;协方差矩阵详解&#34;&gt;协方差矩阵详解&lt;/h2&gt;
 &lt;h3 id=&#34;均值标准差与方差&#34;&gt;均值，标准差与方差&lt;/h3&gt;
@@ -2116,10 +2116,10 @@ weights can be used to assign probabilities to observation vectors.&lt;/p&gt;
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;循环神经网络&#34;&gt;循环神经网络&lt;/h1&gt;
 &lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
 &lt;p&gt;我们知道，在n元语法中，时间步&lt;code&gt;$t$&lt;/code&gt;的词&lt;code&gt;$w_t$&lt;/code&gt;基于前面所有词的条件概率只考虑了最近时间步的&lt;code&gt;$n-1$&lt;/code&gt;个词。如果要考虑比&lt;code&gt;$t-(n-1)$&lt;/code&gt;更早时间步的词对&lt;code&gt;$w_t$&lt;/code&gt;的可能影响，我们需要增大n。&lt;/p&gt;
@@ -2143,10 +2143,10 @@ weights can be used to assign probabilities to observation vectors.&lt;/p&gt;
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;
 &lt;p&gt;在概率论与统计学中，&lt;strong&gt;狄利克雷分布&lt;/strong&gt; &lt;em&gt;Dirichlet distribution&lt;/em&gt; 常被简记为&lt;code&gt;$Dir(\alpha)$&lt;/code&gt;,是基于一个正实数向量&lt;code&gt;$\alpha&lt;/code&gt;参数的连续多元概率分布族。狄利克雷分布是对&lt;strong&gt;贝塔分布&lt;/strong&gt; &lt;em&gt;beta distribution&lt;/em&gt;的多元泛化，所以它也被称为&lt;strong&gt;多元贝塔分布&lt;/strong&gt; &lt;em&gt;multivariate beta distribution(MBD)&lt;/em&gt;。&lt;br&gt;
 狄利克雷分布被广泛作为贝叶斯统计的先验分布使用。同时，狄利克雷分布也是分类分布&lt;em&gt;Categorical distribution&lt;/em&gt; 和多项分布&lt;em&gt;categorical distribution&lt;/em&gt; 的共轭先验。&lt;br&gt;
@@ -2156,10 +2156,10 @@ weights can be used to assign probabilities to observation vectors.&lt;/p&gt;
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;matrix-differentiation矩阵求导&#34;&gt;Matrix Differentiation（矩阵求导）&lt;/h1&gt;
 &lt;blockquote&gt;
 &lt;p&gt;References: &lt;a class=&#34;link&#34; href=&#34;https://atmos.washington.edu/~dennis/MatrixCalculus.pdf&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
@@ -2222,10 +2222,10 @@ weights can be used to assign probabilities to observation vectors.&lt;/p&gt;
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;语言模型&#34;&gt;语言模型&lt;/h1&gt;
 &lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
 &lt;p&gt;DCP用到了&lt;code&gt;Transformer&lt;/code&gt;，其很多实现的Motivation都来自于Sq2Sq的启发。所以重新回顾学习语言模型。&lt;/p&gt;
@@ -2248,10 +2248,10 @@ weights can be used to assign probabilities to observation vectors.&lt;/p&gt;
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;blockquote&gt;
 &lt;p&gt;Reference: &lt;a class=&#34;link&#34; href=&#34;https://en.wikipedia.org/wiki/Bayesian_inference&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Wikipedia:Bayesian_inference&lt;/a&gt;&lt;/p&gt;
@@ -2322,10 +2322,10 @@ P(H)+P(\neg H)=1
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;边际似然函数&#34;&gt;边际似然函数&lt;/h1&gt;
 &lt;p&gt;统计学中，&lt;strong&gt;边际似然函数&lt;/strong&gt;（&lt;em&gt;marginal likelihood function&lt;/em&gt; 或 &lt;em&gt;integrated likelihood&lt;/em&gt;）是一种似然函数，其中某些参数变量被边缘化。在贝叶斯统计的背景下，它常常代指证据&lt;em&gt;evidence&lt;/em&gt;或模型证据&lt;em&gt;model evidence&lt;/em&gt;。&lt;/p&gt;
 &lt;h2 id=&#34;概念&#34;&gt;概念&lt;/h2&gt;
@@ -2336,10 +2336,10 @@ P(H)+P(\neg H)=1
         </item>
         <item>
         <title></title>
-        <link>https://Codefmeister.github.io/p/</link>
+        <link>https://codefmeister.github.io/p/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://Codefmeister.github.io/p/</guid>
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;高斯混合模型&#34;&gt;高斯混合模型&lt;/h1&gt;
 &lt;h2 id=&#34;混合模型概述&#34;&gt;混合模型概述&lt;/h2&gt;
 &lt;blockquote&gt;

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>numpy基础 on Codefmeister</title>
-    <link>https://Codefmeister.github.io/tags/numpy%E5%9F%BA%E7%A1%80/</link>
+    <link>https://codefmeister.github.io/tags/numpy%E5%9F%BA%E7%A1%80/</link>
     <description>Recent content in numpy基础 on Codefmeister</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 21 Nov 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://Codefmeister.github.io/tags/numpy%E5%9F%BA%E7%A1%80/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 21 Nov 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/numpy%E5%9F%BA%E7%A1%80/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>np.transpose()详解</title>
-      <link>https://Codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</link>
+      <link>https://codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</link>
       <pubDate>Sat, 21 Nov 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</guid>
+      <guid>https://codefmeister.github.io/p/np.transpose%E8%AF%A6%E8%A7%A3/</guid>
       <description>ndarray的转置(transpose) 对于A是由np.ndarray表示的情况：
 可以直接使用命令A.T。
 也可以使用命令A.transpose()。
@@ -29,10 +29,10 @@ Example： 二维默认情况下： A = np.array([[1,2],[3,4]]) print(A) print(A
     
     <item>
       <title>np.unique()解读</title>
-      <link>https://Codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</link>
+      <link>https://codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</link>
       <pubDate>Sat, 21 Nov 2020 09:40:49 +0800</pubDate>
       
-      <guid>https://Codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</guid>
+      <guid>https://codefmeister.github.io/p/np.unique%E8%A7%A3%E8%AF%BB/</guid>
       <description>np.unique()官方文档分析以及举例 1.1 官方文档及解读 numpy.unique 语法：numpy.unique(ar, return_index=False, return_inverse=False, return_counts=False, axis=None)
 作用：找到array中不重复（独一无二）的元素
 返回值：默认返回不重复元素的sorted排好序的从小到大的数组。可选的返回值有：
