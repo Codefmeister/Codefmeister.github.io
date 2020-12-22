@@ -238,7 +238,25 @@ $f$是每一层后的聚合函数。$N_i$指的是和点$x_i$存在KNN关系的�
 &lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig5.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;!-- raw HTML omitted --&gt;此处同样存疑&lt;!-- raw HTML omitted --&gt;，作者在论文里未提及此细节。&lt;/p&gt;
 &lt;h3 id=&#34;用于match寻找点对关系的module2&#34;&gt;用于Match（寻找点对关系）的Module2&lt;/h3&gt;
-&lt;h4 id=&#34;transformer&#34;&gt;Transformer&lt;/h4&gt;
+&lt;h4 id=&#34;基于attention机制的transformer&#34;&gt;基于Attention机制的Transformer&lt;/h4&gt;
+&lt;p&gt;使用Attention机制的初衷在于：我们想让配准变得更加&lt;code&gt;task specify&lt;/code&gt;。也就是说，不再独立地关注两个输入点云$X$,$Y$的&lt;code&gt;embedding feature&lt;/code&gt;，而是关注$X$,$Y$之间的一些联合特性。于是乎，自然而然的想到了&lt;code&gt;Attention&lt;/code&gt;机制。基于&lt;code&gt;attention&lt;/code&gt;，设计一个可以捕捉&lt;code&gt;self-attention&lt;/code&gt;和&lt;code&gt;conditional attention&lt;/code&gt;的模块，用于学习$X,Y$点云之间的某些联合信息。&lt;/p&gt;
+&lt;p&gt;我们将由上一个Module对两个点云各自独立生成的embedding特征$F_X,F_Y$作为输入，那么就有：
+$$
+\Phi_X = F_X + \phi(F_X,F_Y)
+$$
+$$
+\Phi_Y = F_Y + \phi(F_Y,F_X)
+$$
+其中，$\phi$是Transformer学习得到的映射函数:$\phi: R^{N \times P} \times R^{N \times P} \to R^{N \times P}$.&lt;/p&gt;
+&lt;p&gt;我们将$\phi$当做一个残差项，&lt;!-- raw HTML omitted --&gt;&lt;strong&gt;基于$F_X,F_Y$的输入顺序&lt;/strong&gt;&lt;!-- raw HTML omitted --&gt;，为$F_X,F_Y$提供一个附加的改变项。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Notice we treat $\phi$ as a residual term, providing an additive change to $F_X$ and $F_Y$ depending on the order of its input.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;之所以采取将$F_X \to \Phi_X$的&lt;strong&gt;Motivation&lt;/strong&gt;：以一种适应$Y$中点的组织结构（个人理解即输入顺序）的方式改变$X$的&lt;code&gt;Feature embedding&lt;/code&gt;。对$F_Y \to \Phi_Y$，动机相同。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The idea here is that the map $F_X \to \Phi_X$ modifies the features associated to the points in X in a fashion that is knowledgeable about the structure of $Y$.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;选择Transformer提供的非对称函数作为$\phi$。Transformer由一些堆叠的&lt;code&gt;encoder-decoder&lt;/code&gt;组成，是一种解决Seq2Seq问题的经典架构。关于Transformer的更多信息，移步我的另一篇博客&lt;a class=&#34;link&#34; href=&#34;&#34; &gt;《图解Transformer（译）》&lt;/a&gt;&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -460,6 +478,145 @@ PointNet++意识到了PointNet中存在的问题，所以它通过FPS采样，�
 &lt;p&gt;PointNet++ 首先通过欧氏距离来构建图Graph，然后每经过一个layer对图进行一次粗糙化。在每一层，首先通过FPS选取一些点，只有这些被选取的点将保留，其他的点都将被抛弃。通过这种方法，图会在每经过一层网络后变得越来越小。同时，PointNet++使用输入数据的欧式距离来计算点对关系，所以就导致了他们的图在整个训练过程中是固定的，而不是动态调整的（DGCNN一大特点就是动态图）。&lt;code&gt;Edge Function&lt;/code&gt;是$h_{\Theta}(x_i,x_j)=h_{\Theta}(x_j)$&lt;/p&gt;
 &lt;h3 id=&#34;monet-与-pcnn&#34;&gt;MoNet 与 PCNN&lt;/h3&gt;
 &lt;p&gt;笔者还未阅读这两篇论文。看的时候没什么概念。先留个坑。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>图解Transformer</title>
+        <link>https://codefmeister.github.io/p/%E5%9B%BE%E8%A7%A3transformer/</link>
+        <pubDate>Fri, 18 Dec 2020 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/%E5%9B%BE%E8%A7%A3transformer/</guid>
+        <description>&lt;h1 id=&#34;图解transformer&#34;&gt;图解Transformer&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Reference: &lt;a class=&#34;link&#34; href=&#34;https://jalammar.github.io/illustrated-transformer/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;The Illustrated Transformer&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;本文自译用于加深理解与印象。&lt;/p&gt;
+&lt;p&gt;关于注意力机制，可以参考先前的&lt;code&gt;Seq2Seq Model with Attention&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Transformer是论文&lt;strong&gt;Attention is All You Need&lt;/strong&gt;提出的。在这篇文章中，我们将尝试把事情弄得简单一点，逐个介绍概念，以便更好理解。&lt;/p&gt;
+&lt;h2 id=&#34;a-high-level-look&#34;&gt;A High-Level Look&lt;/h2&gt;
+&lt;p&gt;我们首先把模型看作是一个黑箱。在机器翻译领域的应用中，输入一种语言的一个句子，会输出另外其翻译结果。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig1.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;揭开盖子，我们能够看到一个编码组件&lt;code&gt;encoding component&lt;/code&gt;，一个解码组件&lt;code&gt;decoding component&lt;/code&gt;，还有其之间的连接关系&lt;code&gt;connections&lt;/code&gt;。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig2.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;编码组件是一堆编码器构成的（Paper中堆叠了六个编码器，&lt;em&gt;六个&lt;/em&gt;并没有什么说法，你也可以尝试其他数字）。解码组件也是由一堆解码器构成的（数量与编码器相同）。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig3.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;所有编码器在结构上都是相同的，&lt;strong&gt;然而他们并不共享参数（或权重）。&lt;/strong&gt; 每一个都可以被拆分为两个子层&lt;code&gt;sub-layers&lt;/code&gt;。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig4.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;编码器的输入首先流过&lt;code&gt;self-attention&lt;/code&gt;层，&lt;code&gt;self-attention&lt;/code&gt;层可以帮助我们在对某个特定的词进行编码的时候同时关注到句子中其他位置单词的影响。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;self-attention&lt;/code&gt;层的输出被送往&lt;code&gt;feed-foward neural network&lt;/code&gt;，即前馈神经网络层。完全相同的前馈网络，&lt;strong&gt;独立地&lt;/strong&gt;作用于每一个位置&lt;code&gt;position&lt;/code&gt;上。&lt;/p&gt;
+&lt;p&gt;解码器也有上述这两个层，但除此以外，在这两层之间，还有一个&lt;code&gt;attention layer&lt;/code&gt;，帮助解码器更加关注输入句子中相关的部分。（作用类似于Seq2Seq中的注意力机制的作用。）
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig5.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;bringing-the-tensor-into-the-picture&#34;&gt;Bringing The Tensor Into The Picture&lt;/h2&gt;
+&lt;p&gt;现在，我们已经了解了模型的主要组件，下面让我们开始研究各种矢量/张量以及它们如何在这些组件之间流动，以将经过训练的模型的输入转换为输出。&lt;/p&gt;
+&lt;p&gt;首先我们将每一个输入单词通过&lt;code&gt;embedding algorithm&lt;/code&gt;转换为一个词向量。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig6.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;嵌入过程只发生在最底部的encoder。对于所有的编码器&lt;code&gt;Encoder&lt;/code&gt;，他们都接受一个size为512的向量列表作为输入。只不过对于最底部的Encoder，其输入为单词经过嵌入后得到的词向量，而其他的Encoder的输入，是其下方一层Encoder的输出。列表的size是一个我们可以设定的超参数——通常来讲它会是我们训练集中最长的一个句子的长度。&lt;/p&gt;
+&lt;p&gt;在将输入序列中的单词进行&lt;code&gt;Embedding&lt;/code&gt;之后，他们中的每一个都会流过编码器的两层。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig7.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;从这里我们可以看到一个Transformer非常重要的特性，那便是每一个位置上的单词在Encoder中自己的路径上各自流动。在&lt;code&gt;self-attention&lt;/code&gt;层中，这些路径之间存在相互依赖。而前馈层&lt;code&gt;feed-forward&lt;/code&gt;中彼此间并无依赖。所以在流经前馈层的时候，可以进行并行化处理。&lt;/p&gt;
+&lt;p&gt;下面我们将举一个短句的例子，然后观察&lt;code&gt;sub-layer&lt;/code&gt;上发生了什么。&lt;/p&gt;
+&lt;h2 id=&#34;now-were-encoding&#34;&gt;Now We&amp;rsquo;re Encoding&lt;/h2&gt;
+&lt;p&gt;像我们先前提到的，一个编码器接收一个向量列表作为输入。这个向量列表首先被送往&lt;code&gt;self-attention&lt;/code&gt;层，然后再送往&lt;code&gt;feed-forward&lt;/code&gt;前馈层。处理结束后将其&lt;code&gt;output&lt;/code&gt;送往下一个&lt;code&gt;Encoder&lt;/code&gt;。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig8.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;每个位置的单词都被送往一个&lt;code&gt;self attention&lt;/code&gt;层，然后再穿过一个前馈神经网络——每个向量独立穿过这个完全相同的网络。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;self-attention-at-a-high-level&#34;&gt;Self-Attention at a High Level&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;self-attention&lt;/code&gt;是Paper中提出的一个全新概念，不要被其简单的命名给迷惑。&lt;/p&gt;
+&lt;p&gt;假设我们输入了如下一个句子，并试图进行翻译：&lt;br&gt;
+&lt;strong&gt;&amp;ldquo;The animal didn&amp;rsquo;t cross the street because it was too tired&amp;rdquo;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;那么句子中的&lt;code&gt;it&lt;/code&gt;指代谁呢？是指街道&lt;code&gt;street&lt;/code&gt;还是指动物&lt;code&gt;animal&lt;/code&gt;。这个问题对人类来说再简单不过，不过对算法来说却不是这样。&lt;/p&gt;
+&lt;p&gt;当处理单词&lt;code&gt;it&lt;/code&gt;时，&lt;code&gt;self-attention&lt;/code&gt;机制就可以让&lt;code&gt;it&lt;/code&gt;与&lt;code&gt;animal&lt;/code&gt;联系在一起。&lt;/p&gt;
+&lt;p&gt;当模型处理每个单词（即输入序列中的每个position）时，&lt;code&gt;self-attention&lt;/code&gt;可以在输入序列中的其他位置中寻找线索，来帮助这个单词获得更好的编码效果。&lt;/p&gt;
+&lt;p&gt;如果你熟悉RNN的话，想一下RNN是通过维持一个隐藏状态，来结合先前的处理过的向量与当前的输入向量。 而&lt;code&gt;Self-attention&lt;/code&gt;层是结合所有其他相关单词的&amp;quot;理解&amp;quot;，将这些理解“融入”对当前处理单词的编码中。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig9.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;当我们在最顶端的编码器#5对单词&lt;code&gt;it&lt;/code&gt;进行编码时，注意力机制的一部分就会集中在&lt;code&gt;The Animal&lt;/code&gt;上，并将它的一部分编码表示（&lt;code&gt;representation&lt;/code&gt;，我个人理解为是编码表示）融入到对&lt;code&gt;it&lt;/code&gt;的编码中去。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;self-attention-in-detail&#34;&gt;Self-Attention in Detail&lt;/h2&gt;
+&lt;p&gt;我们先看一下如何使用向量来计算&lt;code&gt;self-attention&lt;/code&gt;，然后再看一次它真正的实现方式——通过矩阵计算。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Self-Attention&lt;/code&gt;的&lt;strong&gt;第一步&lt;/strong&gt;：为输入的向量列表中的每一个向量(在这里的例子，由于是最底层，所以输入的是单词的Embedding)都创建三个向量。所以对于每个单词而言，我们创建了一个&lt;code&gt;Query vector&lt;/code&gt;，一个&lt;code&gt;Key vector&lt;/code&gt;，一个&lt;code&gt;Value vector&lt;/code&gt;。这三个向量是通过将输入向量乘以三个矩阵（矩阵是在训练中得到的）而得到的。&lt;/p&gt;
+&lt;p&gt;值得关注的是，这些新的向量在维度上比输入向量更小。他们的维度是&lt;code&gt;64&lt;/code&gt;，而&lt;code&gt;embedding&lt;/code&gt;和编码器的&lt;code&gt;input/output&lt;/code&gt;向量的维度是512。这些向量并不是&lt;strong&gt;必须&lt;/strong&gt;要比原来的维度更小，这仅仅是一种架构上的选择，为的是&lt;code&gt;multiheaded attention&lt;/code&gt;的计算恒定。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig10.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;用&lt;code&gt;$x_1$&lt;/code&gt;乘以权重矩阵&lt;code&gt;$W^Q$&lt;/code&gt;就得到了&lt;code&gt;$x_1$&lt;/code&gt;的&lt;code&gt;query vector&lt;/code&gt;-&lt;code&gt;$q1$&lt;/code&gt;。类似这样，我们最终为输入序列中的每个单词都创造一个&lt;code&gt;query&lt;/code&gt;，一个&lt;code&gt;key&lt;/code&gt;，以及一个&lt;code&gt;value&lt;/code&gt;投影。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;第二步&lt;/strong&gt;：计算&lt;code&gt;score&lt;/code&gt;。例如当我们计算下例中的第一个单词&amp;quot;Thinking&amp;quot;时，我们需要基于当前单词，为输入句子中其他位置的每个单词打分（有一点条件概率的意思）。这个分数决定了在我们对这个单词进行编码的时候，对输入序列的单词需要给予多少注意力。&lt;/p&gt;
+&lt;p&gt;该分数通过将&lt;code&gt;query vector&lt;/code&gt;与&lt;code&gt;key vector&lt;/code&gt;进行点积操作&lt;code&gt;dot product&lt;/code&gt;来得到。所以当我们对位置1的单词计算其&lt;code&gt;self-attention&lt;/code&gt;时，第一个分数会是&lt;code&gt;q1&lt;/code&gt;和&lt;code&gt;k1&lt;/code&gt;的点积。第二个分数是&lt;code&gt;q1&lt;/code&gt;和&lt;code&gt;k2&lt;/code&gt;的点积。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig11.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;第三步是将这些分数除以8(8是论文中&lt;code&gt;key vector&lt;/code&gt;维度&lt;code&gt;64&lt;/code&gt;的平方根，这可以使得梯度更加稳定，同时你可以选取其他的值)。&lt;/p&gt;
+&lt;p&gt;第四步是经过一个&lt;code&gt;softmax&lt;/code&gt;操作，&lt;code&gt;softmax&lt;/code&gt;可以保证score经过处理后全部为正，而且加和为1.
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig12.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;softmax score&lt;/code&gt;决定了每个单词将对这个&lt;code&gt;position&lt;/code&gt;的下一次编码起到多大作用。显然，当前位置的单词会有最大的&lt;code&gt;softmax score&lt;/code&gt;，但是无疑，关注与当前单词有关的单词是很有用。&lt;/p&gt;
+&lt;p&gt;第五步：是将每个值向量&lt;code&gt;value vector&lt;/code&gt;乘以其对应的&lt;code&gt;softmax&lt;/code&gt;分数（要准备将他们加在一起了），这一步的动机就是放大那些我们&lt;code&gt;focus&lt;/code&gt;的单词，而淡化那些不那么重要的单词。&lt;/p&gt;
+&lt;p&gt;第六步：将所有加权后的值向量&lt;code&gt;weighted value vector&lt;/code&gt;（上一步得到的）相加，得到self-attention层对于该位置（例子中是第一个单词）的输出。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig13.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;以上就是&lt;code&gt;self-attention&lt;/code&gt;的计算过程。得到的向量是一个我们可以直接送往前馈神经网络的向量。 在实际的实现中，我们通过矩阵运算来更快的处理。&lt;/p&gt;
+&lt;h2 id=&#34;matrix-calculation-of-self-attention&#34;&gt;Matrix Calculation of Self-Attention&lt;/h2&gt;
+&lt;p&gt;第一步： 计算&lt;code&gt;Query&lt;/code&gt;,&lt;code&gt;Key&lt;/code&gt;and &lt;code&gt;Value&lt;/code&gt;矩阵。我们通过把输入的向量打包为一个矩阵，然后乘以我们训练得到的权重矩阵计算之。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig14.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;X中的每一行对应输入序列中的一个单词。我们从图中又一次可以看到&lt;code&gt;embdding vector&lt;/code&gt;和&lt;code&gt;q/k/v&lt;/code&gt;向量的在维度上是不同的。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;最后：由于我们使用矩阵进行数据处理，我们可以把2-6步浓缩到一步，直接计算出&lt;code&gt;self-attention&lt;/code&gt;层的输出。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig15.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;the-beast-with-many-heads&#34;&gt;The Beast With Many Heads&lt;/h2&gt;
+&lt;p&gt;论文随后进一步细化了&lt;code&gt;self-attention&lt;/code&gt;层，为其增加了一种叫做&lt;code&gt;multi-headed attention&lt;/code&gt;的机制。它通过两种方式提升&lt;code&gt;attention-layer&lt;/code&gt;的表现。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&amp;ldquo;Multi-head&amp;quot;扩展了模型focus于不同位置的能力。就像上面那个例子一样，&lt;code&gt;z1&lt;/code&gt;包含有其他每个字母编码的一小部分，但其主要还是被其本来位置上的单词所主宰。在我们翻译类似&amp;quot;The animal didn&amp;rsquo;t cross the street because it was too tired&amp;quot;这种句子时，Multi-Head Attention是非常有用的，因为我们想要知道&lt;code&gt;it&lt;/code&gt;指代的是谁。&lt;/li&gt;
+&lt;li&gt;&amp;ldquo;Multi-head&amp;quot;给了&lt;code&gt;Attention Layer&lt;/code&gt;一些代表子空间&lt;code&gt;representation subspaces&lt;/code&gt;。&lt;code&gt;Multi-Headed Attention&lt;/code&gt;机制下，我们不再是只有一组权重矩阵，而是有多组权重矩阵(Transformer中使用了八个&lt;code&gt;attention head&lt;/code&gt;，所以我们最后会得到八组&lt;code&gt;Query/Key/Value&lt;/code&gt;的权重矩阵。每一组都是随机初始化， 然后经过循环后，每一组都用于将输入向量投影到不同的子空间中&lt;code&gt;representation subspace&lt;/code&gt;。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig16.png&#34; alt=&#34;image&#34;  /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;Multi-headed Attention&lt;/code&gt;机制下，我们分别保存着每个子空间(&lt;code&gt;each head&lt;/code&gt;)的&lt;code&gt;Q/K/V&lt;/code&gt;矩阵。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;那么为上述八组&lt;code&gt;Q/K/V&lt;/code&gt;矩阵，分别做完上述的&lt;code&gt;self-attention&lt;/code&gt;计算后，我们会得到八个不同的&lt;code&gt;Z&lt;/code&gt;矩阵。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig17.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;然后迎面而来的就有一个小问题，前馈神经网络并不需要8个矩阵，它期待的输入是一个矩阵，其中每一个向量代表一个单词。所以我们需要一种方法来将八个矩阵浓缩为一个。&lt;/p&gt;
+&lt;p&gt;怎么做呢？我们&lt;code&gt;concatenate&lt;/code&gt;这些矩阵，然后将拼接后的矩阵乘以一个额外的&lt;code&gt;weights matrix&lt;/code&gt;&amp;ndash;&lt;code&gt;$WO$&lt;/code&gt;。所得到的结果&lt;code&gt;Z&lt;/code&gt;就会捕捉到所有&lt;code&gt;attention head&lt;/code&gt;中包含的信息，然后这个&lt;code&gt;Z&lt;/code&gt;被送往FFNN。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig18.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;以上就是&lt;code&gt;Multi-head self-attention&lt;/code&gt;的全部，下面我们将所有的信息集合在一张图中：
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig19.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;说完了&lt;code&gt;attention-head&lt;/code&gt;，我们回顾一下先前的例子，看一下不同的&lt;code&gt;attention head&lt;/code&gt;在我们对&lt;code&gt;it&lt;/code&gt;进行编码的是如何focus的。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig20.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;当我们编码单词&lt;code&gt;it&lt;/code&gt;时，一个&lt;code&gt;attention head&lt;/code&gt;更集中于&lt;code&gt;the animal&lt;/code&gt;上，另一个更集中于&lt;code&gt;tired&lt;/code&gt;上。从语义上分析，it在编码时融入了&lt;code&gt;animal&lt;/code&gt;和&lt;code&gt;tired&lt;/code&gt;的&lt;code&gt;representation&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;所有&lt;code&gt;attention head&lt;/code&gt;全部加进来的情况如下，语义上有点难解释。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig29.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;representing-the-order-of-the-sequence-using-positional-encoding&#34;&gt;Representing The Order of the Sequence Using Positional Encoding&lt;/h2&gt;
+&lt;p&gt;以上我们描述的模型中，缺失了单词在输入序列中的输入顺序。（没有时序信息）&lt;/p&gt;
+&lt;p&gt;为了记录这一点，Transformer为每个&lt;code&gt;input embedding&lt;/code&gt;加上了一个向量。这些向量遵循模型学习的一种特定模式&lt;code&gt;specific pattern&lt;/code&gt;，有助于确定每个单词的位置，或序列中不同单词之间的距离。这里的直觉是：将这些值添加到&lt;code&gt;embedding&lt;/code&gt;中，当其被投影到&lt;code&gt;Q/K/V&lt;/code&gt;向量中或者在进行点积操作时，就会提供有意义的距离信息。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig21.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;假设&lt;code&gt;embedding&lt;/code&gt;是四维的话，那么实际的&lt;code&gt;positional encoding&lt;/code&gt;看起来可能是这个样子:
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig22.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;而&lt;code&gt;pattern&lt;/code&gt;看起来应该是什么样子？&lt;/p&gt;
+&lt;p&gt;在下图中，每一行对应一个向量的位置信息的编码结果。所以第一行就是我们将要加到输入序列中第一个单词的&lt;code&gt;embedding&lt;/code&gt;结果上的向量。每一行含有512个值，每个值的取值范围都是[-1,1],下图进行了可视化。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig23.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;positional encoding&lt;/code&gt;的公式在论文中详细描述了，而且这也不是唯一的对位置信息进行编码的方法。但是论文中的编码方式有一个优势：可以对未训练过的序列长度进行很好的缩放。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig24.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;the-residuals&#34;&gt;The Residuals&lt;/h2&gt;
+&lt;p&gt;一个encoder架构的细节是： 在每个&lt;code&gt;sub-layer&lt;/code&gt;之后，都有一个&lt;code&gt;residual connection&lt;/code&gt;，随后是一个&lt;code&gt;layer-normalization&lt;/code&gt;归一化操作。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig25.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;如果我们将向量和&lt;code&gt;layer-norm&lt;/code&gt;与&lt;code&gt;self attention&lt;/code&gt;的操作形象化，它看起来会是这样：
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig26.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;对于解码器的子层，也是这样。如果我们把它想象成一个由两个堆叠的编码器和解码器（Paper中是六个），它看起来应该是这样的。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig27.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;the-decoder-side&#34;&gt;The Decoder Side&lt;/h2&gt;
+&lt;p&gt;我们已经讨论了编码器方面的绝大部分概念，也知道了其是如何工作的。下面让我们看一下他们是怎么样一起工作的。&lt;/p&gt;
+&lt;p&gt;编码器从处理输入序列开始，最顶端的编码器的输出随后被转换为&lt;code&gt;attention vector&lt;/code&gt; &lt;code&gt;$K,V$&lt;/code&gt;的集合。这些向量在每一个解码器&lt;code&gt;decoder&lt;/code&gt;的&lt;code&gt;encoder-decoder&lt;/code&gt;层使用，用于帮助解码器focus在&lt;code&gt;input sequence&lt;/code&gt;的恰当位置。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_gif1.gif&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;下面的步骤重复这个过程，直到遇到终止符（表明decoder已经完成输出）。每一步的输出都会在下一个时间步反馈给最底层的解码器，解码器会将其输出一层一层向上&lt;code&gt;bubble up&lt;/code&gt;，就像编码器所做的一样。同时，我们也为解码器的输入加上了位置信息的编码。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_gif2.gif&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;解码器中的&lt;code&gt;self-attention layer&lt;/code&gt;与编码器中有微微的一些不同。&lt;/p&gt;
+&lt;p&gt;在解码器中，&lt;code&gt;self-attention layer&lt;/code&gt;只允许将时序上在前的位置信息“融合”进输出序列，这是通过在softmax步前进行mask来完成的。&lt;/p&gt;
+&lt;p&gt;而&lt;code&gt;Encoder-Decoder Attention&lt;/code&gt;层的工作原理，类似于&lt;code&gt;Multiheaded self-attention&lt;/code&gt;，不同的是，它从其下一层创建&lt;code&gt;Query Matrix&lt;/code&gt;， 而&lt;code&gt;Key&lt;/code&gt;和&lt;code&gt;Value&lt;/code&gt;矩阵都来自编码器最上层的输出。&lt;/p&gt;
+&lt;h2 id=&#34;the-final-linear-and-softmax-layer&#34;&gt;The Final Linear and Softmax Layer&lt;/h2&gt;
+&lt;p&gt;解码器输出的是一个浮点数的向量，我们应该如何将其转换为单词呢？这就是最后一个线性层的工作，其后还跟着一个Softmax层。&lt;/p&gt;
+&lt;p&gt;Linear Layer是一个简单的全连接神经网络，将解码器产生的向量投影到一个维度大的多的向量&lt;code&gt;logits vector&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;假设我们的模型从训练集中学到了10000个不同的英文单词，那么我们的&lt;code&gt;logits vector&lt;/code&gt;就有10000个元素，每个都对应着一个单词的score。这就是我们将其转换成单词的方法。&lt;/p&gt;
+&lt;p&gt;Softmax 层随后将这些score转换为概率，有最高概率的单词被选中，然后输出。&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -1932,148 +2089,6 @@ True返回最大值，False返回最小值。&lt;/p&gt;
 &lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;topk&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;return_types&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;topk&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;values&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tensor&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;5.&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;4.&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;3.&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;indices&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tensor&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]))&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
-        </item>
-        <item>
-        <title></title>
-        <link>https://codefmeister.github.io/p/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://codefmeister.github.io/p/</guid>
-        <description>&lt;h1 id=&#34;图解transformer&#34;&gt;图解Transformer&lt;/h1&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Reference: &lt;a class=&#34;link&#34; href=&#34;https://jalammar.github.io/illustrated-transformer/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;The Illustrated Transformer&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;本文自译用于加深理解与印象。&lt;/p&gt;
-&lt;p&gt;关于注意力机制，可以参考先前的&lt;code&gt;Seq2Seq Model with Attention&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Transformer是论文&lt;strong&gt;Attention is All You Need&lt;/strong&gt;提出的。在这篇文章中，我们将尝试把事情弄得简单一点，逐个介绍概念，以便更好理解。&lt;/p&gt;
-&lt;h2 id=&#34;a-high-level-look&#34;&gt;A High-Level Look&lt;/h2&gt;
-&lt;p&gt;我们首先把模型看作是一个黑箱。在机器翻译领域的应用中，输入一种语言的一个句子，会输出另外其翻译结果。
-&lt;img src=&#34;FEE39F3346A54B959AFB944D5936999B&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;揭开盖子，我们能够看到一个编码组件&lt;code&gt;encoding component&lt;/code&gt;，一个解码组件&lt;code&gt;decoding component&lt;/code&gt;，还有其之间的连接关系&lt;code&gt;connections&lt;/code&gt;。
-&lt;img src=&#34;BA47FFC591B54BDE82B8C6C7D0FBAC87&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;编码组件是一堆编码器构成的（Paper中堆叠了六个编码器，&lt;em&gt;六个&lt;/em&gt;并没有什么说法，你也可以尝试其他数字）。解码组件也是由一堆解码器构成的（数量与编码器相同）。
-&lt;img src=&#34;D2D6E544B35445B5ACA50393E53F8968&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;所有编码器在结构上都是相同的，&lt;strong&gt;然而他们并不共享参数（或权重）。&lt;/strong&gt; 每一个都可以被拆分为两个子层&lt;code&gt;sub-layers&lt;/code&gt;。
-&lt;img src=&#34;AE16AF1AF5FD436EA53A78069AD451AE&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;编码器的输入首先流过&lt;code&gt;self-attention&lt;/code&gt;层，&lt;code&gt;self-attention&lt;/code&gt;层可以帮助我们在对某个特定的词进行编码的时候同时关注到句子中其他位置单词的影响。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;self-attention&lt;/code&gt;层的输出被送往&lt;code&gt;feed-foward neural network&lt;/code&gt;，即前馈神经网络层。完全相同的前馈网络，&lt;strong&gt;独立地&lt;/strong&gt;作用于每一个位置&lt;code&gt;position&lt;/code&gt;上。&lt;/p&gt;
-&lt;p&gt;解码器也有上述这两个层，但除此以外，在这两层之间，还有一个&lt;code&gt;attention layer&lt;/code&gt;，帮助解码器更加关注输入句子中相关的部分。（作用类似于Seq2Seq中的注意力机制的作用。）
-&lt;img src=&#34;9B1485852AA8460DA48B4DA9AF346AC5&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;bringing-the-tensor-into-the-picture&#34;&gt;Bringing The Tensor Into The Picture&lt;/h2&gt;
-&lt;p&gt;现在，我们已经了解了模型的主要组件，下面让我们开始研究各种矢量/张量以及它们如何在这些组件之间流动，以将经过训练的模型的输入转换为输出。&lt;/p&gt;
-&lt;p&gt;首先我们将每一个输入单词通过&lt;code&gt;embedding algorithm&lt;/code&gt;转换为一个词向量。
-&lt;img src=&#34;56C90622C7F54ADD81B537A3FEFF0364&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;嵌入过程只发生在最底部的encoder。对于所有的编码器&lt;code&gt;Encoder&lt;/code&gt;，他们都接受一个size为512的向量列表作为输入。只不过对于最底部的Encoder，其输入为单词经过嵌入后得到的词向量，而其他的Encoder的输入，是其下方一层Encoder的输出。列表的size是一个我们可以设定的超参数——通常来讲它会是我们训练集中最长的一个句子的长度。&lt;/p&gt;
-&lt;p&gt;在将输入序列中的单词进行&lt;code&gt;Embedding&lt;/code&gt;之后，他们中的每一个都会流过编码器的两层。
-&lt;img src=&#34;87B7F235D1A64087BE80B9F7A632BBFE&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;从这里我们可以看到一个Transformer非常重要的特性，那便是每一个位置上的单词在Encoder中自己的路径上各自流动。在&lt;code&gt;self-attention&lt;/code&gt;层中，这些路径之间存在相互依赖。而前馈层&lt;code&gt;feed-forward&lt;/code&gt;中彼此间并无依赖。所以在流经前馈层的时候，可以进行并行化处理。&lt;/p&gt;
-&lt;p&gt;下面我们将举一个短句的例子，然后观察&lt;code&gt;sub-layer&lt;/code&gt;上发生了什么。&lt;/p&gt;
-&lt;h2 id=&#34;now-were-encoding&#34;&gt;Now We&amp;rsquo;re Encoding&lt;/h2&gt;
-&lt;p&gt;像我们先前提到的，一个编码器接收一个向量列表作为输入。这个向量列表首先被送往&lt;code&gt;self-attention&lt;/code&gt;层，然后再送往&lt;code&gt;feed-forward&lt;/code&gt;前馈层。处理结束后将其&lt;code&gt;output&lt;/code&gt;送往下一个&lt;code&gt;Encoder&lt;/code&gt;。
-&lt;img src=&#34;778C9E9E44154DC8B1C176D4E1BC33FF&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;每个位置的单词都被送往一个&lt;code&gt;self attention&lt;/code&gt;层，然后再穿过一个前馈神经网络——每个向量独立穿过这个完全相同的网络。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;self-attention-at-a-high-level&#34;&gt;Self-Attention at a High Level&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;self-attention&lt;/code&gt;是Paper中提出的一个全新概念，不要被其简单的命名给迷惑。&lt;/p&gt;
-&lt;p&gt;假设我们输入了如下一个句子，并试图进行翻译：&lt;br&gt;
-&lt;strong&gt;&amp;ldquo;The animal didn&amp;rsquo;t cross the street because it was too tired&amp;rdquo;&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;那么句子中的&lt;code&gt;it&lt;/code&gt;指代谁呢？是指街道&lt;code&gt;street&lt;/code&gt;还是指动物&lt;code&gt;animal&lt;/code&gt;。这个问题对人类来说再简单不过，不过对算法来说却不是这样。&lt;/p&gt;
-&lt;p&gt;当处理单词&lt;code&gt;it&lt;/code&gt;时，&lt;code&gt;self-attention&lt;/code&gt;机制就可以让&lt;code&gt;it&lt;/code&gt;与&lt;code&gt;animal&lt;/code&gt;联系在一起。&lt;/p&gt;
-&lt;p&gt;当模型处理每个单词（即输入序列中的每个position）时，&lt;code&gt;self-attention&lt;/code&gt;可以在输入序列中的其他位置中寻找线索，来帮助这个单词获得更好的编码效果。&lt;/p&gt;
-&lt;p&gt;如果你熟悉RNN的话，想一下RNN是通过维持一个隐藏状态，来结合先前的处理过的向量与当前的输入向量。 而&lt;code&gt;Self-attention&lt;/code&gt;层是结合所有其他相关单词的&amp;quot;理解&amp;quot;，将这些理解“融入”对当前处理单词的编码中。
-&lt;img src=&#34;42F87D03C5AE4036BE412FD21F3C5D5B&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;当我们在最顶端的编码器#5对单词&lt;code&gt;it&lt;/code&gt;进行编码时，注意力机制的一部分就会集中在&lt;code&gt;The Animal&lt;/code&gt;上，并将它的一部分编码表示（&lt;code&gt;representation&lt;/code&gt;，我个人理解为是编码表示）融入到对&lt;code&gt;it&lt;/code&gt;的编码中去。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;self-attention-in-detail&#34;&gt;Self-Attention in Detail&lt;/h2&gt;
-&lt;p&gt;我们先看一下如何使用向量来计算&lt;code&gt;self-attention&lt;/code&gt;，然后再看一次它真正的实现方式——通过矩阵计算。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;Self-Attention&lt;/code&gt;的&lt;strong&gt;第一步&lt;/strong&gt;：为输入的向量列表中的每一个向量(在这里的例子，由于是最底层，所以输入的是单词的Embedding)都创建三个向量。所以对于每个单词而言，我们创建了一个&lt;code&gt;Query vector&lt;/code&gt;，一个&lt;code&gt;Key vector&lt;/code&gt;，一个&lt;code&gt;Value vector&lt;/code&gt;。这三个向量是通过将输入向量乘以三个矩阵（矩阵是在训练中得到的）而得到的。&lt;/p&gt;
-&lt;p&gt;值得关注的是，这些新的向量在维度上比输入向量更小。他们的维度是&lt;code&gt;64&lt;/code&gt;，而&lt;code&gt;embedding&lt;/code&gt;和编码器的&lt;code&gt;input/output&lt;/code&gt;向量的维度是512。这些向量并不是&lt;strong&gt;必须&lt;/strong&gt;要比原来的维度更小，这仅仅是一种架构上的选择，为的是&lt;code&gt;multiheaded attention&lt;/code&gt;的计算恒定。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;4A41CFBFAE524DE29FC80229BADAEBD0&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;用&lt;code&gt;$x_1$&lt;/code&gt;乘以权重矩阵&lt;code&gt;$W^Q$&lt;/code&gt;就得到了&lt;code&gt;$x_1$&lt;/code&gt;的&lt;code&gt;query vector&lt;/code&gt;-&lt;code&gt;$q1$&lt;/code&gt;。类似这样，我们最终为输入序列中的每个单词都创造一个&lt;code&gt;query&lt;/code&gt;，一个&lt;code&gt;key&lt;/code&gt;，以及一个&lt;code&gt;value&lt;/code&gt;投影。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;第二步&lt;/strong&gt;：计算&lt;code&gt;score&lt;/code&gt;。例如当我们计算下例中的第一个单词&amp;quot;Thinking&amp;quot;时，我们需要基于当前单词，为输入句子中其他位置的每个单词打分（有一点条件概率的意思）。这个分数决定了在我们对这个单词进行编码的时候，对输入序列的单词需要给予多少注意力。&lt;/p&gt;
-&lt;p&gt;该分数通过将&lt;code&gt;query vector&lt;/code&gt;与&lt;code&gt;key vector&lt;/code&gt;进行点积操作&lt;code&gt;dot product&lt;/code&gt;来得到。所以当我们对位置1的单词计算其&lt;code&gt;self-attention&lt;/code&gt;时，第一个分数会是&lt;code&gt;q1&lt;/code&gt;和&lt;code&gt;k1&lt;/code&gt;的点积。第二个分数是&lt;code&gt;q1&lt;/code&gt;和&lt;code&gt;k2&lt;/code&gt;的点积。
-&lt;img src=&#34;0EEC807F3F004278BE65BBAEFCE49509&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;第三步是将这些分数除以8(8是论文中&lt;code&gt;key vector&lt;/code&gt;维度&lt;code&gt;64&lt;/code&gt;的平方根，这可以使得梯度更加稳定，同时你可以选取其他的值)。&lt;/p&gt;
-&lt;p&gt;第四步是经过一个&lt;code&gt;softmax&lt;/code&gt;操作，&lt;code&gt;softmax&lt;/code&gt;可以保证score经过处理后全部为正，而且加和为1.
-&lt;img src=&#34;EBCABF4F175848B6AFBD24FC14562B3A&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;softmax score&lt;/code&gt;决定了每个单词将对这个&lt;code&gt;position&lt;/code&gt;的下一次编码起到多大作用。显然，当前位置的单词会有最大的&lt;code&gt;softmax score&lt;/code&gt;，但是无疑，关注与当前单词有关的单词是很有用。&lt;/p&gt;
-&lt;p&gt;第五步：是将每个值向量&lt;code&gt;value vector&lt;/code&gt;乘以其对应的&lt;code&gt;softmax&lt;/code&gt;分数（要准备将他们加在一起了），这一步的动机就是放大那些我们&lt;code&gt;focus&lt;/code&gt;的单词，而淡化那些不那么重要的单词。&lt;/p&gt;
-&lt;p&gt;第六步：将所有加权后的值向量&lt;code&gt;weighted value vector&lt;/code&gt;（上一步得到的）相加，得到self-attention层对于该位置（例子中是第一个单词）的输出。
-&lt;img src=&#34;5FEA28762B3C4B87A2EFCE55E7A3F2B7&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;以上就是&lt;code&gt;self-attention&lt;/code&gt;的计算过程。得到的向量是一个我们可以直接送往前馈神经网络的向量。 在实际的实现中，我们通过矩阵运算来更快的处理。&lt;/p&gt;
-&lt;h2 id=&#34;matrix-calculation-of-self-attention&#34;&gt;Matrix Calculation of Self-Attention&lt;/h2&gt;
-&lt;p&gt;第一步： 计算&lt;code&gt;Query&lt;/code&gt;,&lt;code&gt;Key&lt;/code&gt;and &lt;code&gt;Value&lt;/code&gt;矩阵。我们通过把输入的向量打包为一个矩阵，然后乘以我们训练得到的权重矩阵计算之。
-&lt;img src=&#34;7ACA89D65BE4441CAAB7F78D5E41E8E9&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;X中的每一行对应输入序列中的一个单词。我们从图中又一次可以看到&lt;code&gt;embdding vector&lt;/code&gt;和&lt;code&gt;q/k/v&lt;/code&gt;向量的在维度上是不同的。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;最后：由于我们使用矩阵进行数据处理，我们可以把2-6步浓缩到一步，直接计算出&lt;code&gt;self-attention&lt;/code&gt;层的输出。
-&lt;img src=&#34;9EA6D163C4634699BBB43CD092E692DF&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;the-beast-with-many-heads&#34;&gt;The Beast With Many Heads&lt;/h2&gt;
-&lt;p&gt;论文随后进一步细化了&lt;code&gt;self-attention&lt;/code&gt;层，为其增加了一种叫做&lt;code&gt;multi-headed attention&lt;/code&gt;的机制。它通过两种方式提升&lt;code&gt;attention-layer&lt;/code&gt;的表现。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&amp;ldquo;Multi-head&amp;quot;扩展了模型focus于不同位置的能力。就像上面那个例子一样，&lt;code&gt;z1&lt;/code&gt;包含有其他每个字母编码的一小部分，但其主要还是被其本来位置上的单词所主宰。在我们翻译类似&amp;quot;The animal didn&amp;rsquo;t cross the street because it was too tired&amp;quot;这种句子时，Multi-Head Attention是非常有用的，因为我们想要知道&lt;code&gt;it&lt;/code&gt;指代的是谁。&lt;/li&gt;
-&lt;li&gt;&amp;ldquo;Multi-head&amp;quot;给了&lt;code&gt;Attention Layer&lt;/code&gt;一些代表子空间&lt;code&gt;representation subspaces&lt;/code&gt;。&lt;code&gt;Multi-Headed Attention&lt;/code&gt;机制下，我们不再是只有一组权重矩阵，而是有多组权重矩阵(Transformer中使用了八个&lt;code&gt;attention head&lt;/code&gt;，所以我们最后会得到八组&lt;code&gt;Query/Key/Value&lt;/code&gt;的权重矩阵。每一组都是随机初始化， 然后经过循环后，每一组都用于将输入向量投影到不同的子空间中&lt;code&gt;representation subspace&lt;/code&gt;。
-&lt;img src=&#34;731575F3C4C84B5EA90DAAE685C49A04&#34; alt=&#34;image&#34;  /&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;code&gt;Multi-headed Attention&lt;/code&gt;机制下，我们分别保存着每个子空间(&lt;code&gt;each head&lt;/code&gt;)的&lt;code&gt;Q/K/V&lt;/code&gt;矩阵。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;那么为上述八组&lt;code&gt;Q/K/V&lt;/code&gt;矩阵，分别做完上述的&lt;code&gt;self-attention&lt;/code&gt;计算后，我们会得到八个不同的&lt;code&gt;Z&lt;/code&gt;矩阵。
-&lt;img src=&#34;FF9F8F23D026439E97D50CA5D167820C&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;然后迎面而来的就有一个小问题，前馈神经网络并不需要8个矩阵，它期待的输入是一个矩阵，其中每一个向量代表一个单词。所以我们需要一种方法来将八个矩阵浓缩为一个。&lt;/p&gt;
-&lt;p&gt;怎么做呢？我们&lt;code&gt;concatenate&lt;/code&gt;这些矩阵，然后将拼接后的矩阵乘以一个额外的&lt;code&gt;weights matrix&lt;/code&gt;&amp;ndash;&lt;code&gt;$WO$&lt;/code&gt;。所得到的结果&lt;code&gt;Z&lt;/code&gt;就会捕捉到所有&lt;code&gt;attention head&lt;/code&gt;中包含的信息，然后这个&lt;code&gt;Z&lt;/code&gt;被送往FFNN。
-&lt;img src=&#34;60997AD8E11A4E2CB999F0E4CDDFD0AB&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;以上就是&lt;code&gt;Multi-head self-attention&lt;/code&gt;的全部，下面我们将所有的信息集合在一张图中：
-&lt;img src=&#34;560634D696394195B17DC6912440D3A0&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;说完了&lt;code&gt;attention-head&lt;/code&gt;，我们回顾一下先前的例子，看一下不同的&lt;code&gt;attention head&lt;/code&gt;在我们对&lt;code&gt;it&lt;/code&gt;进行编码的是如何focus的。
-&lt;img src=&#34;6DAC495ECA7E49D0869A78653F7BD3C8&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;当我们编码单词&lt;code&gt;it&lt;/code&gt;时，一个&lt;code&gt;attention head&lt;/code&gt;更集中于&lt;code&gt;the animal&lt;/code&gt;上，另一个更集中于&lt;code&gt;tired&lt;/code&gt;上。从语义上分析，it在编码时融入了&lt;code&gt;animal&lt;/code&gt;和&lt;code&gt;tired&lt;/code&gt;的&lt;code&gt;representation&lt;/code&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;所有&lt;code&gt;attention head&lt;/code&gt;全部加进来的情况如下，语义上有点难解释。
-&lt;img src=&#34;B29EE44657604902BB1456C728ED0FB1&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;representing-the-order-of-the-sequence-using-positional-encoding&#34;&gt;Representing The Order of the Sequence Using Positional Encoding&lt;/h2&gt;
-&lt;p&gt;以上我们描述的模型中，缺失了单词在输入序列中的输入顺序。（没有时序信息）&lt;/p&gt;
-&lt;p&gt;为了记录这一点，Transformer为每个&lt;code&gt;input embedding&lt;/code&gt;加上了一个向量。这些向量遵循模型学习的一种特定模式&lt;code&gt;specific pattern&lt;/code&gt;，有助于确定每个单词的位置，或序列中不同单词之间的距离。这里的直觉是：将这些值添加到&lt;code&gt;embedding&lt;/code&gt;中，当其被投影到&lt;code&gt;Q/K/V&lt;/code&gt;向量中或者在进行点积操作时，就会提供有意义的距离信息。
-&lt;img src=&#34;6EF4E29B75C94DF6A58A3E032F9F3299&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;假设&lt;code&gt;embedding&lt;/code&gt;是四维的话，那么实际的&lt;code&gt;positional encoding&lt;/code&gt;看起来可能是这个样子:
-&lt;img src=&#34;AB5D8BE4D710436C9BC7A7AF87FE449E&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;而&lt;code&gt;pattern&lt;/code&gt;看起来应该是什么样子？&lt;/p&gt;
-&lt;p&gt;在下图中，每一行对应一个向量的位置信息的编码结果。所以第一行就是我们将要加到输入序列中第一个单词的&lt;code&gt;embedding&lt;/code&gt;结果上的向量。每一行含有512个值，每个值的取值范围都是[-1,1],下图进行了可视化。
-&lt;img src=&#34;D4E1730E9D044F5CA384DFDC5E1A8CDE&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;positional encoding&lt;/code&gt;的公式在论文中详细描述了，而且这也不是唯一的对位置信息进行编码的方法。但是论文中的编码方式有一个优势：可以对未训练过的序列长度进行很好的缩放。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;13EC68FF03004F8C88BEF46B87A6835A&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;the-residuals&#34;&gt;The Residuals&lt;/h2&gt;
-&lt;p&gt;一个encoder架构的细节是： 在每个&lt;code&gt;sub-layer&lt;/code&gt;之后，都有一个&lt;code&gt;residual connection&lt;/code&gt;，随后是一个&lt;code&gt;layer-normalization&lt;/code&gt;归一化操作。
-&lt;img src=&#34;67F08DADF6C74E17AA695759263B5589&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;如果我们将向量和&lt;code&gt;layer-norm&lt;/code&gt;与&lt;code&gt;self attention&lt;/code&gt;的操作形象化，它看起来会是这样：
-&lt;img src=&#34;D71CD6891DFD4FB0A0D791549872CA23&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;对于解码器的子层，也是这样。如果我们把它想象成一个由两个堆叠的编码器和解码器（Paper中是六个），它看起来应该是这样的。
-&lt;img src=&#34;1AA5FE7ED8654B6E963A60B8BDD4B969&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;the-decoder-side&#34;&gt;The Decoder Side&lt;/h2&gt;
-&lt;p&gt;我们已经讨论了编码器方面的绝大部分概念，也知道了其是如何工作的。下面让我们看一下他们是怎么样一起工作的。&lt;/p&gt;
-&lt;p&gt;编码器从处理输入序列开始，最顶端的编码器的输出随后被转换为&lt;code&gt;attention vector&lt;/code&gt; &lt;code&gt;$K,V$&lt;/code&gt;的集合。这些向量在每一个解码器&lt;code&gt;decoder&lt;/code&gt;的&lt;code&gt;encoder-decoder&lt;/code&gt;层使用，用于帮助解码器focus在&lt;code&gt;input sequence&lt;/code&gt;的恰当位置。
-&lt;img src=&#34;877735405DA842B1B72AB7819EB09BC8&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;注：上图是一张动图，链接：https://jalammar.github.io/images/t/transformer_decoding_1.gif&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;下面的步骤重复这个过程，直到遇到终止符（表明decoder已经完成输出）。每一步的输出都会在下一个时间步反馈给最底层的解码器，解码器会将其输出一层一层向上&lt;code&gt;bubble up&lt;/code&gt;，就像编码器所做的一样。同时，我们也为解码器的输入加上了位置信息的编码。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;2E7B75FD179149878B426ECDADEF2006&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;解码器中的&lt;code&gt;self-attention layer&lt;/code&gt;与编码器中有微微的一些不同。&lt;/p&gt;
-&lt;p&gt;在解码器中，&lt;code&gt;self-attention layer&lt;/code&gt;只允许将时序上在前的位置信息“融合”进输出序列，这是通过在softmax步前进行mask来完成的。&lt;/p&gt;
-&lt;p&gt;而&lt;code&gt;Encoder-Decoder Attention&lt;/code&gt;层的工作原理，类似于&lt;code&gt;Multiheaded self-attention&lt;/code&gt;，不同的是，它从其下一层创建&lt;code&gt;Query Matrix&lt;/code&gt;， 而&lt;code&gt;Key&lt;/code&gt;和&lt;code&gt;Value&lt;/code&gt;矩阵都来自编码器最上层的输出。&lt;/p&gt;
-&lt;h2 id=&#34;the-final-linear-and-softmax-layer&#34;&gt;The Final Linear and Softmax Layer&lt;/h2&gt;
-&lt;p&gt;解码器输出的是一个浮点数的向量，我们应该如何将其转换为单词呢？这就是最后一个线性层的工作，其后还跟着一个Softmax层。&lt;/p&gt;
-&lt;p&gt;Linear Layer是一个简单的全连接神经网络，将解码器产生的向量投影到一个维度大的多的向量&lt;code&gt;logits vector&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;假设我们的模型从训练集中学到了10000个不同的英文单词，那么我们的&lt;code&gt;logits vector&lt;/code&gt;就有10000个元素，每个都对应着一个单词的score。这就是我们将其转换成单词的方法。&lt;/p&gt;
-&lt;p&gt;Softmax 层随后将这些score转换为概率，有最高概率的单词被选中，然后输出。&lt;/p&gt;
-</description>
         </item>
         <item>
         <title></title>

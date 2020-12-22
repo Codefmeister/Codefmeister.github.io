@@ -48,6 +48,16 @@
   </url>
   
   <url>
+    <loc>https://codefmeister.github.io/tags/attention/</loc>
+    <lastmod>2020-12-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://codefmeister.github.io/p/%E5%9B%BE%E8%A7%A3transformer/</loc>
+    <lastmod>2020-12-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</loc>
     <lastmod>2020-12-16T09:40:49+08:00</lastmod>
   </url>
@@ -105,10 +115,6 @@
   <url>
     <loc>https://codefmeister.github.io/about/</loc>
     <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://codefmeister.github.io/p/</loc>
   </url>
   
   <url>

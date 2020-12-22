@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='图解Transformer  Reference: The Illustrated Transformer
+ 本文自译用于加深理解与印象。
+关于注意力机制，可以参考先前的Seq2Seq Model with Attention
+Transformer是论文Attention is All You Need提出的。在这篇文章中，我们将尝试把事情弄得简单一点，逐个介绍概念，以便更好理解。
+A High-Level Look 我们首先把模型看作是一个黑箱。在机器翻译领域的应用中，输入一种语言的一个句子，会输出另外其翻译结果。 揭开盖子，我们能够看到一个编码组件encoding component，一个解码组件decoding component，还有其之间的连接关系connections。 编码组件是一堆编码器构成的（Paper中堆叠了六个编码器，六个并没有什么说法，你也可以尝试其他数字）。解码组件也是由一堆解码器构成的（数量与编码器相同）。 所有编码器在结构上都是相同的，然而他们并不共享参数（或权重）。 每一个都可以被拆分为两个子层sub-layers。 编码器的输入首先流过self-attention层，self-attention层可以帮助我们在对某个特定的词进行编码的时候同时关注到句子中其他位置单词的影响。
+self-attention层的输出被送往feed-foward neural network，即前馈神经网络层。完全相同的前馈网络，独立地作用于每一个位置position上。
+解码器也有上述这两个层，但除此以外，在这两层之间，还有一个attention layer，帮助解码器更加关注输入句子中相关的部分。（作用类似于Seq2Seq中的注意力机制的作用。） Bringing The Tensor Into The Picture 现在，我们已经了解了模型的主要组件，下面让我们开始研究各种矢量/张量以及它们如何在这些组件之间流动，以将经过训练的模型的输入转换为输出。
+首先我们将每一个输入单词通过embedding algorithm转换为一个词向量。 嵌入过程只发生在最底部的encoder。对于所有的编码器Encoder，他们都接受一个size为512的向量列表作为输入。只不过对于最底部的Encoder，其输入为单词经过嵌入后得到的词向量，而其他的Encoder的输入，是其下方一层Encoder的输出。列表的size是一个我们可以设定的超参数——通常来讲它会是我们训练集中最长的一个句子的长度。
+在将输入序列中的单词进行Embedding之后，他们中的每一个都会流过编码器的两层。 从这里我们可以看到一个Transformer非常重要的特性，那便是每一个位置上的单词在Encoder中自己的路径上各自流动。在self-attention层中，这些路径之间存在相互依赖。而前馈层feed-forward中彼此间并无依赖。所以在流经前馈层的时候，可以进行并行化处理。
+下面我们将举一个短句的例子，然后观察sub-layer上发生了什么。
+Now We&amp;rsquo;re Encoding 像我们先前提到的，一个编码器接收一个向量列表作为输入。这个向量列表首先被送往self-attention层，然后再送往feed-forward前馈层。处理结束后将其output送往下一个Encoder。  每个位置的单词都被送往一个self attention层，然后再穿过一个前馈神经网络——每个向量独立穿过这个完全相同的网络。
+ Self-Attention at a High Level self-attention是Paper中提出的一个全新概念，不要被其简单的命名给迷惑。
+假设我们输入了如下一个句子，并试图进行翻译：
+&amp;ldquo;The animal didn&amp;rsquo;t cross the street because it was too tired&amp;rdquo;'><title>图解Transformer</title>
+
+<link rel='canonical' href='https://codefmeister.github.io/p/%E5%9B%BE%E8%A7%A3transformer/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='图解Transformer'>
+<meta property='og:description' content='图解Transformer  Reference: The Illustrated Transformer
+ 本文自译用于加深理解与印象。
+关于注意力机制，可以参考先前的Seq2Seq Model with Attention
+Transformer是论文Attention is All You Need提出的。在这篇文章中，我们将尝试把事情弄得简单一点，逐个介绍概念，以便更好理解。
+A High-Level Look 我们首先把模型看作是一个黑箱。在机器翻译领域的应用中，输入一种语言的一个句子，会输出另外其翻译结果。 揭开盖子，我们能够看到一个编码组件encoding component，一个解码组件decoding component，还有其之间的连接关系connections。 编码组件是一堆编码器构成的（Paper中堆叠了六个编码器，六个并没有什么说法，你也可以尝试其他数字）。解码组件也是由一堆解码器构成的（数量与编码器相同）。 所有编码器在结构上都是相同的，然而他们并不共享参数（或权重）。 每一个都可以被拆分为两个子层sub-layers。 编码器的输入首先流过self-attention层，self-attention层可以帮助我们在对某个特定的词进行编码的时候同时关注到句子中其他位置单词的影响。
+self-attention层的输出被送往feed-foward neural network，即前馈神经网络层。完全相同的前馈网络，独立地作用于每一个位置position上。
+解码器也有上述这两个层，但除此以外，在这两层之间，还有一个attention layer，帮助解码器更加关注输入句子中相关的部分。（作用类似于Seq2Seq中的注意力机制的作用。） Bringing The Tensor Into The Picture 现在，我们已经了解了模型的主要组件，下面让我们开始研究各种矢量/张量以及它们如何在这些组件之间流动，以将经过训练的模型的输入转换为输出。
+首先我们将每一个输入单词通过embedding algorithm转换为一个词向量。 嵌入过程只发生在最底部的encoder。对于所有的编码器Encoder，他们都接受一个size为512的向量列表作为输入。只不过对于最底部的Encoder，其输入为单词经过嵌入后得到的词向量，而其他的Encoder的输入，是其下方一层Encoder的输出。列表的size是一个我们可以设定的超参数——通常来讲它会是我们训练集中最长的一个句子的长度。
+在将输入序列中的单词进行Embedding之后，他们中的每一个都会流过编码器的两层。 从这里我们可以看到一个Transformer非常重要的特性，那便是每一个位置上的单词在Encoder中自己的路径上各自流动。在self-attention层中，这些路径之间存在相互依赖。而前馈层feed-forward中彼此间并无依赖。所以在流经前馈层的时候，可以进行并行化处理。
+下面我们将举一个短句的例子，然后观察sub-layer上发生了什么。
+Now We&amp;rsquo;re Encoding 像我们先前提到的，一个编码器接收一个向量列表作为输入。这个向量列表首先被送往self-attention层，然后再送往feed-forward前馈层。处理结束后将其output送往下一个Encoder。  每个位置的单词都被送往一个self attention层，然后再穿过一个前馈神经网络——每个向量独立穿过这个完全相同的网络。
+ Self-Attention at a High Level self-attention是Paper中提出的一个全新概念，不要被其简单的命名给迷惑。
+假设我们输入了如下一个句子，并试图进行翻译：
+&amp;ldquo;The animal didn&amp;rsquo;t cross the street because it was too tired&amp;rdquo;'>
+<meta property='og:url' content='https://codefmeister.github.io/p/%E5%9B%BE%E8%A7%A3transformer/'>
+<meta property='og:site_name' content='Codefmeister'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='深度学习' /><meta property='article:tag' content='Attention' /><meta property='article:published_time' content='2020-12-18T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2020-12-18T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="图解Transformer">
+<meta name="twitter:description" content="图解Transformer  Reference: The Illustrated Transformer
+ 本文自译用于加深理解与印象。
+关于注意力机制，可以参考先前的Seq2Seq Model with Attention
+Transformer是论文Attention is All You Need提出的。在这篇文章中，我们将尝试把事情弄得简单一点，逐个介绍概念，以便更好理解。
+A High-Level Look 我们首先把模型看作是一个黑箱。在机器翻译领域的应用中，输入一种语言的一个句子，会输出另外其翻译结果。 揭开盖子，我们能够看到一个编码组件encoding component，一个解码组件decoding component，还有其之间的连接关系connections。 编码组件是一堆编码器构成的（Paper中堆叠了六个编码器，六个并没有什么说法，你也可以尝试其他数字）。解码组件也是由一堆解码器构成的（数量与编码器相同）。 所有编码器在结构上都是相同的，然而他们并不共享参数（或权重）。 每一个都可以被拆分为两个子层sub-layers。 编码器的输入首先流过self-attention层，self-attention层可以帮助我们在对某个特定的词进行编码的时候同时关注到句子中其他位置单词的影响。
+self-attention层的输出被送往feed-foward neural network，即前馈神经网络层。完全相同的前馈网络，独立地作用于每一个位置position上。
+解码器也有上述这两个层，但除此以外，在这两层之间，还有一个attention layer，帮助解码器更加关注输入句子中相关的部分。（作用类似于Seq2Seq中的注意力机制的作用。） Bringing The Tensor Into The Picture 现在，我们已经了解了模型的主要组件，下面让我们开始研究各种矢量/张量以及它们如何在这些组件之间流动，以将经过训练的模型的输入转换为输出。
+首先我们将每一个输入单词通过embedding algorithm转换为一个词向量。 嵌入过程只发生在最底部的encoder。对于所有的编码器Encoder，他们都接受一个size为512的向量列表作为输入。只不过对于最底部的Encoder，其输入为单词经过嵌入后得到的词向量，而其他的Encoder的输入，是其下方一层Encoder的输出。列表的size是一个我们可以设定的超参数——通常来讲它会是我们训练集中最长的一个句子的长度。
+在将输入序列中的单词进行Embedding之后，他们中的每一个都会流过编码器的两层。 从这里我们可以看到一个Transformer非常重要的特性，那便是每一个位置上的单词在Encoder中自己的路径上各自流动。在self-attention层中，这些路径之间存在相互依赖。而前馈层feed-forward中彼此间并无依赖。所以在流经前馈层的时候，可以进行并行化处理。
+下面我们将举一个短句的例子，然后观察sub-layer上发生了什么。
+Now We&amp;rsquo;re Encoding 像我们先前提到的，一个编码器接收一个向量列表作为输入。这个向量列表首先被送往self-attention层，然后再送往feed-forward前馈层。处理结束后将其output送往下一个Encoder。  每个位置的单词都被送往一个self attention层，然后再穿过一个前馈神经网络——每个向量独立穿过这个完全相同的网络。
+ Self-Attention at a High Level self-attention是Paper中提出的一个全新概念，不要被其简单的命名给迷惑。
+假设我们输入了如下一个句子，并试图进行翻译：
+&amp;ldquo;The animal didn&amp;rsquo;t cross the street because it was too tired&amp;rdquo;">
+    </head>
+    <body class="">
+        <div class="container flex on-phone--column align-items--flex-start extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/Icon_hua25ec96b536dfdbbcc947accbc1cb594_86128_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://codefmeister.github.io">Codefmeister</a></h1>
+        <h2 class="site-description">Major in Computer science</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a href="https://codefmeister.github.io" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E5%9B%BE%E8%A7%A3transformer/">图解Transformer</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Dec 18, 2020</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <h1 id="图解transformer">图解Transformer</h1>
+<blockquote>
+<p>Reference: <a class="link" href="https://jalammar.github.io/illustrated-transformer/"  target="_blank" rel="noopener"
+    >The Illustrated Transformer</a></p>
+</blockquote>
+<p>本文自译用于加深理解与印象。</p>
+<p>关于注意力机制，可以参考先前的<code>Seq2Seq Model with Attention</code></p>
+<p>Transformer是论文<strong>Attention is All You Need</strong>提出的。在这篇文章中，我们将尝试把事情弄得简单一点，逐个介绍概念，以便更好理解。</p>
+<h2 id="a-high-level-look">A High-Level Look</h2>
+<p>我们首先把模型看作是一个黑箱。在机器翻译领域的应用中，输入一种语言的一个句子，会输出另外其翻译结果。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig1.png" alt="image"  /></p>
+<p>揭开盖子，我们能够看到一个编码组件<code>encoding component</code>，一个解码组件<code>decoding component</code>，还有其之间的连接关系<code>connections</code>。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig2.png" alt="image"  /></p>
+<p>编码组件是一堆编码器构成的（Paper中堆叠了六个编码器，<em>六个</em>并没有什么说法，你也可以尝试其他数字）。解码组件也是由一堆解码器构成的（数量与编码器相同）。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig3.png" alt="image"  /></p>
+<p>所有编码器在结构上都是相同的，<strong>然而他们并不共享参数（或权重）。</strong> 每一个都可以被拆分为两个子层<code>sub-layers</code>。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig4.png" alt="image"  /></p>
+<p>编码器的输入首先流过<code>self-attention</code>层，<code>self-attention</code>层可以帮助我们在对某个特定的词进行编码的时候同时关注到句子中其他位置单词的影响。</p>
+<p><code>self-attention</code>层的输出被送往<code>feed-foward neural network</code>，即前馈神经网络层。完全相同的前馈网络，<strong>独立地</strong>作用于每一个位置<code>position</code>上。</p>
+<p>解码器也有上述这两个层，但除此以外，在这两层之间，还有一个<code>attention layer</code>，帮助解码器更加关注输入句子中相关的部分。（作用类似于Seq2Seq中的注意力机制的作用。）
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig5.png" alt="image"  /></p>
+<h2 id="bringing-the-tensor-into-the-picture">Bringing The Tensor Into The Picture</h2>
+<p>现在，我们已经了解了模型的主要组件，下面让我们开始研究各种矢量/张量以及它们如何在这些组件之间流动，以将经过训练的模型的输入转换为输出。</p>
+<p>首先我们将每一个输入单词通过<code>embedding algorithm</code>转换为一个词向量。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig6.png" alt="image"  /></p>
+<p>嵌入过程只发生在最底部的encoder。对于所有的编码器<code>Encoder</code>，他们都接受一个size为512的向量列表作为输入。只不过对于最底部的Encoder，其输入为单词经过嵌入后得到的词向量，而其他的Encoder的输入，是其下方一层Encoder的输出。列表的size是一个我们可以设定的超参数——通常来讲它会是我们训练集中最长的一个句子的长度。</p>
+<p>在将输入序列中的单词进行<code>Embedding</code>之后，他们中的每一个都会流过编码器的两层。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig7.png" alt="image"  /></p>
+<p>从这里我们可以看到一个Transformer非常重要的特性，那便是每一个位置上的单词在Encoder中自己的路径上各自流动。在<code>self-attention</code>层中，这些路径之间存在相互依赖。而前馈层<code>feed-forward</code>中彼此间并无依赖。所以在流经前馈层的时候，可以进行并行化处理。</p>
+<p>下面我们将举一个短句的例子，然后观察<code>sub-layer</code>上发生了什么。</p>
+<h2 id="now-were-encoding">Now We&rsquo;re Encoding</h2>
+<p>像我们先前提到的，一个编码器接收一个向量列表作为输入。这个向量列表首先被送往<code>self-attention</code>层，然后再送往<code>feed-forward</code>前馈层。处理结束后将其<code>output</code>送往下一个<code>Encoder</code>。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig8.png" alt="image"  /></p>
+<blockquote>
+<p>每个位置的单词都被送往一个<code>self attention</code>层，然后再穿过一个前馈神经网络——每个向量独立穿过这个完全相同的网络。</p>
+</blockquote>
+<h2 id="self-attention-at-a-high-level">Self-Attention at a High Level</h2>
+<p><code>self-attention</code>是Paper中提出的一个全新概念，不要被其简单的命名给迷惑。</p>
+<p>假设我们输入了如下一个句子，并试图进行翻译：<br>
+<strong>&ldquo;The animal didn&rsquo;t cross the street because it was too tired&rdquo;</strong></p>
+<p>那么句子中的<code>it</code>指代谁呢？是指街道<code>street</code>还是指动物<code>animal</code>。这个问题对人类来说再简单不过，不过对算法来说却不是这样。</p>
+<p>当处理单词<code>it</code>时，<code>self-attention</code>机制就可以让<code>it</code>与<code>animal</code>联系在一起。</p>
+<p>当模型处理每个单词（即输入序列中的每个position）时，<code>self-attention</code>可以在输入序列中的其他位置中寻找线索，来帮助这个单词获得更好的编码效果。</p>
+<p>如果你熟悉RNN的话，想一下RNN是通过维持一个隐藏状态，来结合先前的处理过的向量与当前的输入向量。 而<code>Self-attention</code>层是结合所有其他相关单词的&quot;理解&quot;，将这些理解“融入”对当前处理单词的编码中。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig9.png" alt="image"  /></p>
+<blockquote>
+<p>当我们在最顶端的编码器#5对单词<code>it</code>进行编码时，注意力机制的一部分就会集中在<code>The Animal</code>上，并将它的一部分编码表示（<code>representation</code>，我个人理解为是编码表示）融入到对<code>it</code>的编码中去。</p>
+</blockquote>
+<h2 id="self-attention-in-detail">Self-Attention in Detail</h2>
+<p>我们先看一下如何使用向量来计算<code>self-attention</code>，然后再看一次它真正的实现方式——通过矩阵计算。</p>
+<p><code>Self-Attention</code>的<strong>第一步</strong>：为输入的向量列表中的每一个向量(在这里的例子，由于是最底层，所以输入的是单词的Embedding)都创建三个向量。所以对于每个单词而言，我们创建了一个<code>Query vector</code>，一个<code>Key vector</code>，一个<code>Value vector</code>。这三个向量是通过将输入向量乘以三个矩阵（矩阵是在训练中得到的）而得到的。</p>
+<p>值得关注的是，这些新的向量在维度上比输入向量更小。他们的维度是<code>64</code>，而<code>embedding</code>和编码器的<code>input/output</code>向量的维度是512。这些向量并不是<strong>必须</strong>要比原来的维度更小，这仅仅是一种架构上的选择，为的是<code>multiheaded attention</code>的计算恒定。</p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig10.png" alt="image"  /></p>
+<blockquote>
+<p>用<code>$x_1$</code>乘以权重矩阵<code>$W^Q$</code>就得到了<code>$x_1$</code>的<code>query vector</code>-<code>$q1$</code>。类似这样，我们最终为输入序列中的每个单词都创造一个<code>query</code>，一个<code>key</code>，以及一个<code>value</code>投影。</p>
+</blockquote>
+<p><strong>第二步</strong>：计算<code>score</code>。例如当我们计算下例中的第一个单词&quot;Thinking&quot;时，我们需要基于当前单词，为输入句子中其他位置的每个单词打分（有一点条件概率的意思）。这个分数决定了在我们对这个单词进行编码的时候，对输入序列的单词需要给予多少注意力。</p>
+<p>该分数通过将<code>query vector</code>与<code>key vector</code>进行点积操作<code>dot product</code>来得到。所以当我们对位置1的单词计算其<code>self-attention</code>时，第一个分数会是<code>q1</code>和<code>k1</code>的点积。第二个分数是<code>q1</code>和<code>k2</code>的点积。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig11.png" alt="image"  /></p>
+<p>第三步是将这些分数除以8(8是论文中<code>key vector</code>维度<code>64</code>的平方根，这可以使得梯度更加稳定，同时你可以选取其他的值)。</p>
+<p>第四步是经过一个<code>softmax</code>操作，<code>softmax</code>可以保证score经过处理后全部为正，而且加和为1.
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig12.png" alt="image"  /></p>
+<p><code>softmax score</code>决定了每个单词将对这个<code>position</code>的下一次编码起到多大作用。显然，当前位置的单词会有最大的<code>softmax score</code>，但是无疑，关注与当前单词有关的单词是很有用。</p>
+<p>第五步：是将每个值向量<code>value vector</code>乘以其对应的<code>softmax</code>分数（要准备将他们加在一起了），这一步的动机就是放大那些我们<code>focus</code>的单词，而淡化那些不那么重要的单词。</p>
+<p>第六步：将所有加权后的值向量<code>weighted value vector</code>（上一步得到的）相加，得到self-attention层对于该位置（例子中是第一个单词）的输出。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig13.png" alt="image"  /></p>
+<p>以上就是<code>self-attention</code>的计算过程。得到的向量是一个我们可以直接送往前馈神经网络的向量。 在实际的实现中，我们通过矩阵运算来更快的处理。</p>
+<h2 id="matrix-calculation-of-self-attention">Matrix Calculation of Self-Attention</h2>
+<p>第一步： 计算<code>Query</code>,<code>Key</code>and <code>Value</code>矩阵。我们通过把输入的向量打包为一个矩阵，然后乘以我们训练得到的权重矩阵计算之。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig14.png" alt="image"  /></p>
+<blockquote>
+<p>X中的每一行对应输入序列中的一个单词。我们从图中又一次可以看到<code>embdding vector</code>和<code>q/k/v</code>向量的在维度上是不同的。</p>
+</blockquote>
+<p>最后：由于我们使用矩阵进行数据处理，我们可以把2-6步浓缩到一步，直接计算出<code>self-attention</code>层的输出。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig15.png" alt="image"  /></p>
+<h2 id="the-beast-with-many-heads">The Beast With Many Heads</h2>
+<p>论文随后进一步细化了<code>self-attention</code>层，为其增加了一种叫做<code>multi-headed attention</code>的机制。它通过两种方式提升<code>attention-layer</code>的表现。</p>
+<ol>
+<li>&ldquo;Multi-head&quot;扩展了模型focus于不同位置的能力。就像上面那个例子一样，<code>z1</code>包含有其他每个字母编码的一小部分，但其主要还是被其本来位置上的单词所主宰。在我们翻译类似&quot;The animal didn&rsquo;t cross the street because it was too tired&quot;这种句子时，Multi-Head Attention是非常有用的，因为我们想要知道<code>it</code>指代的是谁。</li>
+<li>&ldquo;Multi-head&quot;给了<code>Attention Layer</code>一些代表子空间<code>representation subspaces</code>。<code>Multi-Headed Attention</code>机制下，我们不再是只有一组权重矩阵，而是有多组权重矩阵(Transformer中使用了八个<code>attention head</code>，所以我们最后会得到八组<code>Query/Key/Value</code>的权重矩阵。每一组都是随机初始化， 然后经过循环后，每一组都用于将输入向量投影到不同的子空间中<code>representation subspace</code>。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig16.png" alt="image"  /></li>
+</ol>
+<blockquote>
+<p><code>Multi-headed Attention</code>机制下，我们分别保存着每个子空间(<code>each head</code>)的<code>Q/K/V</code>矩阵。</p>
+</blockquote>
+<p>那么为上述八组<code>Q/K/V</code>矩阵，分别做完上述的<code>self-attention</code>计算后，我们会得到八个不同的<code>Z</code>矩阵。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig17.png" alt="image"  /></p>
+<p>然后迎面而来的就有一个小问题，前馈神经网络并不需要8个矩阵，它期待的输入是一个矩阵，其中每一个向量代表一个单词。所以我们需要一种方法来将八个矩阵浓缩为一个。</p>
+<p>怎么做呢？我们<code>concatenate</code>这些矩阵，然后将拼接后的矩阵乘以一个额外的<code>weights matrix</code>&ndash;<code>$WO$</code>。所得到的结果<code>Z</code>就会捕捉到所有<code>attention head</code>中包含的信息，然后这个<code>Z</code>被送往FFNN。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig18.png" alt="image"  /></p>
+<p>以上就是<code>Multi-head self-attention</code>的全部，下面我们将所有的信息集合在一张图中：
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig19.png" alt="image"  /></p>
+<p>说完了<code>attention-head</code>，我们回顾一下先前的例子，看一下不同的<code>attention head</code>在我们对<code>it</code>进行编码的是如何focus的。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig20.png" alt="image"  /></p>
+<blockquote>
+<p>当我们编码单词<code>it</code>时，一个<code>attention head</code>更集中于<code>the animal</code>上，另一个更集中于<code>tired</code>上。从语义上分析，it在编码时融入了<code>animal</code>和<code>tired</code>的<code>representation</code></p>
+</blockquote>
+<p>所有<code>attention head</code>全部加进来的情况如下，语义上有点难解释。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig29.png" alt="image"  /></p>
+<h2 id="representing-the-order-of-the-sequence-using-positional-encoding">Representing The Order of the Sequence Using Positional Encoding</h2>
+<p>以上我们描述的模型中，缺失了单词在输入序列中的输入顺序。（没有时序信息）</p>
+<p>为了记录这一点，Transformer为每个<code>input embedding</code>加上了一个向量。这些向量遵循模型学习的一种特定模式<code>specific pattern</code>，有助于确定每个单词的位置，或序列中不同单词之间的距离。这里的直觉是：将这些值添加到<code>embedding</code>中，当其被投影到<code>Q/K/V</code>向量中或者在进行点积操作时，就会提供有意义的距离信息。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig21.png" alt="image"  /></p>
+<p>假设<code>embedding</code>是四维的话，那么实际的<code>positional encoding</code>看起来可能是这个样子:
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig22.png" alt="image"  /></p>
+<p>而<code>pattern</code>看起来应该是什么样子？</p>
+<p>在下图中，每一行对应一个向量的位置信息的编码结果。所以第一行就是我们将要加到输入序列中第一个单词的<code>embedding</code>结果上的向量。每一行含有512个值，每个值的取值范围都是[-1,1],下图进行了可视化。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig23.png" alt="image"  /></p>
+<p><code>positional encoding</code>的公式在论文中详细描述了，而且这也不是唯一的对位置信息进行编码的方法。但是论文中的编码方式有一个优势：可以对未训练过的序列长度进行很好的缩放。</p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig24.png" alt="image"  /></p>
+<h2 id="the-residuals">The Residuals</h2>
+<p>一个encoder架构的细节是： 在每个<code>sub-layer</code>之后，都有一个<code>residual connection</code>，随后是一个<code>layer-normalization</code>归一化操作。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig25.png" alt="image"  /></p>
+<p>如果我们将向量和<code>layer-norm</code>与<code>self attention</code>的操作形象化，它看起来会是这样：
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig26.png" alt="image"  /></p>
+<p>对于解码器的子层，也是这样。如果我们把它想象成一个由两个堆叠的编码器和解码器（Paper中是六个），它看起来应该是这样的。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig27.png" alt="image"  /></p>
+<h2 id="the-decoder-side">The Decoder Side</h2>
+<p>我们已经讨论了编码器方面的绝大部分概念，也知道了其是如何工作的。下面让我们看一下他们是怎么样一起工作的。</p>
+<p>编码器从处理输入序列开始，最顶端的编码器的输出随后被转换为<code>attention vector</code> <code>$K,V$</code>的集合。这些向量在每一个解码器<code>decoder</code>的<code>encoder-decoder</code>层使用，用于帮助解码器focus在<code>input sequence</code>的恰当位置。
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_gif1.gif" alt="image"  /></p>
+<p>下面的步骤重复这个过程，直到遇到终止符（表明decoder已经完成输出）。每一步的输出都会在下一个时间步反馈给最底层的解码器，解码器会将其输出一层一层向上<code>bubble up</code>，就像编码器所做的一样。同时，我们也为解码器的输入加上了位置信息的编码。</p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_gif2.gif" alt="image"  /></p>
+<p>解码器中的<code>self-attention layer</code>与编码器中有微微的一些不同。</p>
+<p>在解码器中，<code>self-attention layer</code>只允许将时序上在前的位置信息“融合”进输出序列，这是通过在softmax步前进行mask来完成的。</p>
+<p>而<code>Encoder-Decoder Attention</code>层的工作原理，类似于<code>Multiheaded self-attention</code>，不同的是，它从其下一层创建<code>Query Matrix</code>， 而<code>Key</code>和<code>Value</code>矩阵都来自编码器最上层的输出。</p>
+<h2 id="the-final-linear-and-softmax-layer">The Final Linear and Softmax Layer</h2>
+<p>解码器输出的是一个浮点数的向量，我们应该如何将其转换为单词呢？这就是最后一个线性层的工作，其后还跟着一个Softmax层。</p>
+<p>Linear Layer是一个简单的全连接神经网络，将解码器产生的向量投影到一个维度大的多的向量<code>logits vector</code></p>
+<p>假设我们的模型从训练集中学到了10000个不同的英文单词，那么我们的<code>logits vector</code>就有10000个元素，每个都对应着一个单词的score。这就是我们将其转换成单词的方法。</p>
+<p>Softmax 层随后将这些score转换为概率，有最高概率的单词被选中，然后输出。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        
+            <a href="/tags/attention/">Attention</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+    integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+    integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+    crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+    integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.querySelector(`.article-content`));"></script>
+<script>
+var katex_config = {
+    delimiters: 
+    [
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false}
+    ]
+};
+</script>
+<script defer src="https://cdn.bootcss.com/KaTeX/0.11.1/contrib/auto-render.min.js" onload="renderMathInElement(document.body,katex_config)"></script>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "codefmeister" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2020 Codefmeister
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="1.1.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+            </main>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
+    integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin="anonymous"></script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<link rel="stylesheet" href="/css/highlight/light.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="/css/highlight/dark.min.css" media="(prefers-color-scheme: dark)">
+
+    </body>
+</html>

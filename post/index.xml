@@ -58,6 +58,28 @@ Parameters   input(Tensor) &amp;ndash; the input tensor
     </item>
     
     <item>
+      <title>图解Transformer</title>
+      <link>https://codefmeister.github.io/p/%E5%9B%BE%E8%A7%A3transformer/</link>
+      <pubDate>Fri, 18 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/%E5%9B%BE%E8%A7%A3transformer/</guid>
+      <description>图解Transformer  Reference: The Illustrated Transformer
+ 本文自译用于加深理解与印象。
+关于注意力机制，可以参考先前的Seq2Seq Model with Attention
+Transformer是论文Attention is All You Need提出的。在这篇文章中，我们将尝试把事情弄得简单一点，逐个介绍概念，以便更好理解。
+A High-Level Look 我们首先把模型看作是一个黑箱。在机器翻译领域的应用中，输入一种语言的一个句子，会输出另外其翻译结果。 揭开盖子，我们能够看到一个编码组件encoding component，一个解码组件decoding component，还有其之间的连接关系connections。 编码组件是一堆编码器构成的（Paper中堆叠了六个编码器，六个并没有什么说法，你也可以尝试其他数字）。解码组件也是由一堆解码器构成的（数量与编码器相同）。 所有编码器在结构上都是相同的，然而他们并不共享参数（或权重）。 每一个都可以被拆分为两个子层sub-layers。 编码器的输入首先流过self-attention层，self-attention层可以帮助我们在对某个特定的词进行编码的时候同时关注到句子中其他位置单词的影响。
+self-attention层的输出被送往feed-foward neural network，即前馈神经网络层。完全相同的前馈网络，独立地作用于每一个位置position上。
+解码器也有上述这两个层，但除此以外，在这两层之间，还有一个attention layer，帮助解码器更加关注输入句子中相关的部分。（作用类似于Seq2Seq中的注意力机制的作用。） Bringing The Tensor Into The Picture 现在，我们已经了解了模型的主要组件，下面让我们开始研究各种矢量/张量以及它们如何在这些组件之间流动，以将经过训练的模型的输入转换为输出。
+首先我们将每一个输入单词通过embedding algorithm转换为一个词向量。 嵌入过程只发生在最底部的encoder。对于所有的编码器Encoder，他们都接受一个size为512的向量列表作为输入。只不过对于最底部的Encoder，其输入为单词经过嵌入后得到的词向量，而其他的Encoder的输入，是其下方一层Encoder的输出。列表的size是一个我们可以设定的超参数——通常来讲它会是我们训练集中最长的一个句子的长度。
+在将输入序列中的单词进行Embedding之后，他们中的每一个都会流过编码器的两层。 从这里我们可以看到一个Transformer非常重要的特性，那便是每一个位置上的单词在Encoder中自己的路径上各自流动。在self-attention层中，这些路径之间存在相互依赖。而前馈层feed-forward中彼此间并无依赖。所以在流经前馈层的时候，可以进行并行化处理。
+下面我们将举一个短句的例子，然后观察sub-layer上发生了什么。
+Now We&amp;rsquo;re Encoding 像我们先前提到的，一个编码器接收一个向量列表作为输入。这个向量列表首先被送往self-attention层，然后再送往feed-forward前馈层。处理结束后将其output送往下一个Encoder。  每个位置的单词都被送往一个self attention层，然后再穿过一个前馈神经网络——每个向量独立穿过这个完全相同的网络。
+ Self-Attention at a High Level self-attention是Paper中提出的一个全新概念，不要被其简单的命名给迷惑。
+假设我们输入了如下一个句子，并试图进行翻译：
+&amp;ldquo;The animal didn&amp;rsquo;t cross the street because it was too tired&amp;rdquo;</description>
+    </item>
+    
+    <item>
       <title>Conv1d与Conv2d</title>
       <link>https://codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</link>
       <pubDate>Wed, 16 Dec 2020 09:40:49 +0800</pubDate>
@@ -453,28 +475,6 @@ Parameters   input (Tensor) &amp;ndash; the input tensor
 指定的排序的维度, dim若为-1，文档未说明，但是根据实操效果，应该是对最后一维进行search。
 如shape为Batch_size x p x q，返回结果为Batch_size x p x k。
   largest(bool, optional) &amp;ndash; controls whether to return largest or smallest elements</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://codefmeister.github.io/p/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://codefmeister.github.io/p/</guid>
-      <description>图解Transformer  Reference: The Illustrated Transformer
- 本文自译用于加深理解与印象。
-关于注意力机制，可以参考先前的Seq2Seq Model with Attention
-Transformer是论文Attention is All You Need提出的。在这篇文章中，我们将尝试把事情弄得简单一点，逐个介绍概念，以便更好理解。
-A High-Level Look 我们首先把模型看作是一个黑箱。在机器翻译领域的应用中，输入一种语言的一个句子，会输出另外其翻译结果。 揭开盖子，我们能够看到一个编码组件encoding component，一个解码组件decoding component，还有其之间的连接关系connections。 编码组件是一堆编码器构成的（Paper中堆叠了六个编码器，六个并没有什么说法，你也可以尝试其他数字）。解码组件也是由一堆解码器构成的（数量与编码器相同）。 所有编码器在结构上都是相同的，然而他们并不共享参数（或权重）。 每一个都可以被拆分为两个子层sub-layers。 编码器的输入首先流过self-attention层，self-attention层可以帮助我们在对某个特定的词进行编码的时候同时关注到句子中其他位置单词的影响。
-self-attention层的输出被送往feed-foward neural network，即前馈神经网络层。完全相同的前馈网络，独立地作用于每一个位置position上。
-解码器也有上述这两个层，但除此以外，在这两层之间，还有一个attention layer，帮助解码器更加关注输入句子中相关的部分。（作用类似于Seq2Seq中的注意力机制的作用。） Bringing The Tensor Into The Picture 现在，我们已经了解了模型的主要组件，下面让我们开始研究各种矢量/张量以及它们如何在这些组件之间流动，以将经过训练的模型的输入转换为输出。
-首先我们将每一个输入单词通过embedding algorithm转换为一个词向量。 嵌入过程只发生在最底部的encoder。对于所有的编码器Encoder，他们都接受一个size为512的向量列表作为输入。只不过对于最底部的Encoder，其输入为单词经过嵌入后得到的词向量，而其他的Encoder的输入，是其下方一层Encoder的输出。列表的size是一个我们可以设定的超参数——通常来讲它会是我们训练集中最长的一个句子的长度。
-在将输入序列中的单词进行Embedding之后，他们中的每一个都会流过编码器的两层。 从这里我们可以看到一个Transformer非常重要的特性，那便是每一个位置上的单词在Encoder中自己的路径上各自流动。在self-attention层中，这些路径之间存在相互依赖。而前馈层feed-forward中彼此间并无依赖。所以在流经前馈层的时候，可以进行并行化处理。
-下面我们将举一个短句的例子，然后观察sub-layer上发生了什么。
-Now We&amp;rsquo;re Encoding 像我们先前提到的，一个编码器接收一个向量列表作为输入。这个向量列表首先被送往self-attention层，然后再送往feed-forward前馈层。处理结束后将其output送往下一个Encoder。  每个位置的单词都被送往一个self attention层，然后再穿过一个前馈神经网络——每个向量独立穿过这个完全相同的网络。
- Self-Attention at a High Level self-attention是Paper中提出的一个全新概念，不要被其简单的命名给迷惑。
-假设我们输入了如下一个句子，并试图进行翻译：
-&amp;ldquo;The animal didn&amp;rsquo;t cross the street because it was too tired&amp;rdquo;</description>
     </item>
     
     <item>

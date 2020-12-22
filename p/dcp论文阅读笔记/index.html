@@ -412,7 +412,25 @@ $f$是每一层后的聚合函数。$N_i$指的是和点$x_i$存在KNN关系的�
 <img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig5.png" alt="image"  /></p>
 <p><!-- raw HTML omitted -->此处同样存疑<!-- raw HTML omitted -->，作者在论文里未提及此细节。</p>
 <h3 id="用于match寻找点对关系的module2">用于Match（寻找点对关系）的Module2</h3>
-<h4 id="transformer">Transformer</h4>
+<h4 id="基于attention机制的transformer">基于Attention机制的Transformer</h4>
+<p>使用Attention机制的初衷在于：我们想让配准变得更加<code>task specify</code>。也就是说，不再独立地关注两个输入点云$X$,$Y$的<code>embedding feature</code>，而是关注$X$,$Y$之间的一些联合特性。于是乎，自然而然的想到了<code>Attention</code>机制。基于<code>attention</code>，设计一个可以捕捉<code>self-attention</code>和<code>conditional attention</code>的模块，用于学习$X,Y$点云之间的某些联合信息。</p>
+<p>我们将由上一个Module对两个点云各自独立生成的embedding特征$F_X,F_Y$作为输入，那么就有：
+$$
+\Phi_X = F_X + \phi(F_X,F_Y)
+$$
+$$
+\Phi_Y = F_Y + \phi(F_Y,F_X)
+$$
+其中，$\phi$是Transformer学习得到的映射函数:$\phi: R^{N \times P} \times R^{N \times P} \to R^{N \times P}$.</p>
+<p>我们将$\phi$当做一个残差项，<!-- raw HTML omitted --><strong>基于$F_X,F_Y$的输入顺序</strong><!-- raw HTML omitted -->，为$F_X,F_Y$提供一个附加的改变项。</p>
+<blockquote>
+<p>Notice we treat $\phi$ as a residual term, providing an additive change to $F_X$ and $F_Y$ depending on the order of its input.</p>
+</blockquote>
+<p>之所以采取将$F_X \to \Phi_X$的<strong>Motivation</strong>：以一种适应$Y$中点的组织结构（个人理解即输入顺序）的方式改变$X$的<code>Feature embedding</code>。对$F_Y \to \Phi_Y$，动机相同。</p>
+<blockquote>
+<p>The idea here is that the map $F_X \to \Phi_X$ modifies the features associated to the points in X in a fashion that is knowledgeable about the structure of $Y$.</p>
+</blockquote>
+<p>选择Transformer提供的非对称函数作为$\phi$。Transformer由一些堆叠的<code>encoder-decoder</code>组成，是一种解决Seq2Seq问题的经典架构。关于Transformer的更多信息，移步我的另一篇博客<a class="link" href="" >《图解Transformer（译）》</a></p>
 
 </section>
 
