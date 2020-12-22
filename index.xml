@@ -146,7 +146,7 @@ $$
 &lt;h4 id=&#34;dgcnn&#34;&gt;DGCNN&lt;/h4&gt;
 &lt;p&gt;DGCNN是作者&lt;code&gt;@WangYue&lt;/code&gt;提出的一种网络架构，其特点是&lt;code&gt;EdgeConv&lt;/code&gt;。可以结合全局特征与局部特征。
 $$
-x_i^l = f({h_{\theta}^l(x_i^{l-1},x_j^{l-1}); \forall j \in N_i})
+x_i^l = f({{} h_{\theta}^l(x_i^{l-1},x_j^{l-1}); \forall j \in N_i {}})
 $$
 $f$是每一层后的聚合函数。$N_i$指的是和点$x_i$存在KNN关系的点的集合。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;get_graph_feature&lt;/code&gt;是返回&lt;code&gt;egde-feature&lt;/code&gt;的函数。这并不是我们关注的重点，代码简要粘贴一下。&lt;/p&gt;
