@@ -6,7 +6,23 @@
     <description>Recent content in torch on Codefmeister</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 14 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/torch/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 22 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/torch/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>torch.unsqueeze()解读</title>
+      <link>https://codefmeister.github.io/p/torch.unsqueeze%E8%A7%A3%E8%AF%BB/</link>
+      <pubDate>Tue, 22 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/torch.unsqueeze%E8%A7%A3%E8%AF%BB/</guid>
+      <description>torch.unsqueeze()函数解读 语法 torch.unsqueeze(input, dim) --&amp;gt; Tensor
+Parameters   input(Tensor) &amp;ndash; the input tensor
+  dim(int) &amp;ndash; the index at which to insert the singleton dimension
+  功能  Return a new tensor with a dimension of size one inserted at the specified position.
+ 返回一个新的tensor，在指定的位置插入维度为1的一维。
+ The returned tensor shares the same underlaying data with this tensor.
+ 返回的这一Tensor在内存中是和原Tensor共享一个内存数据的。(可以用contiguous来重新分配)
+ A dim value within the range [-input.dim() - 1, input.</description>
+    </item>
+    
     <item>
       <title>LeakyReLU函数解析</title>
       <link>https://codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</link>

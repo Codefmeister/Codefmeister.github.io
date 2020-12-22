@@ -4,21 +4,31 @@
   
   <url>
     <loc>https://codefmeister.github.io/</loc>
-    <lastmod>2020-12-21T09:40:49+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</loc>
-    <lastmod>2020-12-21T09:40:49+08:00</lastmod>
+    <lastmod>2020-12-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://codefmeister.github.io/post/</loc>
-    <lastmod>2020-12-21T09:40:49+08:00</lastmod>
+    <lastmod>2020-12-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://codefmeister.github.io/tags/</loc>
+    <lastmod>2020-12-22T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://codefmeister.github.io/tags/torch/</loc>
+    <lastmod>2020-12-22T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://codefmeister.github.io/p/torch.unsqueeze%E8%A7%A3%E8%AF%BB/</loc>
+    <lastmod>2020-12-22T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</loc>
     <lastmod>2020-12-21T09:40:49+08:00</lastmod>
   </url>
   
@@ -49,11 +59,6 @@
   
   <url>
     <loc>https://codefmeister.github.io/p/leakyrelu%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</loc>
-    <lastmod>2020-12-14T09:40:49+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://codefmeister.github.io/tags/torch/</loc>
     <lastmod>2020-12-14T09:40:49+08:00</lastmod>
   </url>
   

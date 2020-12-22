@@ -6,7 +6,16 @@
     <description>Recent content in Tags on Codefmeister</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 21 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 22 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>torch</title>
+      <link>https://codefmeister.github.io/tags/torch/</link>
+      <pubDate>Tue, 22 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/tags/torch/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>深度学习</title>
       <link>https://codefmeister.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</link>
@@ -31,15 +40,6 @@
       <pubDate>Wed, 16 Dec 2020 09:40:49 +0800</pubDate>
       
       <guid>https://codefmeister.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>torch</title>
-      <link>https://codefmeister.github.io/tags/torch/</link>
-      <pubDate>Mon, 14 Dec 2020 09:40:49 +0800</pubDate>
-      
-      <guid>https://codefmeister.github.io/tags/torch/</guid>
       <description></description>
     </item>
     
