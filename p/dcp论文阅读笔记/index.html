@@ -277,8 +277,21 @@ Author: Wang, Yue; Solomon, Justin</p>
 <p>考虑emb_nn，我们有两个选择： 其一是PointNet， 其二是<a class="link" href="https://codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/"  target="_blank" rel="noopener"
     >DGCNN</a>.</p>
 <p>PointNet抽象的特征是<code>global feature</code>， 而DGCNN结合了<code>local feature</code>和<code>global feature</code>.</p>
+<p>我们希望得到的是对<!-- raw HTML omitted --><strong>每一个点抽象而得的特征</strong><!-- raw HTML omitted -->（即每一个点都有其embedding)，并利用两个点云之间点的<code>embedding</code>来生成映射关系（即Match关系）. 所以我们要得到的是<code>per-point feature</code>而不是<code>one feature per cloud</code>。</p>
+<p>出于上述原因，我们在最后一层的聚合函数<code>aggregation function</code>之前生成每个点的<code>representation</code>。
+$$
+F_X = {x_1^L,x_2^L, &hellip;, x_i^L,&hellip;,x_N^L}
+$$
+$$
+F_Y = {y_1^L, y_2^L, &hellip;, y_i^L, &hellip;, y_N^L}
+$$
+上标L代表第L层的输出（假定共有L层）。</p>
 <h4 id="pointnet">PointNet</h4>
-<p>作者<code>@WangYue</code>在github上公布的代码，使用的<code>PointNet</code>的网络架构如下：</p>
+<p>$x_i^l$是第$i$个点在第$l$层后的<code>embedding</code>，而$h_{\theta}^l$是第$l$层的非线性映射函数。PointNet的<code>forward mechanism</code>可以用如下公式给出：
+$$
+x_i^l = h_{\theta}^l(x_i^{l-1})
+$$
+作者<code>@WangYue</code>在github上公布的代码，使用的<code>PointNet</code>的网络架构如下：</p>
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">PointNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">emb_dims</span><span class="o">=</span><span class="mi">512</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PointNet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -303,9 +316,13 @@ Author: Wang, Yue; Solomon, Justin</p>
 
 </code></pre></div><p>从上述代码中，可以看出，<!-- raw HTML omitted --><strong>作者使用的PointNet并没有<code>input-transform</code>和<code>feature-transform</code>这两个Module</strong><!-- raw HTML omitted -->，相当于只应用MLP不断对输入点云进行抽象，直到高维空间。
 <img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig4.png" alt="image"  /></p>
-<p><!-- raw HTML omitted --><em>存疑</em>：为什么不加<code>Transform-Net</code>？ 如果加上效果训练效果如何?<!-- raw HTML omitted --></p>
+<p><!-- raw HTML omitted --><em>存疑</em>：为什么不加<code>Transform-Net</code>？ 如果加上效果训练效果如何? 没有cat，cat之后效果如何？<!-- raw HTML omitted --></p>
 <h4 id="dgcnn">DGCNN</h4>
-<p>DGCNN是作者<code>@WangYue</code>提出的一种网络架构，其特点是<code>EdgeConv</code>。可以结合全局特征与局部特征。</p>
+<p>DGCNN是作者<code>@WangYue</code>提出的一种网络架构，其特点是<code>EdgeConv</code>。可以结合全局特征与局部特征。
+$$
+x_i^l = f({h_{\theta}^l(x_i^{l-1},x_j^{l-1}); \forall j \in N_i})
+$$
+$f$是每一层后的聚合函数。$N_i$指的是和点$x_i$存在KNN关系的点的集合。</p>
 <p><code>get_graph_feature</code>是返回<code>egde-feature</code>的函数。这并不是我们关注的重点，代码简要粘贴一下。</p>
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">knn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
     <span class="n">inner</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">(),</span> <span class="n">x</span><span class="p">)</span>
@@ -393,7 +410,9 @@ Author: Wang, Yue; Solomon, Justin</p>
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">,</span> <span class="n">x4</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># (batch_size, 64+64+128+256, num_points)</span>
 </code></pre></div><p>差别十分明显。相当于网络结构中红框的部分消失了：
 <img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig5.png" alt="image"  /></p>
-<p><!-- raw HTML omitted -->此处同样存疑<!-- raw HTML omitted -->，作者在论文里没说。</p>
+<p><!-- raw HTML omitted -->此处同样存疑<!-- raw HTML omitted -->，作者在论文里未提及此细节。</p>
+<h3 id="用于match寻找点对关系的module2">用于Match（寻找点对关系）的Module2</h3>
+<h4 id="transformer">Transformer</h4>
 
 </section>
 

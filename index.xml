@@ -103,8 +103,21 @@ Author: Wang, Yue; Solomon, Justin&lt;/p&gt;
 &lt;p&gt;考虑emb_nn，我们有两个选择： 其一是PointNet， 其二是&lt;a class=&#34;link&#34; href=&#34;https://codefmeister.github.io/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;DGCNN&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;PointNet抽象的特征是&lt;code&gt;global feature&lt;/code&gt;， 而DGCNN结合了&lt;code&gt;local feature&lt;/code&gt;和&lt;code&gt;global feature&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;我们希望得到的是对&lt;!-- raw HTML omitted --&gt;&lt;strong&gt;每一个点抽象而得的特征&lt;/strong&gt;&lt;!-- raw HTML omitted --&gt;（即每一个点都有其embedding)，并利用两个点云之间点的&lt;code&gt;embedding&lt;/code&gt;来生成映射关系（即Match关系）. 所以我们要得到的是&lt;code&gt;per-point feature&lt;/code&gt;而不是&lt;code&gt;one feature per cloud&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;出于上述原因，我们在最后一层的聚合函数&lt;code&gt;aggregation function&lt;/code&gt;之前生成每个点的&lt;code&gt;representation&lt;/code&gt;。
+$$
+F_X = {x_1^L,x_2^L, &amp;hellip;, x_i^L,&amp;hellip;,x_N^L}
+$$
+$$
+F_Y = {y_1^L, y_2^L, &amp;hellip;, y_i^L, &amp;hellip;, y_N^L}
+$$
+上标L代表第L层的输出（假定共有L层）。&lt;/p&gt;
 &lt;h4 id=&#34;pointnet&#34;&gt;PointNet&lt;/h4&gt;
-&lt;p&gt;作者&lt;code&gt;@WangYue&lt;/code&gt;在github上公布的代码，使用的&lt;code&gt;PointNet&lt;/code&gt;的网络架构如下：&lt;/p&gt;
+&lt;p&gt;$x_i^l$是第$i$个点在第$l$层后的&lt;code&gt;embedding&lt;/code&gt;，而$h_{\theta}^l$是第$l$层的非线性映射函数。PointNet的&lt;code&gt;forward mechanism&lt;/code&gt;可以用如下公式给出：
+$$
+x_i^l = h_{\theta}^l(x_i^{l-1})
+$$
+作者&lt;code&gt;@WangYue&lt;/code&gt;在github上公布的代码，使用的&lt;code&gt;PointNet&lt;/code&gt;的网络架构如下：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;k&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;PointNet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Module&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
     &lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;fm&#34;&gt;__init__&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;emb_dims&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;512&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
         &lt;span class=&#34;nb&#34;&gt;super&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PointNet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;fm&#34;&gt;__init__&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
@@ -129,9 +142,13 @@ Author: Wang, Yue; Solomon, Justin&lt;/p&gt;
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;从上述代码中，可以看出，&lt;!-- raw HTML omitted --&gt;&lt;strong&gt;作者使用的PointNet并没有&lt;code&gt;input-transform&lt;/code&gt;和&lt;code&gt;feature-transform&lt;/code&gt;这两个Module&lt;/strong&gt;&lt;!-- raw HTML omitted --&gt;，相当于只应用MLP不断对输入点云进行抽象，直到高维空间。
 &lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig4.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;!-- raw HTML omitted --&gt;&lt;em&gt;存疑&lt;/em&gt;：为什么不加&lt;code&gt;Transform-Net&lt;/code&gt;？ 如果加上效果训练效果如何?&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;&lt;em&gt;存疑&lt;/em&gt;：为什么不加&lt;code&gt;Transform-Net&lt;/code&gt;？ 如果加上效果训练效果如何? 没有cat，cat之后效果如何？&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
 &lt;h4 id=&#34;dgcnn&#34;&gt;DGCNN&lt;/h4&gt;
-&lt;p&gt;DGCNN是作者&lt;code&gt;@WangYue&lt;/code&gt;提出的一种网络架构，其特点是&lt;code&gt;EdgeConv&lt;/code&gt;。可以结合全局特征与局部特征。&lt;/p&gt;
+&lt;p&gt;DGCNN是作者&lt;code&gt;@WangYue&lt;/code&gt;提出的一种网络架构，其特点是&lt;code&gt;EdgeConv&lt;/code&gt;。可以结合全局特征与局部特征。
+$$
+x_i^l = f({h_{\theta}^l(x_i^{l-1},x_j^{l-1}); \forall j \in N_i})
+$$
+$f$是每一层后的聚合函数。$N_i$指的是和点$x_i$存在KNN关系的点的集合。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;get_graph_feature&lt;/code&gt;是返回&lt;code&gt;egde-feature&lt;/code&gt;的函数。这并不是我们关注的重点，代码简要粘贴一下。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;knn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
     &lt;span class=&#34;n&#34;&gt;inner&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;matmul&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;transpose&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;contiguous&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
@@ -219,7 +236,9 @@ Author: Wang, Yue; Solomon, Justin&lt;/p&gt;
         &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cat&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dim&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;# (batch_size, 64+64+128+256, num_points)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;差别十分明显。相当于网络结构中红框的部分消失了：
 &lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig5.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;!-- raw HTML omitted --&gt;此处同样存疑&lt;!-- raw HTML omitted --&gt;，作者在论文里没说。&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;此处同样存疑&lt;!-- raw HTML omitted --&gt;，作者在论文里未提及此细节。&lt;/p&gt;
+&lt;h3 id=&#34;用于match寻找点对关系的module2&#34;&gt;用于Match（寻找点对关系）的Module2&lt;/h3&gt;
+&lt;h4 id=&#34;transformer&#34;&gt;Transformer&lt;/h4&gt;
 </description>
         </item>
         <item>
