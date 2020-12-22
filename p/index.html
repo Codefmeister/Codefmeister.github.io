@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="en-us">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='numpy '><title></title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='numpy.arange() 语法 x = numpy.arange(start,end,step,dtype=None)
+Parameters说明  start: Optional，起始值，默认值为0。 end: 结束值(不含)。 step: Optional，步长，默认值为1。 dtype：Optional，默认为None，从其他输入值中推测。  功能 [start,end)的左闭右开区间内，每隔一个step取一次值。return值是ndarray。 对于浮点数来说，length = ceil((end - start)/step)，由于浮点数的上溢，此条规则可能会导致在浮点数情况下，最后一个element比end长。
+Note 如果使用非整数步长（譬如0.1），结果往往不一致（原因见上），所以在这种情况下推荐使用numpy.linspace。
+Example &amp;gt;&amp;gt;&amp;gt; np.arange(3) array([0, 1, 2]) &amp;gt;&amp;gt;&amp;gt;np.arange(3.0) array([ 0., 1., 2.]) &amp;gt;&amp;gt;&amp;gt;np.arange(3,7) array([3, 4, 5, 6]) &amp;gt;&amp;gt;&amp;gt;np.arange(3,7,2) array([3, 5]) '><title></title>
 
 <link rel='canonical' href='https://codefmeister.github.io/p/'>
 
 <link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content=''>
-<meta property='og:description' content='numpy '>
+<meta property='og:description' content='numpy.arange() 语法 x = numpy.arange(start,end,step,dtype=None)
+Parameters说明  start: Optional，起始值，默认值为0。 end: 结束值(不含)。 step: Optional，步长，默认值为1。 dtype：Optional，默认为None，从其他输入值中推测。  功能 [start,end)的左闭右开区间内，每隔一个step取一次值。return值是ndarray。 对于浮点数来说，length = ceil((end - start)/step)，由于浮点数的上溢，此条规则可能会导致在浮点数情况下，最后一个element比end长。
+Note 如果使用非整数步长（譬如0.1），结果往往不一致（原因见上），所以在这种情况下推荐使用numpy.linspace。
+Example &amp;gt;&amp;gt;&amp;gt; np.arange(3) array([0, 1, 2]) &amp;gt;&amp;gt;&amp;gt;np.arange(3.0) array([ 0., 1., 2.]) &amp;gt;&amp;gt;&amp;gt;np.arange(3,7) array([3, 4, 5, 6]) &amp;gt;&amp;gt;&amp;gt;np.arange(3,7,2) array([3, 5]) '>
 <meta property='og:url' content='https://codefmeister.github.io/p/'>
 <meta property='og:site_name' content='Codefmeister'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' />
 <meta name="twitter:title" content="">
-<meta name="twitter:description" content="numpy ">
+<meta name="twitter:description" content="numpy.arange() 语法 x = numpy.arange(start,end,step,dtype=None)
+Parameters说明  start: Optional，起始值，默认值为0。 end: 结束值(不含)。 step: Optional，步长，默认值为1。 dtype：Optional，默认为None，从其他输入值中推测。  功能 [start,end)的左闭右开区间内，每隔一个step取一次值。return值是ndarray。 对于浮点数来说，length = ceil((end - start)/step)，由于浮点数的上溢，此条规则可能会导致在浮点数情况下，最后一个element比end长。
+Note 如果使用非整数步长（譬如0.1），结果往往不一致（原因见上），所以在这种情况下推荐使用numpy.linspace。
+Example &amp;gt;&amp;gt;&amp;gt; np.arange(3) array([0, 1, 2]) &amp;gt;&amp;gt;&amp;gt;np.arange(3.0) array([ 0., 1., 2.]) &amp;gt;&amp;gt;&amp;gt;np.arange(3,7) array([3, 4, 5, 6]) &amp;gt;&amp;gt;&amp;gt;np.arange(3,7,2) array([3, 5]) ">
     </head>
     <body class="">
         <div class="container flex on-phone--column align-items--flex-start extended article-page with-toolbar">
@@ -152,24 +161,95 @@
 </header>
 
     <section class="article-content">
-    <h1 id="语言模型">语言模型</h1>
-<h2 id="前言">前言</h2>
-<p>DCP用到了<code>Transformer</code>，其很多实现的Motivation都来自于Sq2Sq的启发。所以重新回顾学习语言模型。</p>
-<h2 id="语言模型-1">语言模型</h2>
-<p>语言模型是自然语言处理的重要技术。自然语言处理中最常见的数据是文本数据。 我们可以把一段自然语言文本看做一段离散的时间序列。假设一段长度为T的文本中的词依次为<code>$w_1,w_2,...,w_T$</code>， 那么在离散的时间序列中，<code>$w_t(1 \le t \le T )$</code>可以看做在时间步<code>t</code>的输出。给定一个长度为T的词的序列<code>$w_1,w_2,...,w_T$</code>。语言模型将计算该序列的概率：</p>
-<pre><code class="language-math" data-lang="math">P(w_1,w_2,...,w_T)
-</code></pre><h2 id="语言模型的计算">语言模型的计算</h2>
-<p>假设序列<code>$w_1,w_2,...,w_T$</code>中的各个词是依次生成的，我们有：</p>
-<pre><code class="language-math" data-lang="math">P(w_1,w_2,...w_T) = \prod\nolimits_{t = 1}^{\rm{T}} {P(w_t|w_1,...,w_{t-1})}
-</code></pre><p>例如，一段含有四个词的文本序列的概率：</p>
-<pre><code class="language-math" data-lang="math">P(w_1,w_2,w_3,w_4) = P(w_1)P(w2|w_1)P(w_3|w_1,w_2)P(w_4|w_1,w_2,w_3)
-</code></pre><p>为了计算语言模型，我们需要计算词的概率，以及一个词在给定的前几个词的情况下的条件概率，即语言模型参数。设训练数据集为一个大型文本语料库，词的概率可以通过该词在训练数据集中的相对词频来计算。例如，<code>$P(w_1)$</code>可以计算为<code>$w_1$</code>在训练数据集中的词频与训练数据集的总词数之比。因此，根据条件概率定义，一个词在给定前几个词的情况下的条件概率也可以通过训练数据集中的相对词频计算。例如<code>$P(w_2|w_1)$</code>可以计算为<code>$w_1,w_2$</code>两词相邻的频率与<code>$w_1$</code>词频的比值，即<code>$P(w_1,w_2)$</code>与<code>$P(w_1)$</code>之比。以此类推。</p>
-<h2 id="n元语法">n元语法</h2>
-<p>当序列长度增加时，计算和存储多个词共同出现的概率的复杂度会呈指数级增加。n元语法通过马尔可夫假设（并不一定成立）简化了语言模型的计算。这里的马尔科夫假设是指一个词的出现如果只与前面n个词相关，即n阶马尔科夫链。如果<code>$n=1$</code>，那么有：<code>$P(w_3|w_1,w_2) = P(w_3|w_2)$</code>。如果基于<code>$n-1$</code>阶马尔科夫链，我们可以将语言模型改写为：</p>
-<pre><code class="language-math" data-lang="math">P(w_1,w_2,...,w_T) \approx \prod\nolimits_{t=1}^{\rm{T}} {P(w_t|w_{t-(n-1)},...,w_{t-1})}
-</code></pre><p>以上称为<strong>n元语法(n-grams)</strong>。它是基于<strong>n-1</strong>阶马尔科夫链的概率语言模型。当n分别为1，2和3时，我们将其分别称作一元语法(unlgram)、二元语法(blgram)和三元语法(trlgram)。例如，长度为4的序列<code>$w_1,w_2,w_3,w_4$</code>在一元语法，二元语法和三元语法中的概率分别为：
-<img src="54496B59912A4336B180096EC8F7BBD4" alt="image"  /></p>
-<p>当n较小时，n元语法往往并不准确。</p>
+    <h1 id="高斯混合模型">高斯混合模型</h1>
+<h2 id="混合模型概述">混合模型概述</h2>
+<blockquote>
+<p>In statistics, a mixture model is a probabilistic model for representing the presence of subpopulations within an overall population, without requiring that an observed data set should identify the sub-population to which an individual observation belongs. Formally a mixture model corresponds to the mixture distribution that represents the probability distribution of observations in the overall population. However, while problems associated with &ldquo;mixture distributions&rdquo; relate to deriving the properties of the overall population from those of the sub-populations, &ldquo;mixture models&rdquo; are used to make statistical inferences about the properties of the sub-populations given only observations on the pooled population, without sub-population identity information.</p>
+</blockquote>
+<p>从统计学角度来说，一个混合模型就是一种概率模型，用于表示总体当中子总体的存在，而不需要观测数据集识别出这个观测数据属于哪一个子总体(子分布)。<br>
+形式上讲，对应混合分布的一个混合模型，就代表了这个总体的概率密度分布。然而，但需要从子总体的性质推导总体的一些性质时，混合模型能够直接根据总体池的观测值来对子总体的特性进行统计推断，而不需要知道他们的归属信息(属于哪一个子总体)。</p>
+<h2 id="mixture-model-structure">Mixture Model Structure</h2>
+<blockquote>
+<p>A typical finite-dimensional mixture model is a hierarchical model consisting of the following components:</p>
+<ul>
+<li>N random variables that are observed, each distributed according to a mixture of K components, with the components belonging to the same parametric family of distributions (e.g., all normal, all Zipfian, etc.) but with different parameters</li>
+<li>N random latent variables specifying the identity of the mixture component of each observation, each distributed according to a K-dimensional categorical distribution</li>
+<li>A set of K mixture weights, which are probabilities that sum to 1.</li>
+<li>A set of K parameters, each specifying the parameter of the corresponding mixture component. In many cases, each &ldquo;parameter&rdquo; is actually a set of parameters. For example, if the mixture components are Gaussian distributions, there will be a mean and variance for each component. If the mixture components are categorical distributions (e.g., when each observation is a token from a finite alphabet of size V), there will be a vector of V probabilities summing to 1.</li>
+</ul>
+<p>In addition, in a Bayesian setting, the mixture weights and parameters will themselves be random variables, and prior distributions will be placed over the variables. In such a case, the weights are typically viewed as a K-dimensional random vector drawn from a Dirichlet distribution (the conjugate prior of the categorical distribution), and the parameters will be distributed according to their respective conjugate priors.</p>
+</blockquote>
+<p>一个典型的有限维度的混合模型是一个分层的模型，有着如下的<code>components</code>:</p>
+<ul>
+<li><code>$N$</code>个被观测的随机变量<code>random variables</code>，每个随机变量都按<code>$K$</code>个子分布(<code>component</code>)构成的混合模型而分布，这些子分布都属于同一类分布，但是具体的参数值不同。</li>
+<li><code>$N$</code>个隐变量<code>latent variables</code>，每一个隐变量都说明了对应的随机变量所属的子分布是哪一个。每一个隐变量都按<code>$K$</code>维分类分布（即隐变量的取值只有<code>$K$</code>个）</li>
+<li><code>$K$</code>个混合权重，每个混合权重指定了某个子分布所占的总体的权重。混合权重的和加起来应等于1.</li>
+<li><code>$K$</code>个参数组，每一个参数组都对应着一个子分布。如高斯混合模型中，每个参数组中的参数有均值和方差。</li>
+</ul>
+<p>此外，在贝叶斯假设下，混合权重和参数组将本身就是随机变量，每个都会有一个先验分布。在这种情况下，混合权重可以被视为一个<code>$K$</code>维的随机向量，由狄利克雷分布(分类分布的共轭先验)得出，而参数组将根据各自的先验共轭分布而分布。（关于先验概率与后验概率在这里不表。）</p>
+<p>从数学角度出发，一个基础的参数化的混合模型可以被以下参数所描述：
+<img src="B3A612BB18074788B100784FCB4F70D9" alt="image"  /></p>
+<p>参数解读：<br>
+<code>$K$</code> 表示<code>mixture component</code>的个数，即混合分布中子分布的个数。<br>
+<code>$N$</code> 表示被观测的随机变量的个数。<br>
+<code>${\theta _{{\rm{i}} = 1...K}}$</code>表示第<code>$i$</code>个子分布<code>component</code>的参数值。<br>
+<code>${\phi _{{\rm{i}} = 1...K}}$</code>表示混合权重，即某个具体的子分布<code>component</code>的先验概率。<br>
+<code>$\Phi$</code>表示由<code>${\phi _{{\rm{i}} = 1...K}}$</code>组成的K维向量，和为1.<br>
+<code>${z _{{\rm{i}} = 1...N}}$</code>表示第<code>$i$</code>个观测值所属的<code>component</code>(子分布)。<br>
+<code>${x _{{\rm{i}} = 1...N}}$</code>表示第<code>$i$</code>个观测的随机变量。<br>
+<code>$F(x|\theta )$</code>表示某个被观测的随机变量在参数组为<code>$\theta$</code>下的概率分布。<br>
+<code>${z _{{\rm{i}} = 1...N}}$</code>服从以<code>$\Phi$</code>为概率的分类分布（共<code>$K$</code>类）。 即：<code>${z_{i = 1...N}} \sim Categorical(\Phi )$</code><br>
+<code>${x_{i = 1...N}}|{z_{i = 1...N}}$</code> 服从<code>$F(\theta _{z_i} )$</code>，即随机变量<code>$x_i$</code>服从其对应<code>component</code>（子分布）<code>$z_i$</code>的参数组<code>$\theta _{z_i}$</code>指定的概率分布。</p>
+<p><strong>注意</strong>：以上参数都是在不是在贝叶斯假设下的。</p>
+<p>在贝叶斯假设下，所有参数都与随机变量相关，如下图：
+<img src="A57CC57659D44B56BF8FA958F4FC5603" alt="image"  /></p>
+<p>参数解读：<br>
+<code>$K$</code>： 同上<br>
+<code>$N$</code>： 同上<br>
+<code>$\theta _{i=1...K}$</code>： 同上<br>
+<code>$\phi _{i=1...K}$</code>： 同上<br>
+<code>$\Phi$</code>： 同上<br>
+<code>$z _{i=1...N}$</code>：同上<br>
+<code>$x_{i=1...N}$</code>：同上<br>
+<code>$F(x|\theta)$</code>：同上<br>
+<code>$\alpha$</code>：各子分布<code>component</code>参数的共用的超参数<br>
+<code>$\beta$</code>: 混合权重的共用的超参数<br>
+<code>$H(\theta|\alpha)$</code>： 子分布<code>component</code>参数的先验概率分布，基于参数<code>$\alpha$</code>。<br>
+<code>$\theta _{i=1...K}$</code>： 服从概率分布<code>$H(\theta|\alpha)$</code>,即<code>$ \theta _ {i=1...K} \sim H(\theta|\alpha)$</code><br>
+<code>$\Phi$</code>： 服从<code>$Symmetric-Dirichlet _K(\beta)$</code>分布。<br>
+<code>$z_{i=1...N}|\Phi$</code>：服从<code>$Categorical(\phi)$</code>，即以<code>$\Phi$</code>为概率的分类分布。<br>
+<code>$x_{i=1...N}|z_{i=1...N},\theta_{i=1...K}$</code>：服从<code>$F(\theta_{z_i})$</code>的分布。</p>
+<p>我们使用<code>$F$</code>和<code>$H$</code>来对观测值和参数进行任意描述。一般来说，<code>$H$</code>是<code>$F$</code>的共轭先验。两个最常见的<code>$F$</code>的选择是：高斯分布，即正态分布（对实值观测值），或者是分类分布（对离散观测值）。其他常见的可以作为混合组件的概率分布有：</p>
+<ul>
+<li>二项分布<code>Binomial distribution</code>: 对于某一事物总数固定，统计其<code>positive occurrence</code>。如投票等。</li>
+<li>多项分布<code>Multinomial distribution</code>： 类似于二项分布，不过事情的结果可能不止有两个。</li>
+<li>负二项分布<code>Negative binomial distribution</code>： 对于二项分布类型的观测值，感兴趣的是在某个给定的次数的<code>positive</code>结果出现前，<code>negative</code>结果出现的次数。</li>
+<li>泊松分布<code>Poisson distribution</code>：统计某一事件在给定时间内发生的次数，该事件具有固定的发生率。</li>
+<li>指数分布<code>Exponential distribution</code>：某个事件下一次出现所需要的的时间的分布，该事件具有固定的发生率。</li>
+<li>对数正态分布<code>Log-normal distribution</code>： 用于那些假定呈指数增长的正实数，如收入或者价格。</li>
+<li>多元正态分布<code>Multivariate normal distribution</code>：即多元高斯分布。结果向量的每一个分量都是一个高斯分布。</li>
+<li>多元t分布<code>Multivariate Student's-t distribution</code>：用于重尾相关结果的向量。</li>
+<li>伯努利分布值的向量，对应于例如黑白图像，每个值代表一个像素，可应用于手写识别。</li>
+</ul>
+<h2 id="非贝叶斯假设下的高斯混合模型">非贝叶斯假设下的高斯混合模型</h2>
+<p>其各个参数为：<br>
+<img src="16877F0AFF554BAB959BFBDFE1B7E062" alt="image"  /></p>
+<p>对应上文很容易理解，不再赘述。<br>
+图示：
+<img src="78680242A7444DDF9DA77D19A51FFB16" alt="image"  /></p>
+<h2 id="贝叶斯假设下的高斯混合模型">贝叶斯假设下的高斯混合模型</h2>
+<p>其各个参数为：</p>
+<p><img src="13052BB3F4344EC1A6E698E3FBDDE94E" alt="image"  /></p>
+<p>其中值得特殊说明的是：<br>
+<code>${\mu _0},\lambda ,\nu ,\sigma _0^2$</code>: 是<code>$\theta$</code>即<code>$\mu $</code>与<code>$\sigma$</code>共享的超参数。<br>
+<code>$\mu_{i=1...K}$</code>：<code>$\mu_{i=1...K} \sim N(\mu_0,\lambda\sigma _i^2)$</code>,即参数<code>$\mu$</code>服从以<code>$mu_0,\lambda\sigma _i^2$</code>为参数的高斯分布。<br>
+<code>$\sigma_{i=1...K}^2$</code>：<code>$\sigma_{i=1...K}^2 \sim Inverse-Gamma(\nu,\sigma_0^2)$</code>。</p>
+<h2 id="多元高斯混合模型">多元高斯混合模型</h2>
+<p>一个贝叶斯高斯混合模型常常被推广去拟合未知的参数向量(下面用粗体表示），或者多元正态分布。在多元分布中（即对具有<code>$N$</code>个随机变量的向量<code>$\bm{x}$</code>），我们可以使用高斯混合模型的先验分布的矢量估计来对该<code>$\bm{x}$</code>进行建模：<br>
+<img src="35B511A935934CA78E4C6A1C3CCDAA2F" alt="image"  /></p>
+<p>其中第<code>$i$</code>个向量子分布<code>component</code>被权重为<code>${\phi _i}$</code>,方差为<code>$\bm{\mu}$</code>，协方差矩阵为<code>$\bm{\sum _i}$</code>的正态分布所定义。为了将这个先验分布纳入贝叶斯估计，这个先验要与已知的分布<code>$p(\bm{x}|\bm{\theta})$</code>相乘，该分布是数据<code>$\bm{x}$</code>在待估参数<code>$\bm{\theta}$</code>上的分布。根据如上阐述，那么后验分布<code>$p(\bm{\theta}|\bm{x})$</code>也是一个高斯混合分布：</p>
+<pre><code class="language-math" data-lang="math">p(\bm{\theta} |\bm{x}) = \sum\limits_{i = 1}^K {{{\tilde \phi }_i}N({\bm{\tilde \mu }_i},{\bm{\tilde \Sigma }_i})} 
+</code></pre><p>其中的参数：<code>${\tilde \phi }_i$</code>，<code>${\bm{\tilde \mu }_i}$</code>和<code>${\bm{\tilde \Sigma }_i}$</code>可以使用<strong>EM</strong>算法进行更新。虽然关于EM算法的参数更新已经很完善了，但是提供对这些参数的初始估计仍然是一个十分活跃的研究领域。必须说明的是，该公式产生了一个完全后验分布的一个封闭形式的解。随机变量<code>$\bm{\theta}$</code>的估计值可以通过取其中几个估计量的其中一个来获得，如取后验分布的均值或者最大值。</p>
 
 </section>
 

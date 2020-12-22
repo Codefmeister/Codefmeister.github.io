@@ -199,7 +199,7 @@ Author: Wang, Yue; Solomon, Justin</p>
     <span class="n">find</span> <span class="n">corresponding</span> <span class="n">relations</span> <span class="n">of</span> <span class="n">points</span> <span class="n">between</span> <span class="n">two</span> <span class="n">scan</span><span class="p">(</span><span class="n">using</span> <span class="n">KNN</span><span class="p">)</span>
     <span class="n">using</span> <span class="n">SVD</span> <span class="n">to</span> <span class="n">solve</span> <span class="n">Rotation</span> <span class="n">Matrix</span> <span class="ow">and</span> <span class="n">Translation</span> <span class="n">vector</span>
     <span class="n">update</span> <span class="n">cloud</span> <span class="n">Data</span>
-</code></pre></div><p>概括起来就是： <!-- raw HTML omitted -->寻找最近点对关系，使用SVD求解刚体变换。<!-- raw HTML omitted -->如此循环往复。</p>
+</code></pre></div><p>概括起来就是： <!-- raw HTML omitted --><strong>寻找最近点对关系，使用SVD求解刚体变换。</strong><!-- raw HTML omitted -->如此循环往复。</p>
 <p>结合论文，个人理解将ICP算法扩展到深度学习存在着以下的难点（可能存在各种问题，笔者深度学习的相关知识很薄弱）：</p>
 <ul>
 <li>首先，点对关系如果是确定的话，沿着网络反向传播可能存在问题。</li>
@@ -215,15 +215,15 @@ Author: Wang, Yue; Solomon, Justin</p>
 <h2 id="网络架构">网络架构</h2>
 <p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig1.png" alt="image"  /></p>
 <p>模型包含三个部分：<br>
-(1) 一个将输入点云映射到高维空间<code>embedding</code>的模块，具有扰动不变性（指DGCNN当点云输入时点的前后顺序发生变化，输出不会有任何改变） 或者 刚体变换不变性（指PointNet对于旋转平移具有不变的特性）。该模块的作用是<!-- raw HTML omitted -->寻找两个输入点云之间的点的对应关系<!-- raw HTML omitted -->. 可选的模块有<!-- raw HTML omitted -->PointNet（Focus于全局特征）， DGCNN（结合局部特征和全局特征）<!-- raw HTML omitted -->。</p>
-<p>(2) 一个基于注意力<code>attention</code>的Pointer网络模块，用于预测两个点云之间的soft matching关系(<!-- raw HTML omitted -->类似于一种基于概率的soft match，之所以soft是由于它并没有显式规定点$x_i$必须与哪个点$x_j$有对应关系，而是通过一个softmax得到的各点和某点$x_i$存在对应关系的概率乘以各点数据，得到一个类似于概率的对应点坐标<!-- raw HTML omitted -->。 该模块采用的是<!-- raw HTML omitted -->Transformer<!-- raw HTML omitted --></p>
+(1) 一个将输入点云映射到高维空间<code>embedding</code>的模块，具有扰动不变性（指DGCNN当点云输入时点的前后顺序发生变化，输出不会有任何改变） 或者 刚体变换不变性（指PointNet对于旋转平移具有不变的特性）。该模块的作用是<!-- raw HTML omitted --><strong>寻找两个输入点云之间的点的对应关系</strong><!-- raw HTML omitted -->. 可选的模块有<!-- raw HTML omitted --><strong>PointNet（Focus于全局特征）， DGCNN（结合局部特征和全局特征）</strong><!-- raw HTML omitted -->。</p>
+<p>(2) 一个基于注意力<code>attention</code>的Pointer网络模块，用于预测两个点云之间的soft matching关系(<!-- raw HTML omitted --><strong>类似于一种基于概率的soft match，之所以soft是由于它并没有显式规定点$x_i$必须与哪个点$x_j$有对应关系，而是通过一个softmax得到的各点和某点$x_i$存在对应关系的概率乘以各点数据，得到一个类似于概率的对应点坐标</strong><!-- raw HTML omitted -->。 该模块采用的是<!-- raw HTML omitted --><strong>Transformer</strong><!-- raw HTML omitted --></p>
 <p>(3) 一个<strong>可微</strong>的<code>SVD</code>分解层，用于输出刚体变换矩阵。</p>
 <h2 id="问题阐述">问题阐述</h2>
 <p>熟悉点云配准的同学应该知道，问题十分清晰。这里直接粘一下原文。<br>
 <img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig2.png" alt="image"  />
 <img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig3.png" alt="image"  /></p>
-<p>值得一提的是，作者分析了一下ICP的算法步骤。和我们上面描述的一样。<!-- raw HTML omitted -->就是用上次更新后的信息寻找最近关系，然后用寻找到的对应关系SVD求解得到$R,t$.<!-- raw HTML omitted --> 所以如果初始值一开始生成的是很差的<code>corresponding relation</code>，那么一下就会陷入局部最优。</p>
-<p>而作者的思路就是：<!-- raw HTML omitted -->使用学习的网络来得到特征，通过特征获得一个更好的对应关系$m(\cdot)$，用这个$m(\cdot)$去计算刚体变换信息。<!-- raw HTML omitted --></p>
+<p>值得一提的是，作者分析了一下ICP的算法步骤。和我们上面描述的一样。<!-- raw HTML omitted --><strong>就是用上次更新后的信息寻找最近关系，然后用寻找到的对应关系SVD求解得到$R,t$.</strong><!-- raw HTML omitted --> 所以如果初始值一开始生成的是很差的<code>corresponding relation</code>，那么一下就会陷入局部最优。</p>
+<p>而作者的思路就是：<!-- raw HTML omitted --><strong>使用学习的网络来得到特征，通过特征获得一个更好的对应关系$m(\cdot)$，用这个$m(\cdot)$去计算刚体变换信息。</strong><!-- raw HTML omitted --></p>
 <h2 id="代码分析与对应模块详解">代码分析与对应模块详解</h2>
 <p>我们采用一种<code>Top-Down</code>的视角来分析整个代码。先从整体入手，然后逐渐拆解模块进行分析。</p>
 <h3 id="整体模块">整体模块</h3>
@@ -231,7 +231,7 @@ Author: Wang, Yue; Solomon, Justin</p>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>       <span class="c1"># args 是一个存放各种参数的namespace</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DCP</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">emb_dims</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">embdims</span>    <span class="c1"># 欲抽象到的特征维度，default为 512</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">cycle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">cycle</span>         <span class="c1"># ba的刚体变换关系是否重新进入网络计算</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">emb_nn</span> <span class="o">==</span> <span class="s1">&#39;pointnet&#39;</span><span class="p">:</span>   <span class="c1"># emb_nn就是上文所说的第一个模块,若选择PointNet</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">emb_nn</span> <span class="o">=</span> <span class="n">PointNet</span><span class="p">(</span><span class="n">emb_dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emb_dims</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">emb_nn</span> <span class="o">==</span> <span class="s1">&#39;dgcnn&#39;</span><span class="p">:</span>    <span class="c1"># 若选择DGCNN</span>
@@ -253,6 +253,25 @@ Author: Wang, Yue; Solomon, Justin</p>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&#34;Not implemented&#34;</span><span class="p">)</span>
     
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="nb">input</span><span class="p">):</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">tgt</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">src_embedding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb_nn</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+        <span class="n">tgt_embedding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb_nn</span><span class="p">(</span><span class="n">tgt</span><span class="p">)</span>    <span class="c1"># Module Part 1</span>
+
+        <span class="n">src_embedding_p</span><span class="p">,</span> <span class="n">tgt_embedding_p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointer</span><span class="p">(</span><span class="n">src_embedding</span><span class="p">,</span> <span class="n">tgt_embedding</span><span class="p">)</span>  <span class="c1"># Module Part 2</span>
+
+        <span class="n">src_embedding</span> <span class="o">=</span> <span class="n">src_embedding</span> <span class="o">+</span> <span class="n">src_embedding_p</span>
+        <span class="n">tgt_embedding</span> <span class="o">=</span> <span class="n">tgt_embedding</span> <span class="o">+</span> <span class="n">tgt_embedding_p</span>
+
+        <span class="n">rotation_ab</span><span class="p">,</span> <span class="n">translation_ab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">src_embedding</span><span class="p">,</span> <span class="n">tgt_embedding</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">tgt</span><span class="p">)</span> <span class="c1"># Module Part 3</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cycle</span><span class="p">:</span>
+            <span class="n">rotation_ba</span><span class="p">,</span> <span class="n">translation_ba</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">tgt_embedding</span><span class="p">,</span> <span class="n">src_embedding</span><span class="p">,</span> <span class="n">tgt</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rotation_ba</span> <span class="o">=</span> <span class="n">rotation_ab</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>
+            <span class="n">translation_ba</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">rotation_ba</span><span class="p">,</span> <span class="n">translation_ab</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rotation_ab</span><span class="p">,</span> <span class="n">translation_ab</span><span class="p">,</span> <span class="n">rotation_ba</span><span class="p">,</span> <span class="n">translation_ba</span>
 </code></pre></div>
 </section>
 
