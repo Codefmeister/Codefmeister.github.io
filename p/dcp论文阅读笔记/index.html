@@ -505,8 +505,8 @@ $$
 <p>其前传机制<code>forward</code>是<code>self.decode(self.encode(src, src_mask), src_mask, tgt, tgt_mask)</code>。即先将<code>src,src_mask</code>进行<code>encode</code>,将编码后的结果同<code>src_mask, tgt, tgt_mask</code>一同<code>decode</code>。</p>
 <p>而<code>encode</code>函数，是这样定义的: <code>self.encoder(self.src_embed(src), src_mask)</code>, 即先将<code>src</code>通过<code>src_embed</code>网络，然后根据其<code>mask</code>再通过<code>encoder</code>网络。</p>
 <p>而<code>decode</code>函数，是：<code>self.generator(self.decoder(self.tgt_embed(tgt), memory, src_mask, tgt_mask))</code>, 也就是说, <code>tgt</code>先经过<code>tgt_embed</code>网络，然后随<code>memory, src_mask, tgt_mask</code>一同传入<code>decoder</code>网络，<code>decoder</code>网络的输出再流入<code>generator</code>网络。</p>
-<p>所以我自己梳理了一下整个EncoderDecoder大概结构如下：
-<img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig7.png" alt="image"  /></p>
+<p>所以我自己梳理了一下整个EncoderDecoder大概结构如下：</p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig7.png" alt="image"  /></p>
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">MultiHeadedAttention</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">dropout</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">):</span>
         <span class="c1"># h: number of heads ;  d_model: dims of model(emb_dims)</span>
