@@ -6,7 +6,20 @@
     <description>Recent content in torch on Codefmeister</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 22 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/torch/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 24 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/torch/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>torch.nn.parameter.Parameter分析</title>
+      <link>https://codefmeister.github.io/p/torch.nn.parameter.parameter%E5%88%86%E6%9E%90/</link>
+      <pubDate>Thu, 24 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/torch.nn.parameter.parameter%E5%88%86%E6%9E%90/</guid>
+      <description>torch.nn.parameter.Parameter 作用  a kind of Tensor that is to be considered a module parameter.
+ Parameter是一种可以作为模型参数的Tensor.
+ Parameters are Tensor subclasses, that have a very special property when used with Module S &amp;mdash;-when they&amp;rsquo;re assigned as Module attributes they are automatically added to the list of its parameters, and will appear e.g. in parameters() iterator. Assigning a Tensor doesn&amp;rsquo;t have such effect.
+ Parameter是Tensor的子类，同时拥有一种非常特殊的性质：当他们与Module S一起使用时，也就是说当它们作为Module参数进行使用时，它们会自动添加到Module的参数列表中，并且出现在parameters()迭代器里。(这样就可以自动计算梯度等)
+构造参数  data(Tensor)&amp;ndash; parameter tensor requires_grad(bool, optional)&amp;ndash; if the parameter requires gradient.</description>
+    </item>
+    
     <item>
       <title>torch.unsqueeze()解读</title>
       <link>https://codefmeister.github.io/p/torch.unsqueeze%E8%A7%A3%E8%AF%BB/</link>

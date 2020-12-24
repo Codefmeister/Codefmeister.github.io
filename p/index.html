@@ -152,24 +152,72 @@
 </header>
 
     <section class="article-content">
-    <h1 id="语言模型">语言模型</h1>
-<h2 id="前言">前言</h2>
-<p>DCP用到了<code>Transformer</code>，其很多实现的Motivation都来自于Sq2Sq的启发。所以重新回顾学习语言模型。</p>
-<h2 id="语言模型-1">语言模型</h2>
-<p>语言模型是自然语言处理的重要技术。自然语言处理中最常见的数据是文本数据。 我们可以把一段自然语言文本看做一段离散的时间序列。假设一段长度为T的文本中的词依次为<code>$w_1,w_2,...,w_T$</code>， 那么在离散的时间序列中，<code>$w_t(1 \le t \le T )$</code>可以看做在时间步<code>t</code>的输出。给定一个长度为T的词的序列<code>$w_1,w_2,...,w_T$</code>。语言模型将计算该序列的概率：</p>
-<pre><code class="language-math" data-lang="math">P(w_1,w_2,...,w_T)
-</code></pre><h2 id="语言模型的计算">语言模型的计算</h2>
-<p>假设序列<code>$w_1,w_2,...,w_T$</code>中的各个词是依次生成的，我们有：</p>
-<pre><code class="language-math" data-lang="math">P(w_1,w_2,...w_T) = \prod\nolimits_{t = 1}^{\rm{T}} {P(w_t|w_1,...,w_{t-1})}
-</code></pre><p>例如，一段含有四个词的文本序列的概率：</p>
-<pre><code class="language-math" data-lang="math">P(w_1,w_2,w_3,w_4) = P(w_1)P(w2|w_1)P(w_3|w_1,w_2)P(w_4|w_1,w_2,w_3)
-</code></pre><p>为了计算语言模型，我们需要计算词的概率，以及一个词在给定的前几个词的情况下的条件概率，即语言模型参数。设训练数据集为一个大型文本语料库，词的概率可以通过该词在训练数据集中的相对词频来计算。例如，<code>$P(w_1)$</code>可以计算为<code>$w_1$</code>在训练数据集中的词频与训练数据集的总词数之比。因此，根据条件概率定义，一个词在给定前几个词的情况下的条件概率也可以通过训练数据集中的相对词频计算。例如<code>$P(w_2|w_1)$</code>可以计算为<code>$w_1,w_2$</code>两词相邻的频率与<code>$w_1$</code>词频的比值，即<code>$P(w_1,w_2)$</code>与<code>$P(w_1)$</code>之比。以此类推。</p>
-<h2 id="n元语法">n元语法</h2>
-<p>当序列长度增加时，计算和存储多个词共同出现的概率的复杂度会呈指数级增加。n元语法通过马尔可夫假设（并不一定成立）简化了语言模型的计算。这里的马尔科夫假设是指一个词的出现如果只与前面n个词相关，即n阶马尔科夫链。如果<code>$n=1$</code>，那么有：<code>$P(w_3|w_1,w_2) = P(w_3|w_2)$</code>。如果基于<code>$n-1$</code>阶马尔科夫链，我们可以将语言模型改写为：</p>
-<pre><code class="language-math" data-lang="math">P(w_1,w_2,...,w_T) \approx \prod\nolimits_{t=1}^{\rm{T}} {P(w_t|w_{t-(n-1)},...,w_{t-1})}
-</code></pre><p>以上称为<strong>n元语法(n-grams)</strong>。它是基于<strong>n-1</strong>阶马尔科夫链的概率语言模型。当n分别为1，2和3时，我们将其分别称作一元语法(unlgram)、二元语法(blgram)和三元语法(trlgram)。例如，长度为4的序列<code>$w_1,w_2,w_3,w_4$</code>在一元语法，二元语法和三元语法中的概率分别为：
-<img src="54496B59912A4336B180096EC8F7BBD4" alt="image"  /></p>
-<p>当n较小时，n元语法往往并不准确。</p>
+    <blockquote>
+<p>Reference: <a class="link" href="https://en.wikipedia.org/wiki/Bayesian_inference"  target="_blank" rel="noopener"
+    >Wikipedia:Bayesian_inference</a></p>
+</blockquote>
+<hr>
+<blockquote>
+<p>Bayesian inference is a method of statistical inference in which Bayes' theorem is used to update the probability for a hypothesis as more evidence or information becomes available. Bayesian inference is an important technique in statistics, and especially in mathematical statistics. Bayesian updating is particularly important in the dynamic analysis of a sequence of data. Bayesian inference has found application in a wide range of activities, including science, engineering, philosophy, medicine, sport, and law. In the philosophy of decision theory, Bayesian inference is closely related to subjective probability, often called &ldquo;Bayesian probability&rdquo;.</p>
+</blockquote>
+<p>贝叶斯推理是一种统计推理方法，利用贝叶斯定理更新假设的概率，来获得更多的证据与信息。贝叶斯推理是统计学尤其是数理统计中的一项重要技术。贝叶斯更新在对于序列化数据的动态分析中非常重要。贝叶斯推断被广泛应用于科学研究，工程等领域。在决策理论哲学中，贝叶斯推理与主观概率密切相关，经常被称为贝叶斯概率。</p>
+<h1 id="贝叶斯规则简介introduction-to-bayes-rule">贝叶斯规则简介(<code>Introduction to Bayes' rule</code>)</h1>
+<h2 id="形式化解释formal-explanation">形式化解释(<code>Formal explanation</code>)</h2>
+<blockquote>
+<p>Bayesian inference derives the posterior probability as a consequence of two antecedents: a prior probability and a &ldquo;likelihood function&rdquo; derived from a statistical model for the observed data. Bayesian inference computes the posterior probability according to Bayes' theorem.</p>
+</blockquote>
+<p>贝叶斯推理根据两个前因式的结果来得到后验概率：一个<strong>先验概率</strong>；一个由观测数据的统计模型得出的<strong>似然函数</strong>。贝叶斯推理根据贝叶斯公式来计算后验概率。</p>
+<p>贝叶斯公式：</p>
+<pre><code class="language-math" data-lang="math">P(H|E) = \frac{{P(E|H) \cdot P(H)}}{{P(E)}}
+</code></pre><p>上述公式中：</p>
+<ul>
+<li><code>$H$</code>代表其概率可能受到数据（下称证据<em>evidence</em>)影响的任何假设。通常这些假设是相互竞争的，而我们的任务就是决定哪一个是最有可能的。</li>
+<li><code>$P(H)$</code>,<strong>先验概率</strong>(<em>prior probability</em>),是在数据<code>$E$</code>（即当前得到的证据）被观测到前，对假设<code>$H$</code>的概率估计。</li>
+<li><code>$E$</code>,即<strong>证据</strong>(<em>evidence</em>),指那些未被用于计算先验概率的新数据。</li>
+<li><code>$P(H|E)$</code>，<strong>后验概率</strong>（<em>posterior probability</em>），是指<code>$H$</code>给予<code>$E$</code>以后的概率，即在观测到证据<code>$E$</code>以后，更新的概率。后验概率就是我们想要得到的：在当前观测到的证据下，某个假设发生的概率有多大。</li>
+<li><code>$P(E|H)$</code>, 是在假设<code>$H$</code>的前提下观测到证据<code>$E$</code>的概率，被称为<strong>似然函数</strong>(<em>likelihood</em>)。作为固定<code>$H$</code>下<code>$E$</code>的函数，它体现了当前证据与给定假设的相容性。似然函数是证据<code>$E$</code>的函数，而后验概率是假设<code>$H$</code>的函数。</li>
+<li><code>$P(E)$</code>，被称作<strong>边际似然函数</strong>或者<strong>模型证据</strong>。该因子对所有被考虑到的可能的假设都相同（可以明显的看出，符号表达式中并没有<code>$H$</code>），所以该因子不会影响各个假设间的相对概率。</li>
+</ul>
+<p>对于不同的<code>$H$</code>，只有<code>$P(H)$</code>和<code>$P(E|H)$</code>这两项在分子上的因子会影响后验概率<code>$P(H|E)$</code>的值。也就是说，后验概率与其先验概率（固有的可能性）和新获得的似然函数（与新获得的证据的相容性）成正比。</p>
+<p>贝叶斯规则也可以被写成如下形式：</p>
+<pre><code class="language-math" data-lang="math">\frac{{P(E|H)P(H)}}{{P(E)}} = \frac{{P(E|H)P(H)}}{{P(E|H)P(H) + P(E|\neg H)P(\neg H)}} = \frac{1}{{1 + (\frac{1}{{P(H)}} - 1)\frac{{P(E|\neg H)}}{{P(E|H)}}}}
+</code></pre><p>这是由于：</p>
+<pre><code class="language-math" data-lang="math">P(E) = {P(E|H)P(H) + P(E|\neg H)P(\neg H)}  
+
+P(H)+P(\neg H)=1
+</code></pre><h1 id="贝叶斯推理的形式化描述formal-description-of-bayesian-inference">贝叶斯推理的形式化描述(<code>Formal description of Bayesian inference</code>)</h1>
+<h2 id="定义-definitions">定义 <code>Definitions</code></h2>
+<ul>
+<li><code>$x$</code>： 一个数据点，事实上可能是一个值向量<code>vector</code>。</li>
+<li><code>$\theta$</code>，数据点所对应的分布的参数，即<code>$x \sim p(x|\theta)$</code>。事实上，<code>$\theta$</code>可能是许多参数组成的向量。</li>
+<li><code>$\alpha$</code>，参数分布的超参数，即<code>$\theta \sim p(\theta | \alpha)$</code>。可能是由很多超参数构成的一个向量。</li>
+<li><code>$X$</code>代表采样，一个由<code>$n$</code>个观测的数据点构成的集合。即<code>$x_1,...,x_n$</code></li>
+<li><code>${\tilde x}$</code>，一个新的数据点，其分布需要被预测。</li>
+</ul>
+<h2 id="贝叶斯推理-bayesian-inference">贝叶斯推理 <code>Bayesian inference</code></h2>
+<ul>
+<li><strong>先验分布</strong> <em>prior distribution</em>，是指参数在没有任何新数据被观测到的情况下的概率分布，即<code>$p(\theta|\alpha)$</code>。先验分布可能不容易确定，在这种情况下，我们可以先采用<a class="link" href="https://en.wikipedia.org/wiki/Jeffreys_prior"  target="_blank" rel="noopener"
+    >Jeffrets Prior</a>去获得一个先验分布的初始值，然后使用观测到的数据进行更新迭代。</li>
+<li><strong>采样分布</strong> <em>sample distribution</em>，是指观测数据<code>$X$</code>在其参数条件下的分布，即<code>$p(X|\theta)$</code>，更确切的说，由于<code>$\theta$</code>服从参数条件<code>$\alpha$</code>下的概率分布，采样分布也可以写为<code>$p(X|\theta,\alpha)$</code>。但是为了不引起歧义与混淆，我们一般都写为<code>$p(X|\theta)$</code>。采样分布有时候也被称为<strong>似然函数</strong>, 尤其是当其被视为是参数<code>$\theta$</code>的函数时。有时候写作<code>$L(\theta|X) = p(X|\theta)$</code>。</li>
+<li><strong>边际似然函数</strong> <em>marginal likelihood</em>，有时也被称为证据<em>evidence</em>，是观测数据<code>marginalized out</code> <code>$\theta$</code>后得到的边缘分布，即<code>$p(X|\alpha ) = \int_\theta  {p(X|\theta )p(\theta |\alpha )d\theta }$</code></li>
+<li><strong>后验分布</strong> <em>posterior distribution</em> 是指在考虑新观测的数据后的参数分布。它由贝叶斯规则决定，形成了贝叶斯推理的核心。</li>
+</ul>
+<pre><code class="language-math" data-lang="math">p(\theta |X,\alpha ) = \frac{{p(\theta ,X,\alpha )}}{{p(X,\alpha )}} = \frac{{p(X|\theta ,\alpha )p(\theta ,\alpha )}}{{p(X|\alpha )p(\alpha )}} = \frac{{p(X|\theta ,\alpha )p(\theta |\alpha )}}{{p(X|\alpha )}} \propto p(X|\theta ,\alpha )p(\theta |\alpha )
+</code></pre><p>用语言描述就是：<strong>后验正比于先验乘以似然。</strong> <strong>后验等于似然乘以先验除以证据</strong>。</p>
+<blockquote>
+<p>&ldquo;posterior is proportional to likelihood times prior&rdquo;, or sometimes as &ldquo;posterior = likelihood times prior, over evidence&rdquo;</p>
+</blockquote>
+<h2 id="贝叶斯预测-bayesian-prediction">贝叶斯预测 <code>Bayesian Prediction</code></h2>
+<ul>
+<li><strong>后验预测分布</strong> <em>Posterior predictive distribution</em>，是新的数据点的概率分布。通过将后验概率边缘化而得到的。</li>
+</ul>
+<pre><code class="language-math" data-lang="math">p(\tilde x|X,\alpha ) = \int {p(\tilde x|\theta )p(\theta |X,\alpha )d\theta } 
+</code></pre><ul>
+<li><strong>先验预测分布</strong> <em>Prior predictive distribution</em>， 是新的数据点的概率分布，在先验概率上边缘化得到的。</li>
+</ul>
+<pre><code class="language-math" data-lang="math">p(\tilde x|\alpha ) = \int {p(\tilde x|\theta )p(\theta |\alpha )d\theta } 
+</code></pre><p>贝叶斯理论要求使用后验预测分布来进行预测推断，即预测新的，未观测到的数据点的分布。也就是说，<strong>不再将一个固定点作为预测结果，而是返回一个可能点的分布。</strong> 只有这样才能使用参数<code>$\theta$</code>的整个后验分布。相比之下，频率统计学中的预测常常需要寻找当前参数下的一个最优点估计，例如通过最大似然或者最大后验估计（MAP）。然后将这个最优点代入点的分布公式中。这样做的缺点是，它没有考虑任何参数的不确定性，所以会降低预测分布的方差。</p>
+<p>两种类型的预测分布都有复合概率分布的形式（所以才有边际似然函数）。事实上，如果先验分布是共轭先验，那么先验分布和后验分布便来自于同一族，可以很容易看出，先验预测分布和后验预测分布同样来自于同一族的复合分布。唯一的不同在于，后验预测分布使用超参数更新后的值，而先验预测分布使用先验分布中出现的超参数的值。</p>
 
 </section>
 
