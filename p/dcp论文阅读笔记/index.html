@@ -622,7 +622,113 @@ $$
 <p>再应用于第四个<code>Linear</code>上，输出的shape: (<code>nbatches, num_points, d_model</code>)</p>
 <p>整个<code>Attention</code>的网络结构如下：
 <img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig11.png" alt="imaege"  /></p>
+<!-- raw HTML omitted -->
+<p>下面关注<code>PositionwiseFeedForward</code>网络结构：</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">PositionwiseFeedForward</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">d_ff</span><span class="p">,</span> <span class="n">dropout</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PositionwiseFeedForward</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">d_ff</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_ff</span><span class="p">,</span> <span class="n">d_model</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="bp">None</span>
 
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w_1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">w_2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+</code></pre></div><p><code>PositionwistFeedForward</code>的网络结构比较简单，不再单独分析。
+整个<code>Encoder</code>的结构分析完毕。 下面再关注一下<code>Decoder</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Decoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Decoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">clones</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">LayerNorm</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">src_mask</span><span class="p">,</span> <span class="n">tgt_mask</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">src_mask</span><span class="p">,</span> <span class="n">tgt_mask</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">DecoderLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="c1"># Decoder is made of self-attn, src-attn, and feed forward(defined below)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">self_attn</span><span class="p">,</span> <span class="n">src_attn</span><span class="p">,</span> <span class="n">feed_forward</span><span class="p">,</span> <span class="n">dropout</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DecoderLayer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">self_attn</span> <span class="o">=</span> <span class="n">self_attn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">src_attn</span> <span class="o">=</span> <span class="n">src_attn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feed_forward</span> <span class="o">=</span> <span class="n">feed_forward</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sublayer</span> <span class="o">=</span> <span class="n">clones</span><span class="p">(</span><span class="n">SublayerConnection</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">dropout</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">src_mask</span><span class="p">,</span> <span class="n">tgt_mask</span><span class="p">):</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">memory</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sublayer</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="n">x</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">self_attn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">tgt_mask</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sublayer</span><span class="p">[</span><span class="mi">1</span><span class="p">](</span><span class="n">x</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_attn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">src_mask</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sublayer</span><span class="p">[</span><span class="mi">2</span><span class="p">](</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feed_forward</span><span class="p">)</span>
+</code></pre></div><p>Decoder的网络结构如图：</p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig13.png" alt="image"  /></p>
+<!-- raw HTML omitted -->
+<p>而DecoderLayer，接收的变量有<code>x</code>,<code>memory</code>,<code>src_mask</code>,<code>tgt_mask</code>，相当于先计算<code>self-attention</code>,再计算<code>co-attention</code>，最后<code>feed-forward</code>，其网络结构为：
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig14.png" alt="image"  /></p>
+<p>至此Transformer应该已经分析清楚了。</p>
+<h3 id="用于svd求解的模块module3">用于SVD求解的模块Module3</h3>
+<p>我们的最终目的是求出刚体变换矩阵。使用上一个<code>Module</code>中计算出的<code>soft pointer</code>，可以生成一个平均意义上的<code>match point</code>。
+$$
+\hat{y_i} = (Y_m)^T m(x_i,Y)
+$$
+这里，$Y_m$是指一个$R^{N \times 3}$的矩阵，包含着$Y$中所有点的信息。 根据这样一种<code>match</code>关系，便可以通过<code>SVD</code>求解出刚体变换矩阵。</p>
+<p>为了能够使得梯度反向传播，我们必须对SVD进行求导，由于我们使用SVD求解的只是3x3，可以使用其导数的近似形式。SVD求导的详细请参考论文:</p>
+<blockquote>
+<p>Estimating the jacobian of the singular value decomposition: Theory and applications</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">SVDHead</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SVDHead</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emb_dims</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">emb_dims</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reflect</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reflect</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="nb">input</span><span class="p">):</span>
+        <span class="n">src_embedding</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">tgt_embedding</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">tgt</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">d_k</span> <span class="o">=</span> <span class="n">src_embedding</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">src_embedding</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">(),</span> <span class="n">tgt_embedding</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d_k</span><span class="p">)</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">src_corr</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">tgt</span><span class="p">,</span> <span class="n">scores</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">())</span>
+
+        <span class="n">src_centered</span> <span class="o">=</span> <span class="n">src</span> <span class="o">-</span> <span class="n">src_mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="n">src_corr_centered</span> <span class="o">=</span> <span class="n">src_corr</span> <span class="o">-</span> <span class="n">src_corr</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">keepdim</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+
+        <span class="n">H</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">src_centered</span><span class="p">,</span> <span class="n">src_corr_centered</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">())</span>
+
+        <span class="n">U</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">V</span> <span class="o">=</span> <span class="p">[],[],[]</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)):</span>
+            <span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">H</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">())</span>
+            <span class="n">r_det</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">r_det</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">H</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reflect</span><span class="p">)</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">())</span>
+
+            <span class="n">R</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+            <span class="n">U</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+            <span class="n">S</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">V</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+        
+</code></pre></div>
 </section>
 
 
