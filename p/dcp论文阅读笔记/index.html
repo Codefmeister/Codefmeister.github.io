@@ -616,6 +616,12 @@ $$
 <p>(2) 根据得到的<code>query, key, value</code>计算Self-Attention.</p>
 <p>Self-Attention的计算： $softmax(\frac{Q \times K^T}{\sqrt{d_k}}) V$</p>
 <p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig12.png" alt="image"  /></p>
+<p>返回的<code>z</code>的shape为：<code>nbatches, self.h, num_points, self.d_k</code></p>
+<p>(3) 通过<code>view</code>进行所谓的<code>Concatenate</code>，将之应用于<code>Linear</code>网络，输出。</p>
+<p>首先进行一个<code>transpose(1,2)</code>,随后改变其内存分布<code>contiguous</code>，然后再通过<code>view()</code>，相当于把多个头的<code>attention</code>拼接起来。此时的shape为：<code>nbatches, num_points, h * d_k</code>.</p>
+<p>再应用于第四个<code>Linear</code>上，输出的shape: (<code>nbatches, num_points, d_model</code>)</p>
+<p>整个<code>Attention</code>的网络结构如下：
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig11.png" alt="imaege"  /></p>
 
 </section>
 

@@ -487,6 +487,12 @@ $$
 &lt;p&gt;(2) 根据得到的&lt;code&gt;query, key, value&lt;/code&gt;计算Self-Attention.&lt;/p&gt;
 &lt;p&gt;Self-Attention的计算： $softmax(\frac{Q \times K^T}{\sqrt{d_k}}) V$&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/DCP_fig12.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;返回的&lt;code&gt;z&lt;/code&gt;的shape为：&lt;code&gt;nbatches, self.h, num_points, self.d_k&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;(3) 通过&lt;code&gt;view&lt;/code&gt;进行所谓的&lt;code&gt;Concatenate&lt;/code&gt;，将之应用于&lt;code&gt;Linear&lt;/code&gt;网络，输出。&lt;/p&gt;
+&lt;p&gt;首先进行一个&lt;code&gt;transpose(1,2)&lt;/code&gt;,随后改变其内存分布&lt;code&gt;contiguous&lt;/code&gt;，然后再通过&lt;code&gt;view()&lt;/code&gt;，相当于把多个头的&lt;code&gt;attention&lt;/code&gt;拼接起来。此时的shape为：&lt;code&gt;nbatches, num_points, h * d_k&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;再应用于第四个&lt;code&gt;Linear&lt;/code&gt;上，输出的shape: (&lt;code&gt;nbatches, num_points, d_model&lt;/code&gt;)&lt;/p&gt;
+&lt;p&gt;整个&lt;code&gt;Attention&lt;/code&gt;的网络结构如下：
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig11.png&#34; alt=&#34;imaege&#34;  /&gt;&lt;/p&gt;
 </description>
         </item>
         <item>
