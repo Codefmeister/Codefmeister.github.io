@@ -255,7 +255,7 @@ Now We&amp;rsquo;re Encoding 像我们先前提到的，一个编码器接收一
 <p>值得关注的是，这些新的向量在维度上比输入向量更小。他们的维度是<code>64</code>，而<code>embedding</code>和编码器的<code>input/output</code>向量的维度是512。这些向量并不是<strong>必须</strong>要比原来的维度更小，这仅仅是一种架构上的选择，为的是<code>multiheaded attention</code>的计算恒定。</p>
 <p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig10.png" alt="image"  /></p>
 <blockquote>
-<p>用<code>$x_1$</code>乘以权重矩阵<code>$W^Q$</code>就得到了<code>$x_1$</code>的<code>query vector</code>-<code>$q1$</code>。类似这样，我们最终为输入序列中的每个单词都创造一个<code>query</code>，一个<code>key</code>，以及一个<code>value</code>投影。</p>
+<p>用$x_1$乘以权重矩阵$W^Q$就得到了$x_1$的<code>query vector</code>-$q1$。类似这样，我们最终为输入序列中的每个单词都创造一个<code>query</code>，一个<code>key</code>，以及一个<code>value</code>投影。</p>
 </blockquote>
 <p><strong>第二步</strong>：计算<code>score</code>。例如当我们计算下例中的第一个单词&quot;Thinking&quot;时，我们需要基于当前单词，为输入句子中其他位置的每个单词打分（有一点条件概率的意思）。这个分数决定了在我们对这个单词进行编码的时候，对输入序列的单词需要给予多少注意力。</p>
 <p>该分数通过将<code>query vector</code>与<code>key vector</code>进行点积操作<code>dot product</code>来得到。所以当我们对位置1的单词计算其<code>self-attention</code>时，第一个分数会是<code>q1</code>和<code>k1</code>的点积。第二个分数是<code>q1</code>和<code>k2</code>的点积。
@@ -289,7 +289,7 @@ Now We&amp;rsquo;re Encoding 像我们先前提到的，一个编码器接收一
 <p>那么为上述八组<code>Q/K/V</code>矩阵，分别做完上述的<code>self-attention</code>计算后，我们会得到八个不同的<code>Z</code>矩阵。
 <img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig17.png" alt="image"  /></p>
 <p>然后迎面而来的就有一个小问题，前馈神经网络并不需要8个矩阵，它期待的输入是一个矩阵，其中每一个向量代表一个单词。所以我们需要一种方法来将八个矩阵浓缩为一个。</p>
-<p>怎么做呢？我们<code>concatenate</code>这些矩阵，然后将拼接后的矩阵乘以一个额外的<code>weights matrix</code>&ndash;<code>$WO$</code>。所得到的结果<code>Z</code>就会捕捉到所有<code>attention head</code>中包含的信息，然后这个<code>Z</code>被送往FFNN。
+<p>怎么做呢？我们<code>concatenate</code>这些矩阵，然后将拼接后的矩阵乘以一个额外的<code>weights matrix</code>&ndash;$WO$。所得到的结果<code>Z</code>就会捕捉到所有<code>attention head</code>中包含的信息，然后这个<code>Z</code>被送往FFNN。
 <img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig18.png" alt="image"  /></p>
 <p>以上就是<code>Multi-head self-attention</code>的全部，下面我们将所有的信息集合在一张图中：
 <img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig19.png" alt="image"  /></p>
@@ -320,7 +320,7 @@ Now We&amp;rsquo;re Encoding 像我们先前提到的，一个编码器接收一
 <img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_fig27.png" alt="image"  /></p>
 <h2 id="the-decoder-side">The Decoder Side</h2>
 <p>我们已经讨论了编码器方面的绝大部分概念，也知道了其是如何工作的。下面让我们看一下他们是怎么样一起工作的。</p>
-<p>编码器从处理输入序列开始，最顶端的编码器的输出随后被转换为<code>attention vector</code> <code>$K,V$</code>的集合。这些向量在每一个解码器<code>decoder</code>的<code>encoder-decoder</code>层使用，用于帮助解码器focus在<code>input sequence</code>的恰当位置。
+<p>编码器从处理输入序列开始，最顶端的编码器的输出随后被转换为<code>attention vector</code> $K,V$的集合。这些向量在每一个解码器<code>decoder</code>的<code>encoder-decoder</code>层使用，用于帮助解码器focus在<code>input sequence</code>的恰当位置。
 <img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_gif1.gif" alt="image"  /></p>
 <p>下面的步骤重复这个过程，直到遇到终止符（表明decoder已经完成输出）。每一步的输出都会在下一个时间步反馈给最底层的解码器，解码器会将其输出一层一层向上<code>bubble up</code>，就像编码器所做的一样。同时，我们也为解码器的输入加上了位置信息的编码。</p>
 <p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Transformer_gif2.gif" alt="image"  /></p>
