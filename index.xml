@@ -112,7 +112,6 @@ Author: Wang, Yue; Solomon, Justin&lt;/p&gt;
 &lt;li&gt;分析了是&lt;code&gt;global feature&lt;/code&gt;有用还是&lt;code&gt;local feature&lt;/code&gt;对配准更加有用&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;网络架构&#34;&gt;网络架构&lt;/h2&gt;
-&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig1.png&#34; alt=&#34;image&#34;  /&gt;
 模型包含三个部分：&lt;br&gt;
 (1) 一个将输入点云映射到高维空间&lt;code&gt;embedding&lt;/code&gt;的模块，具有扰动不变性（指DGCNN当点云输入时点的前后顺序发生变化，输出不会有任何改变） 或者 刚体变换不变性（指PointNet对于旋转平移具有不变的特性）。该模块的作用是&lt;!-- raw HTML omitted --&gt;&lt;strong&gt;寻找两个输入点云之间的点的对应关系&lt;/strong&gt;&lt;!-- raw HTML omitted --&gt;. 可选的模块有&lt;!-- raw HTML omitted --&gt;&lt;strong&gt;PointNet（Focus于全局特征）， DGCNN（结合局部特征和全局特征）&lt;/strong&gt;&lt;!-- raw HTML omitted --&gt;。&lt;/p&gt;
