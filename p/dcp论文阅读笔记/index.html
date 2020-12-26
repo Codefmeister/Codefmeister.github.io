@@ -213,15 +213,15 @@ Author: Wang, Yue; Solomon, Justin</p>
 <li>分析了是<code>global feature</code>有用还是<code>local feature</code>对配准更加有用</li>
 </ul>
 <h2 id="网络架构">网络架构</h2>
-<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig1.png" alt="image"  />
-模型包含三个部分：<br>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig1.png" alt="image"  /></p>
+<p>模型包含三个部分：<br>
 (1) 一个将输入点云映射到高维空间<code>embedding</code>的模块，具有扰动不变性（指DGCNN当点云输入时点的前后顺序发生变化，输出不会有任何改变） 或者 刚体变换不变性（指PointNet对于旋转平移具有不变的特性）。该模块的作用是<!-- raw HTML omitted --><strong>寻找两个输入点云之间的点的对应关系</strong><!-- raw HTML omitted -->. 可选的模块有<!-- raw HTML omitted --><strong>PointNet（Focus于全局特征）， DGCNN（结合局部特征和全局特征）</strong><!-- raw HTML omitted -->。</p>
 <p>(2) 一个基于注意力<code>attention</code>的Pointer网络模块，用于预测两个点云之间的soft matching关系(<!-- raw HTML omitted --><strong>类似于一种基于概率的soft match，之所以soft是由于它并没有显式规定点$x_i$必须与哪个点$x_j$有对应关系，而是通过一个softmax得到的各点和某点$x_i$存在对应关系的概率乘以各点数据，得到一个类似于概率的对应点坐标</strong><!-- raw HTML omitted -->。 该模块采用的是<!-- raw HTML omitted --><strong>Transformer</strong><!-- raw HTML omitted --></p>
 <p>(3) 一个<strong>可微</strong>的<code>SVD</code>分解层，用于输出刚体变换矩阵。</p>
 <h2 id="问题阐述">问题阐述</h2>
-<p>熟悉点云配准的同学应该知道，问题十分清晰。这里直接粘一下原文。<br>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted --></p>
+<p>熟悉点云配准的同学应该知道，问题十分清晰。这里直接粘一下原文。</p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig2.png" alt="image"  /></p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig3.png" alt="image"  /></p>
 <p>值得一提的是，作者分析了一下ICP的算法步骤。和我们上面描述的一样。<!-- raw HTML omitted --><strong>就是用上次更新后的信息寻找最近关系，然后用寻找到的对应关系SVD求解得到$R,t$.</strong><!-- raw HTML omitted --> 所以如果初始值一开始生成的是很差的<code>corresponding relation</code>，那么一下就会陷入局部最优。</p>
 <p>而作者的思路就是：<!-- raw HTML omitted --><strong>使用学习的网络来得到特征，通过特征获得一个更好的对应关系$m(\cdot)$，用这个$m(\cdot)$去计算刚体变换信息。</strong><!-- raw HTML omitted --></p>
 <h2 id="代码分析与对应模块详解">代码分析与对应模块详解</h2>
@@ -315,7 +315,7 @@ $$
         <span class="k">return</span> <span class="n">x</span>
 
 </code></pre></div><p>从上述代码中，可以看出，<!-- raw HTML omitted --><strong>作者使用的PointNet并没有<code>input-transform</code>和<code>feature-transform</code>这两个Module</strong><!-- raw HTML omitted -->，相当于只应用MLP不断对输入点云进行抽象，直到高维空间。
-<!-- raw HTML omitted --></p>
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig4.png" alt="image"  /></p>
 <p><!-- raw HTML omitted --><em>存疑</em>：为什么不加<code>Transform-Net</code>？ 如果加上效果训练效果如何? 没有cat，cat之后效果如何？<!-- raw HTML omitted --></p>
 <h4 id="dgcnn">DGCNN</h4>
 <p>DGCNN是作者<code>@WangYue</code>提出的一种网络架构，其特点是<code>EdgeConv</code>。可以结合全局特征与局部特征。
@@ -409,7 +409,7 @@ $f$是每一层后的聚合函数。$N_i$指的是和点$x_i$存在KNN关系的�
         
         <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">,</span> <span class="n">x4</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># (batch_size, 64+64+128+256, num_points)</span>
 </code></pre></div><p>差别十分明显。相当于网络结构中红框的部分消失了：
-<!-- raw HTML omitted --></p>
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig5.png" alt="image"  /></p>
 <p><!-- raw HTML omitted -->此处同样存疑<!-- raw HTML omitted -->，作者在论文里未提及此细节。</p>
 <h3 id="用于match寻找点对关系的module2">用于Match（寻找点对关系）的Module2</h3>
 <h4 id="基于attention机制的transformer">基于Attention机制的Transformer</h4>
@@ -440,7 +440,7 @@ m(x_i,Y) = softmax(\Phi_y \Phi_{x_i}^T)
 $$
 在这里，$\Phi_Y \in R^{N \times P}$代表Y经过<code>Attention Module</code>后生成的<code>embedding</code>。而$\Phi_{x_i}$代表矩阵$\Phi_X$的第$i$行。 所以可以将$m(x_i, Y)$ 看做一个将每个$x_i$映射到$Y$中元素的<code>soft pointer</code>。</p>
 <p>下面我们关注文中Transformer的实现。其架构为：
-<!-- raw HTML omitted --></p>
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig6.png" alt="image"  /></p>
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Transformer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Transformer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -506,7 +506,7 @@ $$
 <p>而<code>encode</code>函数，是这样定义的: <code>self.encoder(self.src_embed(src), src_mask)</code>, 即先将<code>src</code>通过<code>src_embed</code>网络，然后根据其<code>mask</code>再通过<code>encoder</code>网络。</p>
 <p>而<code>decode</code>函数，是：<code>self.generator(self.decoder(self.tgt_embed(tgt), memory, src_mask, tgt_mask))</code>, 也就是说, <code>tgt</code>先经过<code>tgt_embed</code>网络，然后随<code>memory, src_mask, tgt_mask</code>一同传入<code>decoder</code>网络，<code>decoder</code>网络的输出再流入<code>generator</code>网络。</p>
 <p>所以我自己梳理了一下整个EncoderDecoder大概结构如下：</p>
-<!-- raw HTML omitted -->
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig7.png" alt="image"  /></p>
 <p>进一步关注<code>Encoder</code>与<code>Decoder</code>：</p>
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">clones</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">([</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">module</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)])</span>
@@ -529,7 +529,7 @@ $$
 <span class="n">net_clones</span> <span class="o">=</span> <span class="n">clones</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="s1">&#39;net_clones&#39;</span><span class="p">,</span> <span class="n">net_clones</span><span class="p">)</span>
 </code></pre></div><p>其执行结果是：将<code>net</code>复制了3次，装在一个<code>ModuleList</code>中返回。并且值得一提的是，这里是<strong>copy.deepcopy()</strong>，深复制，所以参数之间不共享。</p>
-<!-- raw HTML omitted -->
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig8.png" alt="image"  /></p>
 <p>而LayerNorm定义如下:</p>
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">LayerNorm</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">):</span>
@@ -544,6 +544,7 @@ $$
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">a_2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">std</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b_2</span>      <span class="c1"># 对最后一维进行Norm</span>
 </code></pre></div><p>可见LayerNorm的作用是对输入的数据<code>x</code>，对其最后一维进行归一化操作。</p>
 <p>而Encoder整个的前传机制为：对于构造时生成的ModuleList,依次将<code>x</code>通过<code>ModuleList</code>中的每个网络<code>layer</code>，即<code>x = layer(x, mask)</code>, 然后再将输出通过LayerNorm对最后一维进行归一化操作返回。 Encoder的网络结构图如下：</p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig9.png" alt="image"  /></p>
 <!-- raw HTML omitted -->
 <p>进一步关注，<code>Encoder</code>在<code>EncoderDecoder</code>构造时，传入的layer参数为：<code>EncoderLayer(self.emb_dims, c(attn), c(ff), self.dropout)</code>。 解读<code>EncoderLayer</code>:</p>
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">EncoderLayer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -568,6 +569,7 @@ $$
         <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">sublayer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 </code></pre></div><p><code>SublayerConnection</code>在构造时，只传入了<code>size, dropout</code>两个参数，用于构造LayerNorm。而前传<code>forward</code>的时候，返回的是<code>x + sublayer(self.norm(x))</code>， 即将<code>x</code>通过了<code>LayerNorm</code>后，再通过作为参数传入的网络<code>sublayer</code>，最后与<code>x</code>相加，返回。</p>
 <p>搞清楚<code>SublayerConnection</code>的机制后，我们回看<code>EncoderLayer</code>的<code>forward</code>机制：<code>x</code>先通过一个传入网络为<code>attn</code>的<code>sublayer</code>，然后再通过一个传入网络为<code>feedforward</code>的<code>sublayer</code>. <code>EncoderLayer</code>网络结构如图：</p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig10.png" alt="image"  /></p>
 <!-- raw HTML omitted -->
 <p>接下来关注<code>attn</code>，即<code>MultiHeadedAttention</code>:</p>
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">attention</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -613,13 +615,13 @@ $$
 <p>需要说明的是，按照Transformer的理论，MultiHeadAttention的生成矩阵(即我们在上面用的投影应该是每个head有一个单独的projection)，但是因为这个projection是学习得到的，所以我们只用一个<code>projection</code>然后再进行<code>view()</code>分割得到<code>MultiHead</code>，在理论上应该能得到相同的效果。</p>
 <p>(2) 根据得到的<code>query, key, value</code>计算Self-Attention.</p>
 <p>Self-Attention的计算： $softmax(\frac{Q \times K^T}{\sqrt{d_k}}) V$</p>
-<!-- raw HTML omitted -->
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig12.png" alt="image"  /></p>
 <p>返回的<code>z</code>的shape为：<code>nbatches, self.h, num_points, self.d_k</code></p>
 <p>(3) 通过<code>view</code>进行所谓的<code>Concatenate</code>，将之应用于<code>Linear</code>网络，输出。</p>
 <p>首先进行一个<code>transpose(1,2)</code>,随后改变其内存分布<code>contiguous</code>，然后再通过<code>view()</code>，相当于把多个头的<code>attention</code>拼接起来。此时的shape为：<code>nbatches, num_points, h * d_k</code>.</p>
 <p>再应用于第四个<code>Linear</code>上，输出的shape: (<code>nbatches, num_points, d_model</code>)</p>
 <p>整个<code>Attention</code>的网络结构如下：
-<!-- raw HTML omitted --></p>
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig11.png" alt="image"  /></p>
 <!-- raw HTML omitted -->
 <p>下面关注<code>PositionwiseFeedForward</code>网络结构：</p>
 <div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">PositionwiseFeedForward</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -666,9 +668,10 @@ $$
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sublayer</span><span class="p">[</span><span class="mi">1</span><span class="p">](</span><span class="n">x</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_attn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">src_mask</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sublayer</span><span class="p">[</span><span class="mi">2</span><span class="p">](</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feed_forward</span><span class="p">)</span>
 </code></pre></div><p>Decoder的网络结构如图：</p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig13.png" alt="image"  /></p>
 <!-- raw HTML omitted -->
 <p>而DecoderLayer，接收的变量有<code>x</code>,<code>memory</code>,<code>src_mask</code>,<code>tgt_mask</code>，相当于先计算<code>self-attention</code>,再计算<code>co-attention</code>，最后<code>feed-forward</code>，其网络结构为：
-<!-- raw HTML omitted --></p>
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig14.png" alt="image"  /></p>
 <p>至此Transformer应该已经分析清楚了。</p>
 <h3 id="用于svd求解的模块module3">用于SVD求解的模块Module3</h3>
 <p>我们的最终目的是求出刚体变换矩阵。使用上一个<code>Module</code>中计算出的<code>soft pointer</code>，可以生成一个平均意义上的<code>match point</code>。
@@ -745,15 +748,15 @@ $$</p>
 <h3 id="关于特征提取选择pointnet还是dgcnn">关于特征提取：选择PointNet还是DGCNN?</h3>
 <p>PointNet 学习的是全局特征， 而DGCNN通过构建<code>k-NN</code> Graph学习到的是局部集合特征。</p>
 <p>从文中的实验结果可以看出，使用DGCNN作为emb_net，比PointNet的性能始终要好。
-<!-- raw HTML omitted --></p>
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig15.png" alt="image"  /></p>
 <h3 id="关于计算刚体变换选择mlp还是svd">关于计算刚体变换：选择MLP还是SVD？</h3>
 <p>MLP在理论上可以模拟任何非线性映射。 而SVD是针对任务进行有目的性设计的网络。</p>
 <p>从文中的实验结果可以看出，使用SVD计算<code>rigid transformation</code>总是更优。
-<!-- raw HTML omitted --></p>
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig16.png" alt="image"  /></p>
 <h1 id="结语">结语</h1>
 <p>以上就是我个人对DCP的笔记记录以及一些解读。</p>
 <p>如果觉得文章对您有帮助，欢迎点赞留言交流。给作者买杯咖啡就更感激不过了！
-<!-- raw HTML omitted --></p>
+<img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/PayCode.jpg" alt="image"  /></p>
 
 </section>
 
