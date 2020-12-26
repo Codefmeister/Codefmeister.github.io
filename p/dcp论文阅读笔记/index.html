@@ -214,7 +214,8 @@ Author: Wang, Yue; Solomon, Justin</p>
 </ul>
 <h2 id="网络架构">网络架构</h2>
 <!-- raw HTML omitted -->
-<p>模型包含三个部分：<br>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig1.png" alt="image"  />
+模型包含三个部分：<br>
 (1) 一个将输入点云映射到高维空间<code>embedding</code>的模块，具有扰动不变性（指DGCNN当点云输入时点的前后顺序发生变化，输出不会有任何改变） 或者 刚体变换不变性（指PointNet对于旋转平移具有不变的特性）。该模块的作用是<!-- raw HTML omitted --><strong>寻找两个输入点云之间的点的对应关系</strong><!-- raw HTML omitted -->. 可选的模块有<!-- raw HTML omitted --><strong>PointNet（Focus于全局特征）， DGCNN（结合局部特征和全局特征）</strong><!-- raw HTML omitted -->。</p>
 <p>(2) 一个基于注意力<code>attention</code>的Pointer网络模块，用于预测两个点云之间的soft matching关系(<!-- raw HTML omitted --><strong>类似于一种基于概率的soft match，之所以soft是由于它并没有显式规定点$x_i$必须与哪个点$x_j$有对应关系，而是通过一个softmax得到的各点和某点$x_i$存在对应关系的概率乘以各点数据，得到一个类似于概率的对应点坐标</strong><!-- raw HTML omitted -->。 该模块采用的是<!-- raw HTML omitted --><strong>Transformer</strong><!-- raw HTML omitted --></p>
 <p>(3) 一个<strong>可微</strong>的<code>SVD</code>分解层，用于输出刚体变换矩阵。</p>
