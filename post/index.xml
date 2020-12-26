@@ -206,6 +206,22 @@ unique数组中对应位置的value值第一次在input数组中出现的下标�
     </item>
     
     <item>
+      <title>parse_args传参</title>
+      <link>https://codefmeister.github.io/p/parse_args%E4%BC%A0%E5%8F%82/</link>
+      <pubDate>Sat, 21 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/parse_args%E4%BC%A0%E5%8F%82/</guid>
+      <description>python中parse_args以及namespace 声明：本笔记记录的是使用parse_args在函数内部进行传参，并非在命令行进行输入。所有操作均需先进行import argparse。
+通过以下操作，可以在传参时直接传入args这个namespace，而不是具体的某个参数。
+创建argparse对象，设置参数以及默认值 使用argparse.ArgumentParser()创建对象，使用argparser.add_argument()操作设置参数以及默认值。
+Example: parser = argparse.ArgumentParser(&#39;Exampe&#39;) parser.add_argument(&#39;--NDArray&#39;,type=np.ndarray,default= NDArray) argument中的参数类型丰富多样，可以是任何数据类型。使用--name来设置参数名，使用type = 设置类型，使用default设置初始化后的默认值。
+parser转换为name_space 使用命令parser.parse_args()，即可将一个ArgumentParser转换为name_space.转换为namespace后，可以对先前设置的argument通过.name的方式类似属性一样进行访问，同样可以进行赋值，存取等操作。
+args = parser.parse_args() print(args.NDArray) a = np.array([[1,2],[3,4]]) args.NDArray = a namespace 的一些操作 在初始化ArgumentParser时，我们可能忘记添加某些argument，这就导致在转换为namespace后缺少某些attribute.
+我们可以对args使用.__setattr(name,value)设置新的属性值。开辟之后就可以使用.attr的方式进行赋值存取。 同样，我们可以使用.__contains__(attribute_name)判断args这个namespace是否含有该属性。
+args.__setattr__(&#39;cloudArray&#39;,[]) args.cloudArray.append(1024) if args.__contains__(&#39;cloudArray&#39;): print(&#39;namespace args contains attr&#39;) </description>
+    </item>
+    
+    <item>
       <title>MatrixCookBook Chapter1:矩阵的基础知识</title>
       <link>https://codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
       <pubDate>Sun, 15 Nov 2020 09:40:49 +0800</pubDate>
@@ -353,22 +369,6 @@ If a is not square or inversion fails.</description>
 Parameters  x: array_like   Input array. If axis is None, x must be 1-D or 2-D, unless ord is None. If both axis and ord are None, the 2-norm of x.ravel will be returned.
  X是输入的array, array的情况必须是以下三种情况之一:
  axis未指定，ord指定。此时x必须是一维或二维数组 axis指定，x任意 axis未指定，ord未指定，此时x任意，返回值为x被展平后的一维向量x.ravel的二范数。   ord：{non-zero int, inf, -inf, &amp;lsquo;fro&amp;rsquo;, &amp;lsquo;nuc&amp;rsquo;}, optional   Order of the norm (see table under Notes). inf means numpy&amp;rsquo;s inf object. The default is None.</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://codefmeister.github.io/p/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://codefmeister.github.io/p/</guid>
-      <description>python中parse_args以及namespace 声明：本笔记记录的是使用parse_args在函数内部进行传参，并非在命令行进行输入。所有操作均需先进行import argparse。
-通过以下操作，可以在传参时直接传入args这个namespace，而不是具体的某个参数。
-创建argparse对象，设置参数以及默认值 使用argparse.ArgumentParser()创建对象，使用argparser.add_argument()操作设置参数以及默认值。
-Example: parser = argparse.ArgumentParser(&#39;Exampe&#39;) parser.add_argument(&#39;--NDArray&#39;,type=np.ndarray,default= NDArray) argument中的参数类型丰富多样，可以是任何数据类型。使用--name来设置参数名，使用type = 设置类型，使用default设置初始化后的默认值。
-parser转换为name_space 使用命令parser.parse_args()，即可将一个ArgumentParser转换为name_space.转换为namespace后，可以对先前设置的argument通过.name的方式类似属性一样进行访问，同样可以进行赋值，存取等操作。
-args = parser.parse_args() print(args.NDArray) a = np.array([[1,2],[3,4]]) args.NDArray = a namespace 的一些操作 在初始化ArgumentParser时，我们可能忘记添加某些argument，这就导致在转换为namespace后缺少某些attribute.
-我们可以对args使用.__setattr(name,value)设置新的属性值。开辟之后就可以使用.attr的方式进行赋值存取。 同样，我们可以使用.__contains__(attribute_name)判断args这个namespace是否含有该属性。
-args.__setattr__(&#39;cloudArray&#39;,[]) args.cloudArray.append(1024) if args.__contains__(&#39;cloudArray&#39;): print(&#39;namespace args contains attr&#39;) </description>
     </item>
     
     <item>

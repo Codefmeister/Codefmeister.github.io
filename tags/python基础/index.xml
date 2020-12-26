@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>python基础 on Codefmeister</title>
+    <link>https://codefmeister.github.io/tags/python%E5%9F%BA%E7%A1%80/</link>
+    <description>Recent content in python基础 on Codefmeister</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 21 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/python%E5%9F%BA%E7%A1%80/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>parse_args传参</title>
+      <link>https://codefmeister.github.io/p/parse_args%E4%BC%A0%E5%8F%82/</link>
+      <pubDate>Sat, 21 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/parse_args%E4%BC%A0%E5%8F%82/</guid>
+      <description>python中parse_args以及namespace 声明：本笔记记录的是使用parse_args在函数内部进行传参，并非在命令行进行输入。所有操作均需先进行import argparse。
+通过以下操作，可以在传参时直接传入args这个namespace，而不是具体的某个参数。
+创建argparse对象，设置参数以及默认值 使用argparse.ArgumentParser()创建对象，使用argparser.add_argument()操作设置参数以及默认值。
+Example: parser = argparse.ArgumentParser(&#39;Exampe&#39;) parser.add_argument(&#39;--NDArray&#39;,type=np.ndarray,default= NDArray) argument中的参数类型丰富多样，可以是任何数据类型。使用--name来设置参数名，使用type = 设置类型，使用default设置初始化后的默认值。
+parser转换为name_space 使用命令parser.parse_args()，即可将一个ArgumentParser转换为name_space.转换为namespace后，可以对先前设置的argument通过.name的方式类似属性一样进行访问，同样可以进行赋值，存取等操作。
+args = parser.parse_args() print(args.NDArray) a = np.array([[1,2],[3,4]]) args.NDArray = a namespace 的一些操作 在初始化ArgumentParser时，我们可能忘记添加某些argument，这就导致在转换为namespace后缺少某些attribute.
+我们可以对args使用.__setattr(name,value)设置新的属性值。开辟之后就可以使用.attr的方式进行赋值存取。 同样，我们可以使用.__contains__(attribute_name)判断args这个namespace是否含有该属性。
+args.__setattr__(&#39;cloudArray&#39;,[]) args.cloudArray.append(1024) if args.__contains__(&#39;cloudArray&#39;): print(&#39;namespace args contains attr&#39;) </description>
+    </item>
+    
+  </channel>
+</rss>
