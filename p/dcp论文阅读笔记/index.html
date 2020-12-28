@@ -317,6 +317,7 @@ $$
 </code></pre></div><p>从上述代码中，可以看出，<!-- raw HTML omitted --><strong>作者使用的PointNet并没有<code>input-transform</code>和<code>feature-transform</code>这两个Module</strong><!-- raw HTML omitted -->，相当于只应用MLP不断对输入点云进行抽象，直到高维空间。
 <img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig4.png" alt="image"  /></p>
 <p><!-- raw HTML omitted --><em>存疑</em>：为什么不加<code>Transform-Net</code>？ 如果加上效果训练效果如何? 没有cat，cat之后效果如何？<!-- raw HTML omitted --></p>
+<p><strong>解答</strong>：记于2020-12-28日：这个问题太傻了。我们这个网络的目的就是学习出刚体变换矩阵。3x3的Transform Net相当于是硬学。而我们是通过其巧妙设计来优化模式，求解刚体变换矩阵。</p>
 <h4 id="dgcnn">DGCNN</h4>
 <p>DGCNN是作者<code>@WangYue</code>提出的一种网络架构，其特点是<code>EdgeConv</code>。可以结合全局特征与局部特征。
 $$

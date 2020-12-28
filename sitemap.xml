@@ -13,6 +13,11 @@
   </url>
   
   <url>
+    <loc>https://codefmeister.github.io/p/np.random%E4%B8%AD%E5%90%84%E5%87%BD%E6%95%B0%E4%B8%80%E8%A7%88/</loc>
+    <lastmod>2020-12-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://codefmeister.github.io/tags/numpy/</loc>
     <lastmod>2020-12-28T00:00:00+00:00</lastmod>
   </url>
@@ -23,7 +28,17 @@
   </url>
   
   <url>
+    <loc>https://codefmeister.github.io/tags/pytorch/</loc>
+    <lastmod>2020-12-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://codefmeister.github.io/tags/</loc>
+    <lastmod>2020-12-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://codefmeister.github.io/p/torch.detach/</loc>
     <lastmod>2020-12-28T00:00:00+00:00</lastmod>
   </url>
   

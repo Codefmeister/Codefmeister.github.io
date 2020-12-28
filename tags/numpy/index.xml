@@ -20,5 +20,19 @@
 Given an interval, values outside the interval are clipped tothe interval edges.</description>
     </item>
     
+    <item>
+      <title>np.random中各函数一览</title>
+      <link>https://codefmeister.github.io/p/np.random%E4%B8%AD%E5%90%84%E5%87%BD%E6%95%B0%E4%B8%80%E8%A7%88/</link>
+      <pubDate>Mon, 28 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/np.random%E4%B8%AD%E5%90%84%E5%87%BD%E6%95%B0%E4%B8%80%E8%A7%88/</guid>
+      <description>np.random.uniform() 语法 `numpy.random.uniform(low=0.0, high=1.0, size = None)
+作用 返回一个均匀分布的采样结果。 左闭右开区间[low, high).
+返回数组的shape与size相同。
+参数  low: 下界，默认为0.0 high: 上界，默认为1.0 size: 返回数组的shape， 默认为None，即返回一个单值  举例 &amp;gt;&amp;gt;&amp;gt; a = np.random.uniform(1,2,(3,4))&amp;gt;&amp;gt;&amp;gt; print(a)array([[1.81297209, 1.79414559, 1.24677702, 1.44857774],[1.9171547 , 1.84473086, 1.33114168, 1.95953694],[1.66085822, 1.30895404, 1.1047299 , 1.6256421 ]])np.random.randn() 语法 numpy.random.randn(d0, d1, ..., dn)
+作用 返回一个shape为(d0, d1, ..., dn)的正态分布采样。分布的均值为0,方差为1. 如果没有提供参数，则返回单个值的采样。
+举例 &amp;gt;&amp;gt;&amp;gt; a = np.random.randn(5,6)&amp;gt;&amp;gt;&amp;gt; print(a)array([[-0.47617937, -0.43465103, 0.14896871, 0.21132357, 0.2143598 ,-0.03354328],[-0.</description>
+    </item>
+    
   </channel>
 </rss>

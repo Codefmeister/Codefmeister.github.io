@@ -73,6 +73,66 @@ ufuncs-output-type
 </description>
         </item>
         <item>
+        <title>np.random中各函数一览</title>
+        <link>https://codefmeister.github.io/p/np.random%E4%B8%AD%E5%90%84%E5%87%BD%E6%95%B0%E4%B8%80%E8%A7%88/</link>
+        <pubDate>Mon, 28 Dec 2020 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/np.random%E4%B8%AD%E5%90%84%E5%87%BD%E6%95%B0%E4%B8%80%E8%A7%88/</guid>
+        <description>&lt;h1 id=&#34;nprandomuniform&#34;&gt;np.random.uniform()&lt;/h1&gt;
+&lt;h2 id=&#34;语法&#34;&gt;语法&lt;/h2&gt;
+&lt;p&gt;`numpy.random.uniform(low=0.0, high=1.0, size = None)&lt;/p&gt;
+&lt;h2 id=&#34;作用&#34;&gt;作用&lt;/h2&gt;
+&lt;p&gt;返回一个均匀分布的采样结果。 左闭右开区间[low, high).&lt;/p&gt;
+&lt;p&gt;返回数组的shape与size相同。&lt;/p&gt;
+&lt;h2 id=&#34;参数&#34;&gt;参数&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;low: 下界，默认为0.0&lt;/li&gt;
+&lt;li&gt;high: 上界，默认为1.0&lt;/li&gt;
+&lt;li&gt;size: 返回数组的shape， 默认为None，即返回一个单值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;举例&#34;&gt;举例&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; a = np.random.uniform(1,2,(3,4))
+&amp;gt;&amp;gt;&amp;gt; print(a)
+array([[1.81297209, 1.79414559, 1.24677702, 1.44857774],
+       [1.9171547 , 1.84473086, 1.33114168, 1.95953694],
+       [1.66085822, 1.30895404, 1.1047299 , 1.6256421 ]])
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;nprandomrandn&#34;&gt;np.random.randn()&lt;/h1&gt;
+&lt;h2 id=&#34;语法-1&#34;&gt;语法&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;numpy.random.randn(d0, d1, ..., dn)&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;作用-1&#34;&gt;作用&lt;/h2&gt;
+&lt;p&gt;返回一个&lt;code&gt;shape&lt;/code&gt;为&lt;code&gt;(d0, d1, ..., dn)&lt;/code&gt;的正态分布采样。分布的均值为0,方差为1. 如果没有提供参数，则返回单个值的采样。&lt;/p&gt;
+&lt;h2 id=&#34;举例-1&#34;&gt;举例&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; a = np.random.randn(5,6)
+&amp;gt;&amp;gt;&amp;gt; print(a)
+array([[-0.47617937, -0.43465103,  0.14896871,  0.21132357,  0.2143598 ,
+        -0.03354328],
+       [-0.04106843, -1.7749601 , -0.21961397,  0.09636438, -0.96454273,
+        -0.19864323],
+       [ 2.23603561, -0.85890889,  0.33559106, -0.04761999, -1.67373302,
+         1.02406518],
+       [ 0.2637569 , -0.21446205,  0.55802706, -0.93956703,  0.71275597,
+         1.13559443],
+       [-0.17459087,  1.11798002, -2.17611829,  0.64592587,  0.87040789,
+        -0.85487641]])
+&amp;gt;&amp;gt;&amp;gt; print(a.shape)
+(5, 6)
+&lt;/code&gt;&lt;/pre&gt;</description>
+        </item>
+        <item>
+        <title>torch.detach()</title>
+        <link>https://codefmeister.github.io/p/torch.detach/</link>
+        <pubDate>Mon, 28 Dec 2020 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/torch.detach/</guid>
+        <description>&lt;h1 id=&#34;torchdetach&#34;&gt;torch.detach()&lt;/h1&gt;
+&lt;h2 id=&#34;作用&#34;&gt;作用&lt;/h2&gt;
+&lt;p&gt;Returns a new Tensor, detached from the current graph.&lt;/p&gt;
+&lt;p&gt;返回一个新的Tensor， 从原有的图中剥离。&lt;/p&gt;
+&lt;p&gt;The result will never require gradient.&lt;/p&gt;
+&lt;p&gt;并且该Tensor不自动计算梯度。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>glob 函数作用分析</title>
         <link>https://codefmeister.github.io/p/glob-%E5%87%BD%E6%95%B0%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/</link>
         <pubDate>Sun, 27 Dec 2020 00:00:00 +0000</pubDate>
@@ -308,6 +368,7 @@ $$
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;从上述代码中，可以看出，&lt;!-- raw HTML omitted --&gt;&lt;strong&gt;作者使用的PointNet并没有&lt;code&gt;input-transform&lt;/code&gt;和&lt;code&gt;feature-transform&lt;/code&gt;这两个Module&lt;/strong&gt;&lt;!-- raw HTML omitted --&gt;，相当于只应用MLP不断对输入点云进行抽象，直到高维空间。
 &lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/DCP_fig4.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;!-- raw HTML omitted --&gt;&lt;em&gt;存疑&lt;/em&gt;：为什么不加&lt;code&gt;Transform-Net&lt;/code&gt;？ 如果加上效果训练效果如何? 没有cat，cat之后效果如何？&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解答&lt;/strong&gt;：记于2020-12-28日：这个问题太傻了。我们这个网络的目的就是学习出刚体变换矩阵。3x3的Transform Net相当于是硬学。而我们是通过其巧妙设计来优化模式，求解刚体变换矩阵。&lt;/p&gt;
 &lt;h4 id=&#34;dgcnn&#34;&gt;DGCNN&lt;/h4&gt;
 &lt;p&gt;DGCNN是作者&lt;code&gt;@WangYue&lt;/code&gt;提出的一种网络架构，其特点是&lt;code&gt;EdgeConv&lt;/code&gt;。可以结合全局特征与局部特征。
 $$
