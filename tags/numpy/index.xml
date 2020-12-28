@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>numpy on Codefmeister</title>
+    <link>https://codefmeister.github.io/tags/numpy/</link>
+    <description>Recent content in numpy on Codefmeister</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 28 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/numpy/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>np.clip作用解析</title>
+      <link>https://codefmeister.github.io/p/np.clip%E4%BD%9C%E7%94%A8%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Mon, 28 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/np.clip%E4%BD%9C%E7%94%A8%E8%A7%A3%E6%9E%90/</guid>
+      <description>np.clip分析 语法 np.clip(a, a_min, a_max, out=None, **kwarys)
+作用 对数组a进行裁剪，小于a_min 的数用a_min代替， 大于a_max的数用a_max代替。
+需要注意的是，函数本身并不会对a_min和a_max之间的大小进行检查。
+参数  a: 待裁剪的数组 a_min: 下界 a_max: 上界  示例 &amp;gt;&amp;gt;&amp;gt; a = np.arange(10)&amp;gt;&amp;gt;&amp;gt; print(a)array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])&amp;gt;&amp;gt;&amp;gt; b = np.clip(a, 3, 7)&amp;gt;&amp;gt;&amp;gt; print(b)array([3, 3, 3, 3, 4, 5, 6, 7, 7, 7])官方文档 Clip (limit) the values in an array.
+Given an interval, values outside the interval are clipped tothe interval edges.</description>
+    </item>
+    
+  </channel>
+</rss>
