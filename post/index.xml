@@ -260,6 +260,18 @@ unique数组中对应位置的value值第一次在input数组中出现的下标�
     </item>
     
     <item>
+      <title>numpy求解范数--numpy.linalg.norm</title>
+      <link>https://codefmeister.github.io/p/numpy%E6%B1%82%E8%A7%A3%E8%8C%83%E6%95%B0-numpy.linalg.norm/</link>
+      <pubDate>Sat, 21 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/numpy%E6%B1%82%E8%A7%A3%E8%8C%83%E6%95%B0-numpy.linalg.norm/</guid>
+      <description>numpy.linalg.norm 语法 numpy.linalg.norm(x,ord=None,axis=None,keepdims=False)
+Parameters  x: array_like   Input array. If axis is None, x must be 1-D or 2-D, unless ord is None. If both axis and ord are None, the 2-norm of x.ravel will be returned.
+ X是输入的array, array的情况必须是以下三种情况之一:
+ axis未指定，ord指定。此时x必须是一维或二维数组 axis指定，x任意 axis未指定，ord未指定，此时x任意，返回值为x被展平后的一维向量x.ravel的二范数。   ord：{non-zero int, inf, -inf, &amp;lsquo;fro&amp;rsquo;, &amp;lsquo;nuc&amp;rsquo;}, optional   Order of the norm (see table under Notes). inf means numpy&amp;rsquo;s inf object. The default is None.</description>
+    </item>
+    
+    <item>
       <title>parse_args传参</title>
       <link>https://codefmeister.github.io/p/parse_args%E4%BC%A0%E5%8F%82/</link>
       <pubDate>Sat, 21 Nov 2020 00:00:00 +0000</pubDate>
@@ -411,18 +423,6 @@ Returns  ainv : (&amp;hellip;, M, M)
 ndarray or matrix (Multiplicative) inverse of the matrix a.  返回的是对应的逆矩阵的数组。
 Raises  LinAlgError
 If a is not square or inversion fails.</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://codefmeister.github.io/p/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://codefmeister.github.io/p/</guid>
-      <description>numpy.linalg.norm 语法 numpy.linalg.norm(x,ord=None,axis=None,keepdims=False)
-Parameters  x: array_like   Input array. If axis is None, x must be 1-D or 2-D, unless ord is None. If both axis and ord are None, the 2-norm of x.ravel will be returned.
- X是输入的array, array的情况必须是以下三种情况之一:
- axis未指定，ord指定。此时x必须是一维或二维数组 axis指定，x任意 axis未指定，ord未指定，此时x任意，返回值为x被展平后的一维向量x.ravel的二范数。   ord：{non-zero int, inf, -inf, &amp;lsquo;fro&amp;rsquo;, &amp;lsquo;nuc&amp;rsquo;}, optional   Order of the norm (see table under Notes). inf means numpy&amp;rsquo;s inf object. The default is None.</description>
     </item>
     
     <item>

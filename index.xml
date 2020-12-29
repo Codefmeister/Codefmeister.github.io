@@ -1437,6 +1437,90 @@ unique数组中对应位置的value值第一次在input数组中出现的下标�
 </description>
         </item>
         <item>
+        <title>numpy求解范数--numpy.linalg.norm</title>
+        <link>https://codefmeister.github.io/p/numpy%E6%B1%82%E8%A7%A3%E8%8C%83%E6%95%B0-numpy.linalg.norm/</link>
+        <pubDate>Sat, 21 Nov 2020 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/numpy%E6%B1%82%E8%A7%A3%E8%8C%83%E6%95%B0-numpy.linalg.norm/</guid>
+        <description>&lt;h1 id=&#34;numpylinalgnorm&#34;&gt;numpy.linalg.norm&lt;/h1&gt;
+&lt;h2 id=&#34;语法&#34;&gt;语法&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;numpy.linalg.norm(x,ord=None,axis=None,keepdims=False)&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;parameters&#34;&gt;Parameters&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;x: array_like&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Input array. If &lt;code&gt;axis&lt;/code&gt; is None, x must be 1-D or 2-D, unless &lt;code&gt;ord&lt;/code&gt; is None. If both &lt;code&gt;axis&lt;/code&gt; and &lt;code&gt;ord&lt;/code&gt; are None, the 2-norm of &lt;code&gt;x.ravel&lt;/code&gt; will be returned.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;X是输入的array, array的情况必须是以下三种情况之一:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;axis&lt;/code&gt;未指定，&lt;code&gt;ord&lt;/code&gt;指定。此时x必须是一维或二维数组&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;axis&lt;/code&gt;指定，&lt;code&gt;x&lt;/code&gt;任意&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;axis&lt;/code&gt;未指定，&lt;code&gt;ord&lt;/code&gt;未指定，此时&lt;code&gt;x&lt;/code&gt;任意，返回值为x被展平后的一维向量&lt;code&gt;x.ravel&lt;/code&gt;的二范数。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;ord：{non-zero int, inf, -inf, &amp;lsquo;fro&amp;rsquo;, &amp;lsquo;nuc&amp;rsquo;}, optional&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Order of the norm (see table under Notes). inf means numpy&amp;rsquo;s inf object. The default is None.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;范数的阶数，可以不指定。默认为None。inf代表无穷大，-inf为无穷小。&lt;br&gt;
+可选的阶数见下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/NumpyNorm_fig1.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;axis:{None, int, 2-tuple of ints},optional&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If &lt;code&gt;axis&lt;/code&gt; is an integer, it specifies the &lt;code&gt;axis&lt;/code&gt; of x along which to compute the vector norms. If &lt;code&gt;axis&lt;/code&gt; is a 2-tuple, it specifies the axes that hold 2-D matrices, and the matrix norms of these matrices are computed. If axis is None then either a vector norm (when x is 1-D) or a matrix norm (when x is 2-D) is returned. The default is None.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;如果&lt;code&gt;axis&lt;/code&gt;是整数，指定了一个维度，在该维度上按照向量进行范数计算。如果是一个二元整数组，指定了两个维度，在指定的这两个维度上可以构成矩阵。对这些矩阵进行计算。如果没有指定&lt;code&gt;axis&lt;/code&gt;,那么对于一维输入返回其向量形式的范数计算值，对于二维输入返回其矩阵形式的范数。默认值为None&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;keepdims: bool, optional&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If this is set to True, the axes which are normed over are left in the result as dimensions with size one. With this option the result will broadcast correctly against the original x.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;如果&lt;code&gt;keepdims=True&lt;/code&gt;，被指定计算范数的维度将在返回结果中保留，其size为1。计算结果会在该维度上进行&lt;code&gt;broadcast&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;各范数详析&#34;&gt;各范数详析&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: 对于&lt;code&gt;ord&amp;lt;1&lt;/code&gt;的各个范数，结果在严格意义不等于数学意义上的范数。但在数值计算层面仍然有效。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/NumpyNorm_fig1.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;默认情况&#34;&gt;默认情况&lt;/h3&gt;
+&lt;p&gt;当不指定ord时，即&lt;code&gt;ord = None&lt;/code&gt;，对于矩阵，计算其&lt;code&gt;Frobenius norm&lt;/code&gt;，对于向量，计算其&lt;code&gt;2-norm&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;frobenius范数&#34;&gt;Frobenius范数&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;ord = &#39;fro&#39;&lt;/code&gt;&lt;br&gt;
+其公式为：&lt;br&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/NumpyNorm_fig2.png&#34; alt=&#34;image&#34;  /&gt;&lt;br&gt;
+F范数只对矩阵存在。其值为对所有元素的绝对值的平方求和后开平方。&lt;/p&gt;
+&lt;h3 id=&#34;nuclear范数核范数&#34;&gt;Nuclear范数(核范数)&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;ord = &#39;nuc&#39;&lt;/code&gt;
+只对矩阵存在，矩阵的核范数等于其所有奇异值的和。&lt;/p&gt;
+&lt;h3 id=&#34;无穷大范数&#34;&gt;无穷大范数&lt;/h3&gt;
+&lt;p&gt;对于矩阵：&lt;code&gt;max(sum(abs(x), axis=1))&lt;/code&gt; ,每一行最终得到一个数，返回最大的数。&lt;br&gt;
+对于向量：&lt;code&gt;max(abs(x)&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;无穷小范数&#34;&gt;无穷小范数&lt;/h3&gt;
+&lt;p&gt;对于矩阵: &lt;code&gt;min(sum(abs(x),axis=1))&lt;/code&gt;,每一行得到一个数，返回最小的数。&lt;br&gt;
+对于向量: &lt;code&gt;min(abs(x))&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;0-范数&#34;&gt;0 范数&lt;/h3&gt;
+&lt;p&gt;对于矩阵：不存在&lt;br&gt;
+对于向量：&lt;code&gt;sum(x!=0)&lt;/code&gt;  所有非零元素的和&lt;/p&gt;
+&lt;h3 id=&#34;1-范数&#34;&gt;1 范数&lt;/h3&gt;
+&lt;p&gt;对于矩阵：&lt;code&gt;max(sum(abs(x)),axis=0&lt;/code&gt;，每一列得到一个数，返回最大值。&lt;br&gt;
+对于向量：&lt;code&gt;sum(abs(x)**ord)**(1./ord)&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;-1-范数&#34;&gt;-1 范数&lt;/h3&gt;
+&lt;p&gt;对于矩阵：&lt;code&gt;min(sum(abs(x)),axis=0&lt;/code&gt;，每一列得到一个数，返回最小值。&lt;br&gt;
+对于向量：&lt;code&gt;sum(abs(x)**ord)**(1./ord)&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;2-范数&#34;&gt;2 范数&lt;/h3&gt;
+&lt;p&gt;对于矩阵：最大的奇异值&lt;br&gt;
+对于向量：&lt;code&gt;sum(abs(x)**ord)**(1./ord)&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;-2范数&#34;&gt;-2范数&lt;/h3&gt;
+&lt;p&gt;对于矩阵：最小的奇异值&lt;br&gt;
+对于向量：&lt;code&gt;sum(abs(x)**ord)**(1./ord)&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;其余int值对应的范数&#34;&gt;其余int值对应的范数&lt;/h3&gt;
+&lt;p&gt;对于矩阵： Undefined&lt;br&gt;
+对于向量：&lt;code&gt;sum(abs(x)**ord)**(1./ord)&lt;/code&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>parse_args传参</title>
         <link>https://codefmeister.github.io/p/parse_args%E4%BC%A0%E5%8F%82/</link>
         <pubDate>Sat, 21 Nov 2020 00:00:00 +0000</pubDate>
@@ -2146,90 +2230,6 @@ True
 &amp;gt;&amp;gt;&amp;gt; np.allclose(B, np.dot(B, np.dot(a, B)))
 True
 &lt;/code&gt;&lt;/pre&gt;</description>
-        </item>
-        <item>
-        <title></title>
-        <link>https://codefmeister.github.io/p/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://codefmeister.github.io/p/</guid>
-        <description>&lt;h1 id=&#34;numpylinalgnorm&#34;&gt;numpy.linalg.norm&lt;/h1&gt;
-&lt;h2 id=&#34;语法&#34;&gt;语法&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;numpy.linalg.norm(x,ord=None,axis=None,keepdims=False)&lt;/code&gt;&lt;/p&gt;
-&lt;h2 id=&#34;parameters&#34;&gt;Parameters&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;x: array_like&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Input array. If &lt;code&gt;axis&lt;/code&gt; is None, x must be 1-D or 2-D, unless &lt;code&gt;ord&lt;/code&gt; is None. If both &lt;code&gt;axis&lt;/code&gt; and &lt;code&gt;ord&lt;/code&gt; are None, the 2-norm of &lt;code&gt;x.ravel&lt;/code&gt; will be returned.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;X是输入的array, array的情况必须是以下三种情况之一:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;code&gt;axis&lt;/code&gt;未指定，&lt;code&gt;ord&lt;/code&gt;指定。此时x必须是一维或二维数组&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;axis&lt;/code&gt;指定，&lt;code&gt;x&lt;/code&gt;任意&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;axis&lt;/code&gt;未指定，&lt;code&gt;ord&lt;/code&gt;未指定，此时&lt;code&gt;x&lt;/code&gt;任意，返回值为x被展平后的一维向量&lt;code&gt;x.ravel&lt;/code&gt;的二范数。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;ord：{non-zero int, inf, -inf, &amp;lsquo;fro&amp;rsquo;, &amp;lsquo;nuc&amp;rsquo;}, optional&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Order of the norm (see table under Notes). inf means numpy&amp;rsquo;s inf object. The default is None.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;范数的阶数，可以不指定。默认为None。inf代表无穷大，-inf为无穷小。&lt;br&gt;
-可选的阶数见下图：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;11777B47ED43448DBAC003F19ED6601B&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;axis:{None, int, 2-tuple of ints},optional&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;If &lt;code&gt;axis&lt;/code&gt; is an integer, it specifies the &lt;code&gt;axis&lt;/code&gt; of x along which to compute the vector norms. If &lt;code&gt;axis&lt;/code&gt; is a 2-tuple, it specifies the axes that hold 2-D matrices, and the matrix norms of these matrices are computed. If axis is None then either a vector norm (when x is 1-D) or a matrix norm (when x is 2-D) is returned. The default is None.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;如果&lt;code&gt;axis&lt;/code&gt;是整数，指定了一个维度，在该维度上按照向量进行范数计算。如果是一个二元整数组，指定了两个维度，在指定的这两个维度上可以构成矩阵。对这些矩阵进行计算。如果没有指定&lt;code&gt;axis&lt;/code&gt;,那么对于一维输入返回其向量形式的范数计算值，对于二维输入返回其矩阵形式的范数。默认值为None&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;keepdims: bool, optional&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;If this is set to True, the axes which are normed over are left in the result as dimensions with size one. With this option the result will broadcast correctly against the original x.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;如果&lt;code&gt;keepdims=True&lt;/code&gt;，被指定计算范数的维度将在返回结果中保留，其size为1。计算结果会在该维度上进行&lt;code&gt;broadcast&lt;/code&gt;&lt;/p&gt;
-&lt;h2 id=&#34;各范数详析&#34;&gt;各范数详析&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;: 对于&lt;code&gt;ord&amp;lt;1&lt;/code&gt;的各个范数，结果在严格意义不等于数学意义上的范数。但在数值计算层面仍然有效。
-&lt;img src=&#34;1CF7630671844760B08D6A84C8017DFB&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;默认情况&#34;&gt;默认情况&lt;/h3&gt;
-&lt;p&gt;当不指定ord时，即&lt;code&gt;ord = None&lt;/code&gt;，对于矩阵，计算其&lt;code&gt;Frobenius norm&lt;/code&gt;，对于向量，计算其&lt;code&gt;2-norm&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;frobenius范数&#34;&gt;Frobenius范数&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;ord = &#39;fro&#39;&lt;/code&gt;&lt;br&gt;
-其公式为：&lt;br&gt;
-&lt;img src=&#34;DE9CE910779F46A9B241429E07A336A2&#34; alt=&#34;image&#34;  /&gt;&lt;br&gt;
-F范数只对矩阵存在。其值为对所有元素的绝对值的平方求和后开平方。&lt;/p&gt;
-&lt;h3 id=&#34;nuclear范数核范数&#34;&gt;Nuclear范数(核范数)&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;ord = &#39;nuc&#39;&lt;/code&gt;
-只对矩阵存在，矩阵的核范数等于其所有奇异值的和。&lt;/p&gt;
-&lt;h3 id=&#34;无穷大范数&#34;&gt;无穷大范数&lt;/h3&gt;
-&lt;p&gt;对于矩阵：&lt;code&gt;max(sum(abs(x), axis=1))&lt;/code&gt; ,每一行最终得到一个数，返回最大的数。&lt;br&gt;
-对于向量：&lt;code&gt;max(abs(x)&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;无穷小范数&#34;&gt;无穷小范数&lt;/h3&gt;
-&lt;p&gt;对于矩阵: &lt;code&gt;min(sum(abs(x),axis=1))&lt;/code&gt;,每一行得到一个数，返回最小的数。&lt;br&gt;
-对于向量: &lt;code&gt;min(abs(x))&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;0-范数&#34;&gt;0 范数&lt;/h3&gt;
-&lt;p&gt;对于矩阵：不存在&lt;br&gt;
-对于向量：&lt;code&gt;sum(x!=0)&lt;/code&gt;  所有非零元素的和&lt;/p&gt;
-&lt;h3 id=&#34;1-范数&#34;&gt;1 范数&lt;/h3&gt;
-&lt;p&gt;对于矩阵：&lt;code&gt;max(sum(abs(x)),axis=0&lt;/code&gt;，每一列得到一个数，返回最大值。&lt;br&gt;
-对于向量：&lt;code&gt;sum(abs(x)**ord)**(1./ord)&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;-1-范数&#34;&gt;-1 范数&lt;/h3&gt;
-&lt;p&gt;对于矩阵：&lt;code&gt;min(sum(abs(x)),axis=0&lt;/code&gt;，每一列得到一个数，返回最小值。&lt;br&gt;
-对于向量：&lt;code&gt;sum(abs(x)**ord)**(1./ord)&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;2-范数&#34;&gt;2 范数&lt;/h3&gt;
-&lt;p&gt;对于矩阵：最大的奇异值&lt;br&gt;
-对于向量：&lt;code&gt;sum(abs(x)**ord)**(1./ord)&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;-2范数&#34;&gt;-2范数&lt;/h3&gt;
-&lt;p&gt;对于矩阵：最小的奇异值&lt;br&gt;
-对于向量：&lt;code&gt;sum(abs(x)**ord)**(1./ord)&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;其余int值对应的范数&#34;&gt;其余int值对应的范数&lt;/h3&gt;
-&lt;p&gt;对于矩阵： Undefined&lt;br&gt;
-对于向量：&lt;code&gt;sum(abs(x)**ord)**(1./ord)&lt;/code&gt;&lt;/p&gt;
-</description>
         </item>
         <item>
         <title></title>

@@ -143,6 +143,11 @@
   </url>
   
   <url>
+    <loc>https://codefmeister.github.io/p/numpy%E6%B1%82%E8%A7%A3%E8%8C%83%E6%95%B0-numpy.linalg.norm/</loc>
+    <lastmod>2020-11-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://codefmeister.github.io/p/parse_args%E4%BC%A0%E5%8F%82/</loc>
     <lastmod>2020-11-21T00:00:00+00:00</lastmod>
   </url>
@@ -165,10 +170,6 @@
   <url>
     <loc>https://codefmeister.github.io/about/</loc>
     <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://codefmeister.github.io/p/</loc>
   </url>
   
   <url>
