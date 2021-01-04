@@ -4,7 +4,27 @@
   
   <url>
     <loc>https://codefmeister.github.io/</loc>
-    <lastmod>2020-12-28T00:00:00+00:00</lastmod>
+    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://codefmeister.github.io/tags/numpy/</loc>
+    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://codefmeister.github.io/p/numpy.cross%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</loc>
+    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://codefmeister.github.io/post/</loc>
+    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://codefmeister.github.io/tags/</loc>
+    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -18,22 +38,7 @@
   </url>
   
   <url>
-    <loc>https://codefmeister.github.io/tags/numpy/</loc>
-    <lastmod>2020-12-28T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://codefmeister.github.io/post/</loc>
-    <lastmod>2020-12-28T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://codefmeister.github.io/tags/pytorch/</loc>
-    <lastmod>2020-12-28T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://codefmeister.github.io/tags/</loc>
     <lastmod>2020-12-28T00:00:00+00:00</lastmod>
   </url>
   
@@ -149,6 +154,11 @@
   
   <url>
     <loc>https://codefmeister.github.io/p/parse_args%E4%BC%A0%E5%8F%82/</loc>
+    <lastmod>2020-11-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://codefmeister.github.io/p/torch.optim%E8%A7%A3%E8%AF%BB/</loc>
     <lastmod>2020-11-21T00:00:00+00:00</lastmod>
   </url>
   

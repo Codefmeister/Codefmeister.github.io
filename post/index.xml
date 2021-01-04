@@ -6,7 +6,17 @@
     <description>Recent content in Posts on Codefmeister</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 28 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 30 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>numpy.cross函数解析</title>
+      <link>https://codefmeister.github.io/p/numpy.cross%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/numpy.cross%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</guid>
+      <description>numpy.cross 语法 numpy.cross(a, b, axisa=-1, axisb=-1, axisc=-1, axis=None)
+功能 Return the cross product of two (arrays of) vectors. The cross product of a and b in :math:R^3 is a vector perpendicular to both a and b. If a and b are arrays of vectors, the vectors are defined by the last axis of a and b by default, and these axes can have dimensions 2 or 3. Where the dimension of either a or b is 2, the third component of the input vector is assumed to be zero and the cross product calculated accordingly.</description>
+    </item>
+    
     <item>
       <title>np.clip作用解析</title>
       <link>https://codefmeister.github.io/p/np.clip%E4%BD%9C%E7%94%A8%E8%A7%A3%E6%9E%90/</link>
@@ -288,6 +298,20 @@ args.__setattr__(&#39;cloudArray&#39;,[]) args.cloudArray.append(1024) if args._
     </item>
     
     <item>
+      <title>torch.optim解读</title>
+      <link>https://codefmeister.github.io/p/torch.optim%E8%A7%A3%E8%AF%BB/</link>
+      <pubDate>Sat, 21 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/torch.optim%E8%A7%A3%E8%AF%BB/</guid>
+      <description>本文参考 lr_scheduler介绍 以及 PyTorch optim文档
+ 1 概述 1.1 PyTorch文档：torch.optim解读  下图是optim的文档
+  TORCH.OPTIM torch.optim is a package implementing various optimization algorithms. Most commonly used methods are already supported, and the interface is general enough, so that more sophisticated ones can be also easily integrated in the future.
+ torch.optim简介
+torch.optim是PyTorch实现的一个包，里面有各种各样的优化算法，大部分常用的优化算法都已经被支持，接口也十分通用，所以可以用来集成实现更加复杂的系统。
+ How to use an optimizer To use torch.optim you have to construct an optimizer object, that will hold the current state and will update the parameters based on the computed gradients.</description>
+    </item>
+    
+    <item>
       <title>MatrixCookBook Chapter1:矩阵的基础知识</title>
       <link>https://codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
       <pubDate>Sun, 15 Nov 2020 09:40:49 +0800</pubDate>
@@ -431,6 +455,15 @@ If a is not square or inversion fails.</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codefmeister.github.io/p/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codefmeister.github.io/p/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>python如何使得list中的元素是ndarray 在一个代码实现时，会想要类似MATLAB一样，拥有一个struct类型的数组，数组中的每个cell都是一个ndarray。因为在某些维度上shape不同，所以不能整合为一个大的ndarray。
 要实现上述需求，可以进行如下操作:
 targetList = [] targetList.append(ndarray) 这样即可获得由ndarray构成的list，可以进一步对list进行concatenate等操作再次整合。</description>
@@ -519,20 +552,6 @@ Tuple 对于元组，虽然其是不可变对象，但在底层实现无intern�
       <description>AdaptiveMaxPool AdaptiveMaxPool是PyTorch中提供的自适应池化层。
 其主要特殊的地方在于： 无论输入Input的size是多少，输出的size总为指定的size。
 AdaptiveMaxPool1d() m = nn.AdaptiveMaxPool1d(3) input = torch.randn(4,3,7) output = m(input) # output的size为(4,3,3) AdaptiveMaxPool2d() m = nn.AdaptiveMaxPool2d((3,6)) input = torch.randn(2,64,8,9) output = m(input) # output的size为(2,64,3,6) AdaptiveMaxPool3d() 同理</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://codefmeister.github.io/p/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://codefmeister.github.io/p/</guid>
-      <description>本文参考 lr_scheduler介绍 以及 PyTorch optim文档
- 1 概述 1.1 PyTorch文档：torch.optim解读  下图是optim的文档
-  TORCH.OPTIM torch.optim is a package implementing various optimization algorithms. Most commonly used methods are already supported, and the interface is general enough, so that more sophisticated ones can be also easily integrated in the future.
- torch.optim简介
-torch.optim是PyTorch实现的一个包，里面有各种各样的优化算法，大部分常用的优化算法都已经被支持，接口也十分通用，所以可以用来集成实现更加复杂的系统。
- How to use an optimizer To use torch.optim you have to construct an optimizer object, that will hold the current state and will update the parameters based on the computed gradients.</description>
     </item>
     
     <item>

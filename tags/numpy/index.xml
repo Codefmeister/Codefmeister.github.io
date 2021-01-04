@@ -6,7 +6,17 @@
     <description>Recent content in numpy on Codefmeister</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 28 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/numpy/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 30 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/numpy/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>numpy.cross函数解析</title>
+      <link>https://codefmeister.github.io/p/numpy.cross%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/numpy.cross%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</guid>
+      <description>numpy.cross 语法 numpy.cross(a, b, axisa=-1, axisb=-1, axisc=-1, axis=None)
+功能 Return the cross product of two (arrays of) vectors. The cross product of a and b in :math:R^3 is a vector perpendicular to both a and b. If a and b are arrays of vectors, the vectors are defined by the last axis of a and b by default, and these axes can have dimensions 2 or 3. Where the dimension of either a or b is 2, the third component of the input vector is assumed to be zero and the cross product calculated accordingly.</description>
+    </item>
+    
     <item>
       <title>np.clip作用解析</title>
       <link>https://codefmeister.github.io/p/np.clip%E4%BD%9C%E7%94%A8%E8%A7%A3%E6%9E%90/</link>

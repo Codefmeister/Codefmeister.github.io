@@ -19,5 +19,19 @@ The result will never require gradient.
 并且该Tensor不自动计算梯度。</description>
     </item>
     
+    <item>
+      <title>torch.optim解读</title>
+      <link>https://codefmeister.github.io/p/torch.optim%E8%A7%A3%E8%AF%BB/</link>
+      <pubDate>Sat, 21 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/torch.optim%E8%A7%A3%E8%AF%BB/</guid>
+      <description>本文参考 lr_scheduler介绍 以及 PyTorch optim文档
+ 1 概述 1.1 PyTorch文档：torch.optim解读  下图是optim的文档
+  TORCH.OPTIM torch.optim is a package implementing various optimization algorithms. Most commonly used methods are already supported, and the interface is general enough, so that more sophisticated ones can be also easily integrated in the future.
+ torch.optim简介
+torch.optim是PyTorch实现的一个包，里面有各种各样的优化算法，大部分常用的优化算法都已经被支持，接口也十分通用，所以可以用来集成实现更加复杂的系统。
+ How to use an optimizer To use torch.optim you have to construct an optimizer object, that will hold the current state and will update the parameters based on the computed gradients.</description>
+    </item>
+    
   </channel>
 </rss>

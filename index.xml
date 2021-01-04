@@ -6,7 +6,120 @@
         <description>Recent content on Codefmeister</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 28 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 30 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>numpy.cross函数解析</title>
+        <link>https://codefmeister.github.io/p/numpy.cross%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/numpy.cross%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</guid>
+        <description>&lt;h1 id=&#34;numpycross&#34;&gt;numpy.cross&lt;/h1&gt;
+&lt;h2 id=&#34;语法&#34;&gt;语法&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;numpy.cross(a, b, axisa=-1, axisb=-1, axisc=-1, axis=None)&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;功能&#34;&gt;功能&lt;/h2&gt;
+&lt;p&gt;Return the cross product of two (arrays of) vectors.
+The cross product of &lt;code&gt;a&lt;/code&gt; and &lt;code&gt;b&lt;/code&gt; in :math:&lt;code&gt;R^3&lt;/code&gt; is a vector perpendicular
+to both &lt;code&gt;a&lt;/code&gt; and &lt;code&gt;b&lt;/code&gt;.  If &lt;code&gt;a&lt;/code&gt; and &lt;code&gt;b&lt;/code&gt; are arrays of vectors, the vectors
+are defined by the last axis of &lt;code&gt;a&lt;/code&gt; and &lt;code&gt;b&lt;/code&gt; by default, and these axes
+can have dimensions 2 or 3.  Where the dimension of either &lt;code&gt;a&lt;/code&gt; or &lt;code&gt;b&lt;/code&gt; is
+2, the third component of the input vector is assumed to be zero and the
+cross product calculated accordingly.  In cases where both input vectors
+have dimension 2, the z-component of the cross product is returned.&lt;/p&gt;
+&lt;p&gt;计算两个向量（向量数组）的叉乘。叉乘返回的数组既垂直于&lt;code&gt;a&lt;/code&gt;，又垂直于&lt;code&gt;b&lt;/code&gt;。 如果&lt;code&gt;a&lt;/code&gt;,&lt;code&gt;b&lt;/code&gt;是向量数组，则向量在最后一维定义。该维度可以为2，也可以为3. 为2的时候会自动将第三个分量视作0补充进去计算。&lt;/p&gt;
+&lt;h2 id=&#34;parameters&#34;&gt;Parameters&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;a : array_like
+Components of the first vector(s).&lt;/li&gt;
+&lt;li&gt;b : array_like
+Components of the second vector(s).&lt;/li&gt;
+&lt;li&gt;axisa : int, optional
+Axis of &lt;code&gt;a&lt;/code&gt; that defines the vector(s).  By default, the last axis.&lt;/li&gt;
+&lt;li&gt;axisb : int, optional
+Axis of &lt;code&gt;b&lt;/code&gt; that defines the vector(s).  By default, the last axis.&lt;/li&gt;
+&lt;li&gt;axisc : int, optional
+Axis of &lt;code&gt;c&lt;/code&gt; containing the cross product vector(s).  Ignored if
+both input vectors have dimension 2, as the return is scalar.
+By default, the last axis.&lt;/li&gt;
+&lt;li&gt;axis : int, optional
+If defined, the axis of &lt;code&gt;a&lt;/code&gt;, &lt;code&gt;b&lt;/code&gt; and &lt;code&gt;c&lt;/code&gt; that defines the vector(s)
+and cross product(s).  Overrides &lt;code&gt;axisa&lt;/code&gt;, &lt;code&gt;axisb&lt;/code&gt; and &lt;code&gt;axisc&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;axisa, axisb, axisc 分别指定两个输入和输出&lt;code&gt;c&lt;/code&gt;的向量所在的维度。而axis则可以覆盖前三个参数，为全局指定向量所在维度。&lt;/p&gt;
+&lt;h2 id=&#34;returns&#34;&gt;Returns&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;c : ndarray
+Vector cross product(s).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;raises&#34;&gt;Raises&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;ValueError： 
+When the dimension of the vector(s) in &lt;code&gt;a&lt;/code&gt; and/or &lt;code&gt;b&lt;/code&gt; does not
+equal 2 or 3.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;当向量所在axis的dimension不为2或者3时，raise ValueError.&lt;/p&gt;
+&lt;h2 id=&#34;see-also相关函数&#34;&gt;See Also(相关函数)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;inner : Inner product 内积&lt;/li&gt;
+&lt;li&gt;outer : Outer product 外积&lt;/li&gt;
+&lt;li&gt;ix_ : Construct index arrays.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;notes&#34;&gt;Notes&lt;/h2&gt;
+&lt;p&gt;.. versionadded:: 1.9.0
+Supports full broadcasting of the inputs.
+支持广播。&lt;/p&gt;
+&lt;h2 id=&#34;examples&#34;&gt;Examples&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;
+&lt;span class=&#34;n&#34;&gt;Vector&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cross&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;product&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cross&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;  &lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;
+
+&lt;span class=&#34;n&#34;&gt;One&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;vector&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;with&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dimension&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;2.&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cross&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;12&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;
+
+&lt;span class=&#34;n&#34;&gt;Equivalently&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cross&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;12&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;
+
+&lt;span class=&#34;n&#34;&gt;Both&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;vectors&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;with&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dimension&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;2.&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cross&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+
+&lt;span class=&#34;n&#34;&gt;Multiple&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;vector&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cross&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;products&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Note&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;that&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;the&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;direction&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;of&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;the&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cross&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;product&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;vector&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;is&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;defined&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;by&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;the&lt;/span&gt; &lt;span class=&#34;sb&#34;&gt;`right-hand rule`&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]])&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]])&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cross&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([[&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;  &lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;  &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]])&lt;/span&gt;
+
+&lt;span class=&#34;n&#34;&gt;The&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;orientation&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;of&lt;/span&gt; &lt;span class=&#34;sb&#34;&gt;`c`&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;can&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;be&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;changed&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;using&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;the&lt;/span&gt; &lt;span class=&#34;sb&#34;&gt;`axisc`&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;keyword&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cross&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;axisc&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([[&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;  &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;  &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]])&lt;/span&gt;
+        
+&lt;span class=&#34;n&#34;&gt;Change&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;the&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;vector&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;definition&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;of&lt;/span&gt; &lt;span class=&#34;sb&#34;&gt;`x`&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;and&lt;/span&gt; &lt;span class=&#34;sb&#34;&gt;`y`&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;using&lt;/span&gt; &lt;span class=&#34;sb&#34;&gt;`axisa`&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;and&lt;/span&gt; &lt;span class=&#34;sb&#34;&gt;`axisb`&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;7&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;8&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;9&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]])&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;7&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;8&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;9&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]])&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cross&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([[&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;  &lt;span class=&#34;mi&#34;&gt;12&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;  &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;   &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;   &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;  &lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;12&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;   &lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]])&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cross&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;y&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;axisa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;axisb&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([[&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;24&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;  &lt;span class=&#34;mi&#34;&gt;48&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;24&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;30&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;  &lt;span class=&#34;mi&#34;&gt;60&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;30&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;36&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;  &lt;span class=&#34;mi&#34;&gt;72&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;36&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]])&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        </item>
+        <item>
         <title>np.clip作用解析</title>
         <link>https://codefmeister.github.io/p/np.clip%E4%BD%9C%E7%94%A8%E8%A7%A3%E6%9E%90/</link>
         <pubDate>Mon, 28 Dec 2020 00:00:00 +0000</pubDate>
@@ -1552,6 +1665,182 @@ if args.__contains__(&#39;cloudArray&#39;):
 &lt;/code&gt;&lt;/pre&gt;</description>
         </item>
         <item>
+        <title>torch.optim解读</title>
+        <link>https://codefmeister.github.io/p/torch.optim%E8%A7%A3%E8%AF%BB/</link>
+        <pubDate>Sat, 21 Nov 2020 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/torch.optim%E8%A7%A3%E8%AF%BB/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;本文参考
+&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qyhaill/article/details/103043637&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;lr_scheduler介绍&lt;/a&gt; 以及
+&lt;a class=&#34;link&#34; href=&#34;https://pytorch.org/docs/stable/optim.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;PyTorch optim文档&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;1-概述&#34;&gt;1 概述&lt;/h1&gt;
+&lt;h2 id=&#34;11-pytorch文档torchoptim解读&#34;&gt;1.1 PyTorch文档：torch.optim解读&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;下图是optim的文档&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;h4 id=&#34;torchoptim&#34;&gt;TORCH.OPTIM&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;torch.optim&lt;/code&gt; is a package implementing various optimization algorithms. Most commonly used methods are already supported, and the interface is general enough, so that more sophisticated ones can be also easily integrated in the future.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;torch.optim简介&lt;/strong&gt;&lt;br&gt;
+torch.optim是PyTorch实现的一个包，里面有各种各样的优化算法，大部分常用的优化算法都已经被支持，接口也十分通用，所以可以用来集成实现更加复杂的系统。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h4 id=&#34;how-to-use-an-optimizer&#34;&gt;How to use an optimizer&lt;/h4&gt;
+&lt;p&gt;To use &lt;code&gt;torch.optim&lt;/code&gt; you have to construct an optimizer object, that will hold the current state and will update the parameters based on the computed gradients.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;如何使用PyTorch提供的optimizer&lt;/strong&gt;&lt;br&gt;
+通过&lt;code&gt;torch.optim&lt;/code&gt;来创建一个&lt;code&gt;Optimizer&lt;/code&gt;对象，这个对象中会保存当前的状态，并且会根据计算的梯度值更新参数。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h4 id=&#34;constructing-it&#34;&gt;Constructing it&lt;/h4&gt;
+&lt;p&gt;To construct an &lt;code&gt;Optimizer&lt;/code&gt; you have to give it an iterable containing the parameters (all should be &lt;code&gt;Variables&lt;/code&gt;) to optimize. Then, you can specify optimizer-specific options such as the learning rate, weight decay, etc.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h5 id=&#34;note&#34;&gt;NOTE&lt;/h5&gt;
+&lt;p&gt;If you need to move a model to GPU via &lt;code&gt;.cuda()&lt;/code&gt;, please do so before constructing optimizers for it. Parameters of a model after &lt;code&gt;.cuda()&lt;/code&gt; will be different objects with those before the call.     &lt;br&gt;
+In general, you should make sure that optimized parameters live in consistent locations when optimizers are constructed and used.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;构造Optimizer&lt;/strong&gt;&lt;br&gt;
+构造&lt;code&gt;Optimizer&lt;/code&gt;时，需要传入一个包含需要进行优化的所有参数的&lt;code&gt;iterable&lt;/code&gt;对象，所有参数都必须是&lt;code&gt;Variables&lt;/code&gt;类型。随后可以进一步设置optimizer的其他具体参数，如learning rate, weight decay, etc.&lt;br&gt;
+&lt;strong&gt;注意&lt;/strong&gt;:&lt;br&gt;
+如果需要将模型移到cuda上(通过&lt;code&gt;.cuda&lt;/code&gt;命令)，那么必须先移动模型，再对模型构造&lt;code&gt;optimizer&lt;/code&gt;。因为调用&lt;code&gt;.cuda&lt;/code&gt;前的模型参数与调用&lt;code&gt;.cuda&lt;/code&gt;后的模型参数不同。&lt;br&gt;
+通常来讲，在使用&lt;code&gt;Optimizer&lt;/code&gt;对参数进行优化时，需要保证构造和使用时，被优化的参数保存在同一位置。&lt;/p&gt;
+&lt;p&gt;以下是实例：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Example:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+optimizer = optim.Adam([var1, var2], lr=0.0001)
+&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;h4 id=&#34;per-parameter-options&#34;&gt;Per-parameter options&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;Optimizer&lt;/code&gt;s also support specifying per-parameter options. To do this, instead of passing an iterable of &lt;code&gt;Variable&lt;/code&gt;s, pass in an iterable of &lt;code&gt;dict&lt;/code&gt;s. Each of them will define a separate parameter group, and should contain a params key, containing a list of parameters belonging to it. Other keys should match the keyword arguments accepted by the optimizers, and will be used as optimization options for this group.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h5 id=&#34;note-1&#34;&gt;NOTE&lt;/h5&gt;
+&lt;p&gt;You can still pass options as keyword arguments. They will be used as defaults, in the groups that didn&amp;rsquo;t override them. This is useful when you only want to vary a single option, while keeping all others consistent between parameter groups.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Per-parameter option&lt;/strong&gt;&lt;br&gt;
+我个人翻译为逐参数选项。&lt;code&gt;Optimizer&lt;/code&gt;在构造的时候同样支持对每个参数进行指定。要实现这种功能，我们不再传入一个含有&lt;code&gt;Variable&lt;/code&gt;类型参数的&lt;code&gt;iterable&lt;/code&gt;对象，而是传入一个&lt;code&gt;dict&lt;/code&gt;字典类型的&lt;code&gt;iterable&lt;/code&gt;对象。每个字典都定义了一个参数组，该参数组的key值是&amp;quot;params&amp;quot;，而对应的值为一个包含参数的列表。同样的可以利用字典的键值对&lt;code&gt;Optimizer&lt;/code&gt;的其他参数进行指定，但是key必须与&lt;code&gt;Optimizer&lt;/code&gt;构造器传参时的关键字一致。这些指定的&lt;code&gt;Optimizer&lt;/code&gt;的参数会被单独应用于该字典中的&lt;code&gt;params&lt;/code&gt;这些参数。&lt;br&gt;
+&lt;strong&gt;注意&lt;/strong&gt;：你仍然可以在构造器中以关键字方式传入参数，这些参数将被当做默认值使用，如果一组参数没有override这个参数，那么就将自动使用默认的参数值。&lt;br&gt;
+以下是实例：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;For example, this is very useful when one wants to specify per-layer learning rates:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;optim.SGD([
+               {&#39;params&#39;: model.base.parameters()},
+               {&#39;params&#39;: model.classifier.parameters(), &#39;lr&#39;: 1e-3}
+           ], lr=1e-2, momentum=0.9)
+&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This means that model.base&amp;rsquo;s parameters will use the default learning rate of 1e-2, model.classifier&amp;rsquo;s parameters will use a learning rate of 1e-3, and a momentum of 0.9 will be used for all parameters.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;对于上面这个例子，首先我们可以看到，传入了一个dict的列表。列表中有两个dict，第一个的&lt;code&gt;params&lt;/code&gt;key 对应的是&lt;code&gt;model.base.parameters()&lt;/code&gt;，而没有对&lt;code&gt;Optimizer&lt;/code&gt;的其他参数进行具体指定。第二个dict的&lt;code&gt;params&lt;/code&gt;key对应的是&lt;code&gt;model.classifier.parameters()&lt;/code&gt;，此外还有一个键值对，说明了&lt;code&gt;lr&lt;/code&gt;的值为1e-3。而在列表之外同时又传入了&lt;code&gt;lr=1e-2&lt;/code&gt;,&lt;code&gt;momentum=0.9&lt;/code&gt;，这两个值将作为默认值来使用。所以整个&lt;code&gt;Optimizer&lt;/code&gt;中，&lt;code&gt;base&#39;s parameters&lt;/code&gt;将使用默认的学习率&lt;code&gt;1e-2&lt;/code&gt;,默认的动量超参数&lt;code&gt;0.9&lt;/code&gt;;而&lt;code&gt;classifier.parameters()&lt;/code&gt;将使用其dict中提供的学习率&lt;code&gt;1e-3&lt;/code&gt;,&lt;code&gt;momentum&lt;/code&gt;仍然使用默认值。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h4 id=&#34;taking-an-optimization-step&#34;&gt;Taking an optimization step&lt;/h4&gt;
+&lt;p&gt;All optimizers implement a &lt;code&gt;step()&lt;/code&gt; method, that updates the parameters. It can be used in two ways:&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;h4 id=&#34;optimizerstep&#34;&gt;&lt;strong&gt;&lt;code&gt;optimizer.step()&lt;/code&gt;&lt;/strong&gt;&lt;/h4&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This is a simplified version supported by most optimizers. The function can be called once the gradients are computed using e.g. backward().&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;采取优化步骤&lt;/strong&gt;&lt;br&gt;
+所有的Optimizer都实现了&lt;code&gt;step()&lt;/code&gt;方法，该方法可以用于更新参数。可以通过两种方式使用&lt;code&gt;.step()&lt;/code&gt;进行优化：&lt;/p&gt;
+&lt;p&gt;第一种方式：&lt;code&gt;optimizer.step()&lt;/code&gt;&lt;br&gt;
+该方法是一个简化后的版本，被大多数optimizer所支持。该函数一般在所有梯度值被更新（或者被计算）后进行调用,如在&lt;code&gt;.backward()&lt;/code&gt;后进行调用。&lt;/p&gt;
+&lt;p&gt;以下是例子：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Example:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;for input, target in dataset:
+   optimizer.zero_grad()
+   output = model(input)
+   loss = loss_fn(output, target)
+   loss.backward()
+   optimizer.step()
+&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;h4 id=&#34;optimizerstepclosure&#34;&gt;&lt;code&gt;optimizer.step(closure)&lt;/code&gt;&lt;/h4&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Some optimization algorithms such as Conjugate Gradient and LBFGS need to reevaluate the function multiple times, so you have to pass in a closure that allows them to recompute your model. The closure should clear the gradients, compute the loss, and return it.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;第二种方式：&lt;code&gt;optimizer.step(closure)&lt;/code&gt;&lt;br&gt;
+有一些优化算法例如&lt;code&gt;Conjugate Gradient&lt;/code&gt;，&lt;code&gt;LBFGS&lt;/code&gt;等需要多次重新计算函数，所以需要传入一个闭包&lt;code&gt;closure&lt;/code&gt;，闭包中应该实现的操作有：清零梯度，计算损失并返回。&lt;br&gt;
+以下是例子：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Example:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;for input, target in dataset:
+   def closure():
+       optimizer.zero_grad()
+       output = model(input)
+       loss = loss_fn(output, target)
+       loss.backward()
+       return loss
+   optimizer.step(closure)
+&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
+&lt;p&gt;具体的各个优化算法的数学原理在此不表，详参手写的笔记本。&lt;/p&gt;
+&lt;h1 id=&#34;2-如何调整学习率&#34;&gt;2 如何调整学习率&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;torch.optim.lr_scheduler&lt;/code&gt;模块，提供了一些根据训练次数来调整学习率(learning rate)的方法，一般情况下我们会设置随着epoch的增大而逐渐减小学习率，从而达到更好的训练效果。
+而&lt;code&gt;torch.optim.lr_scheduler.ReduceLROnPlateau&lt;/code&gt;提供了一些基于训练中某些测量值使得学习率动态下降的办法。&lt;/p&gt;
+&lt;p&gt;学习率的调整应该放在optimizer更新之后，参考模板：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;define scheduler
+for epoch in range(1000):
+    train(...)
+    validate(...)
+    scheduler.step()
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;： 在PyTorch 1.1.0之前的版本，学习率的调整应该被放在optimizer更新之前，如果我们1.1.0之后仍然将学习率的调整(即&lt;code&gt;scheduler.step()&lt;/code&gt;)放在optimizer&amp;rsquo;s update(即&lt;code&gt;optimizer.step&lt;/code&gt;)之前，那么learning rate schedule的第一个值将被跳过。所以如果某个代码是在1.1.0之前的版本开发，移植到高版本进行运行，发现效果变差，可以检查是否将&lt;code&gt;scheduler.step()&lt;/code&gt;放在了&lt;code&gt;optimizer.step()&lt;/code&gt;之前。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注：以上部分参考官方文档批示。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;21-torchoptimlr_schedulersteplr&#34;&gt;2.1 &lt;code&gt;torch.optim.lr_scheduler.StepLR&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;首先贴上官方文档：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h3 id=&#34;torchoptimlr_schedulersteplroptimizer-step_size-gamma01-last_epoch-1-verbosefalse&#34;&gt;&lt;code&gt;torch.optim.lr_scheduler.StepLR(optimizer, step_size, gamma=0.1, last_epoch=-1, verbose=False)&lt;/code&gt;&lt;/h3&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Decays the learning rate of each parameter group by gamma every step_size epochs. Notice that such decay can happen simultaneously with other changes to the learning rate from outside this scheduler. When last_epoch=-1, sets initial lr as lr.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;StepLR&lt;/code&gt;可以根据超参数&lt;code&gt;gamma&lt;/code&gt;每隔固定的&lt;code&gt;step_size&lt;/code&gt;就衰减&lt;code&gt;learning_rate&lt;/code&gt;一次。需要说明的是，这种对&lt;code&gt;learning_rate&lt;/code&gt;的更新可以与外界的其他变化同时进行。当&lt;code&gt;last_epoch = -1&lt;/code&gt;时，将lr置为初始值。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Parameters&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;optimizer (Optimizer) – Wrapped optimizer.&lt;/li&gt;
+&lt;li&gt;step_size (int) – Period of learning rate decay.&lt;/li&gt;
+&lt;li&gt;gamma (float) – Multiplicative factor of learning rate decay. Default: 0.1.&lt;/li&gt;
+&lt;li&gt;last_epoch (int) – The index of last epoch. Default: -1.&lt;/li&gt;
+&lt;li&gt;verbose (bool) – If True, prints a message to stdout for each update. Default: False.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;参数说明&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;optimizer(Optimizer) &amp;mdash;&amp;ndash;用于指定scheduler的应用对象。&lt;/li&gt;
+&lt;li&gt;step_size(int)&amp;mdash;&amp;ndash;用于指定步长，即几次迭代之后进行一次decay&lt;/li&gt;
+&lt;li&gt;gamma(float)&amp;mdash;&amp;ndash;学习率衰减的乘法因子，默认值为0.1&lt;/li&gt;
+&lt;li&gt;last_epoch(int)&amp;mdash;&amp;ndash;更新的边界index，当等于这个值的时候，重置lr，默认为-1&lt;/li&gt;
+&lt;li&gt;verbose(bool)&amp;mdash;&amp;ndash;如果为True，每次decay会向stdout输出一条信息。默认为false.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以下是实例：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Example&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# Assuming optimizer uses lr = 0.05 for all groups
+# lr = 0.05     if epoch &amp;lt; 30
+# lr = 0.005    if 30 &amp;lt;= epoch &amp;lt; 60
+# lr = 0.0005   if 60 &amp;lt;= epoch &amp;lt; 90
+# ...
+scheduler = StepLR(optimizer, step_size=30, gamma=0.1)
+for epoch in range(100):
+    train(...)
+    validate(...)
+    scheduler.step()
+&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
+&lt;p&gt;可见:每经过一个&lt;code&gt;step_size&lt;/code&gt;，&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;lr = lr*gamma 
+&lt;/code&gt;&lt;/pre&gt;</description>
+        </item>
+        <item>
         <title>MatrixCookBook Chapter1:矩阵的基础知识</title>
         <link>https://codefmeister.github.io/p/matrixcookbook-chapter1%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
         <pubDate>Sun, 15 Nov 2020 09:40:49 +0800</pubDate>
@@ -2237,6 +2526,14 @@ True
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://codefmeister.github.io/p/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;python如何使得list中的元素是ndarray&#34;&gt;python如何使得&lt;code&gt;list&lt;/code&gt;中的元素是&lt;code&gt;ndarray&lt;/code&gt;&lt;/h1&gt;
 &lt;p&gt;在一个代码实现时，会想要类似MATLAB一样，拥有一个&lt;code&gt;struct&lt;/code&gt;类型的数组，数组中的每个&lt;code&gt;cell&lt;/code&gt;都是一个&lt;code&gt;ndarray&lt;/code&gt;。因为在某些维度上&lt;code&gt;shape&lt;/code&gt;不同，所以不能整合为一个大的&lt;code&gt;ndarray&lt;/code&gt;。&lt;br&gt;
 要实现上述需求，可以进行如下操作:&lt;/p&gt;
@@ -2417,182 +2714,6 @@ output = m(input)   # output的size为(2,64,3,6)
 &lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;adaptivemaxpool3d&#34;&gt;AdaptiveMaxPool3d()&lt;/h2&gt;
 &lt;p&gt;同理&lt;/p&gt;
 </description>
-        </item>
-        <item>
-        <title></title>
-        <link>https://codefmeister.github.io/p/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://codefmeister.github.io/p/</guid>
-        <description>&lt;blockquote&gt;
-&lt;p&gt;本文参考
-&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qyhaill/article/details/103043637&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;lr_scheduler介绍&lt;/a&gt; 以及
-&lt;a class=&#34;link&#34; href=&#34;https://pytorch.org/docs/stable/optim.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;PyTorch optim文档&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h1 id=&#34;1-概述&#34;&gt;1 概述&lt;/h1&gt;
-&lt;h2 id=&#34;11-pytorch文档torchoptim解读&#34;&gt;1.1 PyTorch文档：torch.optim解读&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;下图是optim的文档&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;h4 id=&#34;torchoptim&#34;&gt;TORCH.OPTIM&lt;/h4&gt;
-&lt;p&gt;&lt;code&gt;torch.optim&lt;/code&gt; is a package implementing various optimization algorithms. Most commonly used methods are already supported, and the interface is general enough, so that more sophisticated ones can be also easily integrated in the future.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;torch.optim简介&lt;/strong&gt;&lt;br&gt;
-torch.optim是PyTorch实现的一个包，里面有各种各样的优化算法，大部分常用的优化算法都已经被支持，接口也十分通用，所以可以用来集成实现更加复杂的系统。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;h4 id=&#34;how-to-use-an-optimizer&#34;&gt;How to use an optimizer&lt;/h4&gt;
-&lt;p&gt;To use &lt;code&gt;torch.optim&lt;/code&gt; you have to construct an optimizer object, that will hold the current state and will update the parameters based on the computed gradients.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;如何使用PyTorch提供的optimizer&lt;/strong&gt;&lt;br&gt;
-通过&lt;code&gt;torch.optim&lt;/code&gt;来创建一个&lt;code&gt;Optimizer&lt;/code&gt;对象，这个对象中会保存当前的状态，并且会根据计算的梯度值更新参数。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;h4 id=&#34;constructing-it&#34;&gt;Constructing it&lt;/h4&gt;
-&lt;p&gt;To construct an &lt;code&gt;Optimizer&lt;/code&gt; you have to give it an iterable containing the parameters (all should be &lt;code&gt;Variables&lt;/code&gt;) to optimize. Then, you can specify optimizer-specific options such as the learning rate, weight decay, etc.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;h5 id=&#34;note&#34;&gt;NOTE&lt;/h5&gt;
-&lt;p&gt;If you need to move a model to GPU via &lt;code&gt;.cuda()&lt;/code&gt;, please do so before constructing optimizers for it. Parameters of a model after &lt;code&gt;.cuda()&lt;/code&gt; will be different objects with those before the call.     &lt;br&gt;
-In general, you should make sure that optimized parameters live in consistent locations when optimizers are constructed and used.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;构造Optimizer&lt;/strong&gt;&lt;br&gt;
-构造&lt;code&gt;Optimizer&lt;/code&gt;时，需要传入一个包含需要进行优化的所有参数的&lt;code&gt;iterable&lt;/code&gt;对象，所有参数都必须是&lt;code&gt;Variables&lt;/code&gt;类型。随后可以进一步设置optimizer的其他具体参数，如learning rate, weight decay, etc.&lt;br&gt;
-&lt;strong&gt;注意&lt;/strong&gt;:&lt;br&gt;
-如果需要将模型移到cuda上(通过&lt;code&gt;.cuda&lt;/code&gt;命令)，那么必须先移动模型，再对模型构造&lt;code&gt;optimizer&lt;/code&gt;。因为调用&lt;code&gt;.cuda&lt;/code&gt;前的模型参数与调用&lt;code&gt;.cuda&lt;/code&gt;后的模型参数不同。&lt;br&gt;
-通常来讲，在使用&lt;code&gt;Optimizer&lt;/code&gt;对参数进行优化时，需要保证构造和使用时，被优化的参数保存在同一位置。&lt;/p&gt;
-&lt;p&gt;以下是实例：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Example:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
-optimizer = optim.Adam([var1, var2], lr=0.0001)
-&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;h4 id=&#34;per-parameter-options&#34;&gt;Per-parameter options&lt;/h4&gt;
-&lt;p&gt;&lt;code&gt;Optimizer&lt;/code&gt;s also support specifying per-parameter options. To do this, instead of passing an iterable of &lt;code&gt;Variable&lt;/code&gt;s, pass in an iterable of &lt;code&gt;dict&lt;/code&gt;s. Each of them will define a separate parameter group, and should contain a params key, containing a list of parameters belonging to it. Other keys should match the keyword arguments accepted by the optimizers, and will be used as optimization options for this group.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;h5 id=&#34;note-1&#34;&gt;NOTE&lt;/h5&gt;
-&lt;p&gt;You can still pass options as keyword arguments. They will be used as defaults, in the groups that didn&amp;rsquo;t override them. This is useful when you only want to vary a single option, while keeping all others consistent between parameter groups.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Per-parameter option&lt;/strong&gt;&lt;br&gt;
-我个人翻译为逐参数选项。&lt;code&gt;Optimizer&lt;/code&gt;在构造的时候同样支持对每个参数进行指定。要实现这种功能，我们不再传入一个含有&lt;code&gt;Variable&lt;/code&gt;类型参数的&lt;code&gt;iterable&lt;/code&gt;对象，而是传入一个&lt;code&gt;dict&lt;/code&gt;字典类型的&lt;code&gt;iterable&lt;/code&gt;对象。每个字典都定义了一个参数组，该参数组的key值是&amp;quot;params&amp;quot;，而对应的值为一个包含参数的列表。同样的可以利用字典的键值对&lt;code&gt;Optimizer&lt;/code&gt;的其他参数进行指定，但是key必须与&lt;code&gt;Optimizer&lt;/code&gt;构造器传参时的关键字一致。这些指定的&lt;code&gt;Optimizer&lt;/code&gt;的参数会被单独应用于该字典中的&lt;code&gt;params&lt;/code&gt;这些参数。&lt;br&gt;
-&lt;strong&gt;注意&lt;/strong&gt;：你仍然可以在构造器中以关键字方式传入参数，这些参数将被当做默认值使用，如果一组参数没有override这个参数，那么就将自动使用默认的参数值。&lt;br&gt;
-以下是实例：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;For example, this is very useful when one wants to specify per-layer learning rates:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;optim.SGD([
-               {&#39;params&#39;: model.base.parameters()},
-               {&#39;params&#39;: model.classifier.parameters(), &#39;lr&#39;: 1e-3}
-           ], lr=1e-2, momentum=0.9)
-&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;This means that model.base&amp;rsquo;s parameters will use the default learning rate of 1e-2, model.classifier&amp;rsquo;s parameters will use a learning rate of 1e-3, and a momentum of 0.9 will be used for all parameters.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;对于上面这个例子，首先我们可以看到，传入了一个dict的列表。列表中有两个dict，第一个的&lt;code&gt;params&lt;/code&gt;key 对应的是&lt;code&gt;model.base.parameters()&lt;/code&gt;，而没有对&lt;code&gt;Optimizer&lt;/code&gt;的其他参数进行具体指定。第二个dict的&lt;code&gt;params&lt;/code&gt;key对应的是&lt;code&gt;model.classifier.parameters()&lt;/code&gt;，此外还有一个键值对，说明了&lt;code&gt;lr&lt;/code&gt;的值为1e-3。而在列表之外同时又传入了&lt;code&gt;lr=1e-2&lt;/code&gt;,&lt;code&gt;momentum=0.9&lt;/code&gt;，这两个值将作为默认值来使用。所以整个&lt;code&gt;Optimizer&lt;/code&gt;中，&lt;code&gt;base&#39;s parameters&lt;/code&gt;将使用默认的学习率&lt;code&gt;1e-2&lt;/code&gt;,默认的动量超参数&lt;code&gt;0.9&lt;/code&gt;;而&lt;code&gt;classifier.parameters()&lt;/code&gt;将使用其dict中提供的学习率&lt;code&gt;1e-3&lt;/code&gt;,&lt;code&gt;momentum&lt;/code&gt;仍然使用默认值。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;h4 id=&#34;taking-an-optimization-step&#34;&gt;Taking an optimization step&lt;/h4&gt;
-&lt;p&gt;All optimizers implement a &lt;code&gt;step()&lt;/code&gt; method, that updates the parameters. It can be used in two ways:&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;h4 id=&#34;optimizerstep&#34;&gt;&lt;strong&gt;&lt;code&gt;optimizer.step()&lt;/code&gt;&lt;/strong&gt;&lt;/h4&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;This is a simplified version supported by most optimizers. The function can be called once the gradients are computed using e.g. backward().&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;采取优化步骤&lt;/strong&gt;&lt;br&gt;
-所有的Optimizer都实现了&lt;code&gt;step()&lt;/code&gt;方法，该方法可以用于更新参数。可以通过两种方式使用&lt;code&gt;.step()&lt;/code&gt;进行优化：&lt;/p&gt;
-&lt;p&gt;第一种方式：&lt;code&gt;optimizer.step()&lt;/code&gt;&lt;br&gt;
-该方法是一个简化后的版本，被大多数optimizer所支持。该函数一般在所有梯度值被更新（或者被计算）后进行调用,如在&lt;code&gt;.backward()&lt;/code&gt;后进行调用。&lt;/p&gt;
-&lt;p&gt;以下是例子：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Example:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;for input, target in dataset:
-   optimizer.zero_grad()
-   output = model(input)
-   loss = loss_fn(output, target)
-   loss.backward()
-   optimizer.step()
-&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;h4 id=&#34;optimizerstepclosure&#34;&gt;&lt;code&gt;optimizer.step(closure)&lt;/code&gt;&lt;/h4&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Some optimization algorithms such as Conjugate Gradient and LBFGS need to reevaluate the function multiple times, so you have to pass in a closure that allows them to recompute your model. The closure should clear the gradients, compute the loss, and return it.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;第二种方式：&lt;code&gt;optimizer.step(closure)&lt;/code&gt;&lt;br&gt;
-有一些优化算法例如&lt;code&gt;Conjugate Gradient&lt;/code&gt;，&lt;code&gt;LBFGS&lt;/code&gt;等需要多次重新计算函数，所以需要传入一个闭包&lt;code&gt;closure&lt;/code&gt;，闭包中应该实现的操作有：清零梯度，计算损失并返回。&lt;br&gt;
-以下是例子：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Example:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;for input, target in dataset:
-   def closure():
-       optimizer.zero_grad()
-       output = model(input)
-       loss = loss_fn(output, target)
-       loss.backward()
-       return loss
-   optimizer.step(closure)
-&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
-&lt;p&gt;具体的各个优化算法的数学原理在此不表，详参手写的笔记本。&lt;/p&gt;
-&lt;h1 id=&#34;2-如何调整学习率&#34;&gt;2 如何调整学习率&lt;/h1&gt;
-&lt;p&gt;&lt;code&gt;torch.optim.lr_scheduler&lt;/code&gt;模块，提供了一些根据训练次数来调整学习率(learning rate)的方法，一般情况下我们会设置随着epoch的增大而逐渐减小学习率，从而达到更好的训练效果。
-而&lt;code&gt;torch.optim.lr_scheduler.ReduceLROnPlateau&lt;/code&gt;提供了一些基于训练中某些测量值使得学习率动态下降的办法。&lt;/p&gt;
-&lt;p&gt;学习率的调整应该放在optimizer更新之后，参考模板：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;define scheduler
-for epoch in range(1000):
-    train(...)
-    validate(...)
-    scheduler.step()
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;： 在PyTorch 1.1.0之前的版本，学习率的调整应该被放在optimizer更新之前，如果我们1.1.0之后仍然将学习率的调整(即&lt;code&gt;scheduler.step()&lt;/code&gt;)放在optimizer&amp;rsquo;s update(即&lt;code&gt;optimizer.step&lt;/code&gt;)之前，那么learning rate schedule的第一个值将被跳过。所以如果某个代码是在1.1.0之前的版本开发，移植到高版本进行运行，发现效果变差，可以检查是否将&lt;code&gt;scheduler.step()&lt;/code&gt;放在了&lt;code&gt;optimizer.step()&lt;/code&gt;之前。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;注：以上部分参考官方文档批示。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;21-torchoptimlr_schedulersteplr&#34;&gt;2.1 &lt;code&gt;torch.optim.lr_scheduler.StepLR&lt;/code&gt;&lt;/h2&gt;
-&lt;p&gt;首先贴上官方文档：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;h3 id=&#34;torchoptimlr_schedulersteplroptimizer-step_size-gamma01-last_epoch-1-verbosefalse&#34;&gt;&lt;code&gt;torch.optim.lr_scheduler.StepLR(optimizer, step_size, gamma=0.1, last_epoch=-1, verbose=False)&lt;/code&gt;&lt;/h3&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Decays the learning rate of each parameter group by gamma every step_size epochs. Notice that such decay can happen simultaneously with other changes to the learning rate from outside this scheduler. When last_epoch=-1, sets initial lr as lr.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;code&gt;StepLR&lt;/code&gt;可以根据超参数&lt;code&gt;gamma&lt;/code&gt;每隔固定的&lt;code&gt;step_size&lt;/code&gt;就衰减&lt;code&gt;learning_rate&lt;/code&gt;一次。需要说明的是，这种对&lt;code&gt;learning_rate&lt;/code&gt;的更新可以与外界的其他变化同时进行。当&lt;code&gt;last_epoch = -1&lt;/code&gt;时，将lr置为初始值。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Parameters&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;optimizer (Optimizer) – Wrapped optimizer.&lt;/li&gt;
-&lt;li&gt;step_size (int) – Period of learning rate decay.&lt;/li&gt;
-&lt;li&gt;gamma (float) – Multiplicative factor of learning rate decay. Default: 0.1.&lt;/li&gt;
-&lt;li&gt;last_epoch (int) – The index of last epoch. Default: -1.&lt;/li&gt;
-&lt;li&gt;verbose (bool) – If True, prints a message to stdout for each update. Default: False.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;参数说明&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;optimizer(Optimizer) &amp;mdash;&amp;ndash;用于指定scheduler的应用对象。&lt;/li&gt;
-&lt;li&gt;step_size(int)&amp;mdash;&amp;ndash;用于指定步长，即几次迭代之后进行一次decay&lt;/li&gt;
-&lt;li&gt;gamma(float)&amp;mdash;&amp;ndash;学习率衰减的乘法因子，默认值为0.1&lt;/li&gt;
-&lt;li&gt;last_epoch(int)&amp;mdash;&amp;ndash;更新的边界index，当等于这个值的时候，重置lr，默认为-1&lt;/li&gt;
-&lt;li&gt;verbose(bool)&amp;mdash;&amp;ndash;如果为True，每次decay会向stdout输出一条信息。默认为false.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;以下是实例：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Example&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# Assuming optimizer uses lr = 0.05 for all groups
-# lr = 0.05     if epoch &amp;lt; 30
-# lr = 0.005    if 30 &amp;lt;= epoch &amp;lt; 60
-# lr = 0.0005   if 60 &amp;lt;= epoch &amp;lt; 90
-# ...
-scheduler = StepLR(optimizer, step_size=30, gamma=0.1)
-for epoch in range(100):
-    train(...)
-    validate(...)
-    scheduler.step()
-&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
-&lt;p&gt;可见:每经过一个&lt;code&gt;step_size&lt;/code&gt;，&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;lr = lr*gamma 
-&lt;/code&gt;&lt;/pre&gt;</description>
         </item>
         <item>
         <title></title>
