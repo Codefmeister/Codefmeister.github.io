@@ -4,7 +4,27 @@
   
   <url>
     <loc>https://codefmeister.github.io/</loc>
-    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
+    <lastmod>2021-01-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://codefmeister.github.io/post/</loc>
+    <lastmod>2021-01-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://codefmeister.github.io/tags/</loc>
+    <lastmod>2021-01-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://codefmeister.github.io/tags/torch/</loc>
+    <lastmod>2021-01-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://codefmeister.github.io/p/torch%E4%B8%ADdataset%E7%9A%84%E6%9E%84%E9%80%A0%E4%B8%8E%E8%A7%A3%E8%AF%BB/</loc>
+    <lastmod>2021-01-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -14,16 +34,6 @@
   
   <url>
     <loc>https://codefmeister.github.io/p/numpy.cross%E5%87%BD%E6%95%B0%E8%A7%A3%E6%9E%90/</loc>
-    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://codefmeister.github.io/post/</loc>
-    <lastmod>2020-12-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://codefmeister.github.io/tags/</loc>
     <lastmod>2020-12-30T00:00:00+00:00</lastmod>
   </url>
   
@@ -55,11 +65,6 @@
   <url>
     <loc>https://codefmeister.github.io/tags/python%E5%9F%BA%E7%A1%80/</loc>
     <lastmod>2020-12-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://codefmeister.github.io/tags/torch/</loc>
-    <lastmod>2020-12-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>

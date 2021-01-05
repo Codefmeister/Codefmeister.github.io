@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='torch中Dataset的构造与解读 Dataset的构造 要自定义自己的数据集，首先需要继承Dataset(torch.utils.data.Dataset)类.
+继承Dataset类之后，必须重写三个方法:__init__(), __getitem__(), __len__()
+class ModelNet40(Dataset): def __init__(self, xxx): ... def __getitem__(self, item): ... def __len()__(self): ... 解读 单看上面的构造结构与三个需要重写的方法可能会一头雾水。我们详细分析其作用：
+  __init__的作用 __init__的作用与所有构造函数都一样，初始化一个类的实例。定义类的实际属性，如点云数据集中的unseen, guassian_noise等，是True还是False， 取出所有数据存储为成员变量等等。
+  __getitem__的作用 __getitem__的作用是，根据item的值取出数据。 item实际上就是索引值，会由Dataloader自动从0一直递增到__len__中取出的值。
+  __len__的作用 __len__的作用是，相当于返回整体数据data的shape[0]， 即给item的递增指定一个范围。
+  例子 class ModelNet40(Dataset): def __init__(self, num_points, partition=&amp;#39;train&amp;#39;, gaussian_noise=False, unseen=False, factor=4): self.data, self.label = load_data(partition) self.num_points = num_points self.partition = partition self.gaussian_noise = gaussian_noise self.unseen = unseen self.label = self.label.squeeze() self.factor = factor if self.'><title>torch中Dataset的构造与解读</title>
+
+<link rel='canonical' href='https://codefmeister.github.io/p/torch%E4%B8%ADdataset%E7%9A%84%E6%9E%84%E9%80%A0%E4%B8%8E%E8%A7%A3%E8%AF%BB/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='torch中Dataset的构造与解读'>
+<meta property='og:description' content='torch中Dataset的构造与解读 Dataset的构造 要自定义自己的数据集，首先需要继承Dataset(torch.utils.data.Dataset)类.
+继承Dataset类之后，必须重写三个方法:__init__(), __getitem__(), __len__()
+class ModelNet40(Dataset): def __init__(self, xxx): ... def __getitem__(self, item): ... def __len()__(self): ... 解读 单看上面的构造结构与三个需要重写的方法可能会一头雾水。我们详细分析其作用：
+  __init__的作用 __init__的作用与所有构造函数都一样，初始化一个类的实例。定义类的实际属性，如点云数据集中的unseen, guassian_noise等，是True还是False， 取出所有数据存储为成员变量等等。
+  __getitem__的作用 __getitem__的作用是，根据item的值取出数据。 item实际上就是索引值，会由Dataloader自动从0一直递增到__len__中取出的值。
+  __len__的作用 __len__的作用是，相当于返回整体数据data的shape[0]， 即给item的递增指定一个范围。
+  例子 class ModelNet40(Dataset): def __init__(self, num_points, partition=&amp;#39;train&amp;#39;, gaussian_noise=False, unseen=False, factor=4): self.data, self.label = load_data(partition) self.num_points = num_points self.partition = partition self.gaussian_noise = gaussian_noise self.unseen = unseen self.label = self.label.squeeze() self.factor = factor if self.'>
+<meta property='og:url' content='https://codefmeister.github.io/p/torch%E4%B8%ADdataset%E7%9A%84%E6%9E%84%E9%80%A0%E4%B8%8E%E8%A7%A3%E8%AF%BB/'>
+<meta property='og:site_name' content='Codefmeister'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='torch' /><meta property='article:published_time' content='2021-01-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-05T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="torch中Dataset的构造与解读">
+<meta name="twitter:description" content="torch中Dataset的构造与解读 Dataset的构造 要自定义自己的数据集，首先需要继承Dataset(torch.utils.data.Dataset)类.
+继承Dataset类之后，必须重写三个方法:__init__(), __getitem__(), __len__()
+class ModelNet40(Dataset): def __init__(self, xxx): ... def __getitem__(self, item): ... def __len()__(self): ... 解读 单看上面的构造结构与三个需要重写的方法可能会一头雾水。我们详细分析其作用：
+  __init__的作用 __init__的作用与所有构造函数都一样，初始化一个类的实例。定义类的实际属性，如点云数据集中的unseen, guassian_noise等，是True还是False， 取出所有数据存储为成员变量等等。
+  __getitem__的作用 __getitem__的作用是，根据item的值取出数据。 item实际上就是索引值，会由Dataloader自动从0一直递增到__len__中取出的值。
+  __len__的作用 __len__的作用是，相当于返回整体数据data的shape[0]， 即给item的递增指定一个范围。
+  例子 class ModelNet40(Dataset): def __init__(self, num_points, partition=&amp;#39;train&amp;#39;, gaussian_noise=False, unseen=False, factor=4): self.data, self.label = load_data(partition) self.num_points = num_points self.partition = partition self.gaussian_noise = gaussian_noise self.unseen = unseen self.label = self.label.squeeze() self.factor = factor if self.">
+    </head>
+    <body class="">
+        <div class="container flex on-phone--column align-items--flex-start extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/Icon_hua25ec96b536dfdbbcc947accbc1cb594_86128_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://codefmeister.github.io">Codefmeister</a></h1>
+        <h2 class="site-description">Major in Computer science</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a href="https://codefmeister.github.io" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/torch%E4%B8%ADdataset%E7%9A%84%E6%9E%84%E9%80%A0%E4%B8%8E%E8%A7%A3%E8%AF%BB/">torch中Dataset的构造与解读</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Jan 05, 2021</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <h1 id="torch中dataset的构造与解读">torch中Dataset的构造与解读</h1>
+<h2 id="dataset的构造">Dataset的构造</h2>
+<p>要自定义自己的数据集，首先需要继承<code>Dataset(torch.utils.data.Dataset)</code>类.</p>
+<p>继承<code>Dataset</code>类之后，必须重写三个方法:<code>__init__(), __getitem__(), __len__()</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">ModelNet40</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xxx</span><span class="p">):</span>
+        <span class="o">...</span>
+    
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">__len</span><span class="p">()</span><span class="n">__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span>
+
+</code></pre></div><h2 id="解读">解读</h2>
+<p>单看上面的构造结构与三个需要重写的方法可能会一头雾水。我们详细分析其作用：</p>
+<ol>
+<li>
+<p>__init__的作用
+__init__的作用与所有构造函数都一样，初始化一个类的实例。定义类的实际属性，如点云数据集中的<code>unseen, guassian_noise</code>等，是<code>True</code>还是<code>False</code>， 取出所有数据存储为成员变量等等。</p>
+</li>
+<li>
+<p>__getitem__的作用
+__getitem__的作用是，根据item的值取出数据。 item实际上就是索引值，会由Dataloader自动从0一直递增到__len__中取出的值。</p>
+</li>
+<li>
+<p>__len__的作用
+__len__的作用是，相当于返回整体数据data的shape[0]， 即给item的递增指定一个范围。</p>
+</li>
+</ol>
+<h2 id="例子">例子</h2>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">ModelNet40</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_points</span><span class="p">,</span> <span class="n">partition</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="n">gaussian_noise</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">unseen</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="n">partition</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_points</span> <span class="o">=</span> <span class="n">num_points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partition</span> <span class="o">=</span> <span class="n">partition</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gaussian_noise</span> <span class="o">=</span> <span class="n">gaussian_noise</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unseen</span> <span class="o">=</span> <span class="n">unseen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factor</span> <span class="o">=</span> <span class="n">factor</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unseen</span><span class="p">:</span>
+            <span class="c1">######## simulate testing on first 20 categories while training on last 20 categories</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">partition</span> <span class="o">==</span> <span class="s1">&#39;test&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">&gt;=</span><span class="mi">20</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">&gt;=</span><span class="mi">20</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">partition</span> <span class="o">==</span> <span class="s1">&#39;train&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">&lt;</span><span class="mi">20</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="o">&lt;</span><span class="mi">20</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="n">pointcloud</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">item</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">num_points</span><span class="p">]</span>          <span class="c1"># 核心代码，就是用item取出的数据</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gaussian_noise</span><span class="p">:</span>
+            <span class="n">pointcloud</span> <span class="o">=</span> <span class="n">jitter_pointcloud</span><span class="p">(</span><span class="n">pointcloud</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">partition</span> <span class="o">!=</span> <span class="s1">&#39;train&#39;</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="n">anglex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor</span>
+        <span class="n">angley</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor</span>
+        <span class="n">anglez</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor</span>
+
+        <span class="n">cosx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">anglex</span><span class="p">)</span>
+        <span class="n">cosy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angley</span><span class="p">)</span>
+        <span class="n">cosz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">anglez</span><span class="p">)</span>
+        <span class="n">sinx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">anglex</span><span class="p">)</span>
+        <span class="n">siny</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angley</span><span class="p">)</span>
+        <span class="n">sinz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">anglez</span><span class="p">)</span>
+        <span class="n">Rx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">cosx</span><span class="p">,</span> <span class="o">-</span><span class="n">sinx</span><span class="p">],</span>
+                        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">sinx</span><span class="p">,</span> <span class="n">cosx</span><span class="p">]])</span>
+        <span class="n">Ry</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">cosy</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">siny</span><span class="p">],</span>
+                        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="o">-</span><span class="n">siny</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cosy</span><span class="p">]])</span>
+        <span class="n">Rz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">cosz</span><span class="p">,</span> <span class="o">-</span><span class="n">sinz</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="n">sinz</span><span class="p">,</span> <span class="n">cosz</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+        <span class="n">R_ab</span> <span class="o">=</span> <span class="n">Rx</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Ry</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Rz</span><span class="p">)</span>
+        <span class="n">R_ba</span> <span class="o">=</span> <span class="n">R_ab</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">translation_ab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
+                                   <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)])</span>
+        <span class="n">translation_ba</span> <span class="o">=</span> <span class="o">-</span><span class="n">R_ba</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">translation_ab</span><span class="p">)</span>
+
+        <span class="n">pointcloud1</span> <span class="o">=</span> <span class="n">pointcloud</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="n">rotation_ab</span> <span class="o">=</span> <span class="n">Rotation</span><span class="o">.</span><span class="n">from_euler</span><span class="p">(</span><span class="s1">&#39;zyx&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">anglez</span><span class="p">,</span> <span class="n">angley</span><span class="p">,</span> <span class="n">anglex</span><span class="p">])</span>
+        <span class="n">pointcloud2</span> <span class="o">=</span> <span class="n">rotation_ab</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pointcloud1</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">translation_ab</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">euler_ab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">anglez</span><span class="p">,</span> <span class="n">angley</span><span class="p">,</span> <span class="n">anglex</span><span class="p">])</span>
+        <span class="n">euler_ba</span> <span class="o">=</span> <span class="o">-</span><span class="n">euler_ab</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">pointcloud1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">pointcloud1</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">pointcloud2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">pointcloud2</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">pointcloud1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pointcloud1</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">pointcloud2</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">R_ab</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> \
+               <span class="n">translation_ab</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">R_ba</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">translation_ba</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> \
+               <span class="n">euler_ab</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">euler_ba</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>       <span class="c1"># 给item一个范围</span>
+</code></pre></div><h2 id="进一步理解其执行逻辑">进一步理解其执行逻辑</h2>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">dataset1</span> <span class="o">=</span> <span class="n">ModelNet40</span><span class="p">(</span><span class="n">num_points</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">partition</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="n">gaussian_noise</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset1</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">src_pointcloud</span><span class="p">,</span> <span class="n">tgt_pointcloud</span><span class="p">,</span> <span class="n">Rotation</span><span class="p">,</span> <span class="n">translation</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">dataloader</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">src_pointcloud</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+</code></pre></div><p>首先需要说明的是，在ModelNet40中，getitem中会打印item的当前值。</p>
+<p>如果执行这段代码，在<code>shuffle=False</code>的情况下，其结果为：</p>
+<p>item从0一直增加到<code>__len__</code>返回的那个值-1， 也就是data的第一维（姑且称为batch维）。</p>
+<p>在getitem中取出的pointcloud的shape为(3, 1024)，只有两个axis.</p>
+<p>而最后输出的count，也就是main函数中整个for循环执行的次数，会是<code>__len__() / batch_size</code>.</p>
+<p>比如len是9480，即self.data的shape为(9480, 2048, 3)，那么item就会从0一直增加到9479. 在batch_size为64的情况下，for循环一共执行（即count为） 9480/64 = 148.125， 那么最终会执行149次。 也就是说，每次for循环实质上调用了getitem方法64次，最后在第一维上stack，使之shape变为(64, 3, 1024).</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/torch/">torch</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+    integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+    integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+    crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+    integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.querySelector(`.article-content`));"></script>
+<script>
+var katex_config = {
+    delimiters: 
+    [
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false}
+    ]
+};
+</script>
+<script defer src="https://cdn.bootcss.com/KaTeX/0.11.1/contrib/auto-render.min.js" onload="renderMathInElement(document.body,katex_config)"></script>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "codefmeister" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 Codefmeister
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="1.1.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+            </main>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
+    integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin="anonymous"></script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<link rel="stylesheet" href="/css/highlight/light.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="/css/highlight/dark.min.css" media="(prefers-color-scheme: dark)">
+
+    </body>
+</html>
