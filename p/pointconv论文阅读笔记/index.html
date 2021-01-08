@@ -226,7 +226,8 @@ $$</p>
 <p>PointConv通过网络学习得到权重函数W的离散化模拟，对于每个输入点，通过MLP使用其相对坐标来计算权重。下图(a)举了一个连续的权重函数用于卷积的例子，而点云是对连续输入（i.e.空间）的离散化处理（i.e.采样），我们通过图(b)类似的方式进行离散化卷积来抽象出局部特征（对于不同的采样会输出不同的W和S，所以其效果也不同）。 需要说明的是，对于光栅图像，其某个局部区域内的相对坐标都是固定的（体素化网格），所以经过PointConv时，对于整个图像，会输出相同的权重函数W和密度函数S，会变为传统的离散卷积。（所以作者还在后文专门进行了实验，将二维图像升维到三维空间中，通过PointConv，结果确实和二维一致。所以证明了PointConv确实是三维连续卷积的full approximation。</p>
 <h1 id="pointdeconv">PointDeConv</h1>
 <h1 id="efficient-pointconv">Efficient PointConv</h1>
-<p>这两个part搁置一下。因为我感觉这篇paper其实不是那么棒。后面的用到的时候再深究。就先不记笔记了。</p>
+<p>这两个part搁置一下。因为我感觉论文的核心Part就是如何理解三维点云上的卷积操作。核心部分已经记录了。</p>
+<p>而且这篇论文我私以为存在一些问题，作者文中提到more details can be found in supplementary materials, 但是在哪都找不到他的补充材料，并且github上公开的源码并没有efficient realization of PointConv. 作者也不回答这些问题。</p>
 
 </section>
 
