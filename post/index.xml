@@ -6,7 +6,20 @@
     <description>Recent content in Posts on Codefmeister</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 05 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 06 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PointConv论文阅读笔记</title>
+      <link>https://codefmeister.github.io/p/pointconv%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Wed, 06 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/pointconv%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Abstract 本文发表于CVPR。 其主要内容正如标题，是提出了一个对点云进行卷积的Module，称为PointConv。由于点云的无序性和不规则性，因此应用卷积比较困难。
+其主要的思路是，将卷积核当做是一个由权值函数和密度函数组成的三维点的局部坐标的非线性函数。通过MLP学习权重函数，然后通过核密度估计得到密度函数。
+还有一个主要的贡献在于，使用了一种高效计算的方法，转换了公式的计算分时，使得PointConv的卷积操作变得memory efficient，从而加深网络的深度。
+This paper first published on CVPR. In this paper, author proposed a novel convolution operation which can be directly used on point cloud. As we all know, unlike image whose pixels are fixed, point cloud is irregular and unordered. So directly extend convolution operation into 3D pointcloud can be difficult.
+Author treat convolution kernels as nonlinear functions of the local coordinates of 3D points comprised of weight function and density function.</description>
+    </item>
+    
     <item>
       <title>torch中Dataset的构造与解读</title>
       <link>https://codefmeister.github.io/p/torch%E4%B8%ADdataset%E7%9A%84%E6%9E%84%E9%80%A0%E4%B8%8E%E8%A7%A3%E8%AF%BB/</link>

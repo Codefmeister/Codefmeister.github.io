@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Abstract 本文发表于CVPR。 其主要内容正如标题，是提出了一个对点云进行卷积的Module，称为PointConv。由于点云的无序性和不规则性，因此应用卷积比较困难。
+其主要的思路是，将卷积核当做是一个由权值函数和密度函数组成的三维点的局部坐标的非线性函数。通过MLP学习权重函数，然后通过核密度估计得到密度函数。
+还有一个主要的贡献在于，使用了一种高效计算的方法，转换了公式的计算分时，使得PointConv的卷积操作变得memory efficient，从而加深网络的深度。
+This paper first published on CVPR. In this paper, author proposed a novel convolution operation which can be directly used on point cloud. As we all know, unlike image whose pixels are fixed, point cloud is irregular and unordered. So directly extend convolution operation into 3D pointcloud can be difficult.
+Author treat convolution kernels as nonlinear functions of the local coordinates of 3D points comprised of weight function and density function.'><title>PointConv论文阅读笔记</title>
+
+<link rel='canonical' href='https://codefmeister.github.io/p/pointconv%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='PointConv论文阅读笔记'>
+<meta property='og:description' content='Abstract 本文发表于CVPR。 其主要内容正如标题，是提出了一个对点云进行卷积的Module，称为PointConv。由于点云的无序性和不规则性，因此应用卷积比较困难。
+其主要的思路是，将卷积核当做是一个由权值函数和密度函数组成的三维点的局部坐标的非线性函数。通过MLP学习权重函数，然后通过核密度估计得到密度函数。
+还有一个主要的贡献在于，使用了一种高效计算的方法，转换了公式的计算分时，使得PointConv的卷积操作变得memory efficient，从而加深网络的深度。
+This paper first published on CVPR. In this paper, author proposed a novel convolution operation which can be directly used on point cloud. As we all know, unlike image whose pixels are fixed, point cloud is irregular and unordered. So directly extend convolution operation into 3D pointcloud can be difficult.
+Author treat convolution kernels as nonlinear functions of the local coordinates of 3D points comprised of weight function and density function.'>
+<meta property='og:url' content='https://codefmeister.github.io/p/pointconv%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
+<meta property='og:site_name' content='Codefmeister'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='深度学习' /><meta property='article:published_time' content='2021-01-06T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-06T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="PointConv论文阅读笔记">
+<meta name="twitter:description" content="Abstract 本文发表于CVPR。 其主要内容正如标题，是提出了一个对点云进行卷积的Module，称为PointConv。由于点云的无序性和不规则性，因此应用卷积比较困难。
+其主要的思路是，将卷积核当做是一个由权值函数和密度函数组成的三维点的局部坐标的非线性函数。通过MLP学习权重函数，然后通过核密度估计得到密度函数。
+还有一个主要的贡献在于，使用了一种高效计算的方法，转换了公式的计算分时，使得PointConv的卷积操作变得memory efficient，从而加深网络的深度。
+This paper first published on CVPR. In this paper, author proposed a novel convolution operation which can be directly used on point cloud. As we all know, unlike image whose pixels are fixed, point cloud is irregular and unordered. So directly extend convolution operation into 3D pointcloud can be difficult.
+Author treat convolution kernels as nonlinear functions of the local coordinates of 3D points comprised of weight function and density function.">
+    </head>
+    <body class="">
+        <div class="container flex on-phone--column align-items--flex-start extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/Icon_hua25ec96b536dfdbbcc947accbc1cb594_86128_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://codefmeister.github.io">Codefmeister</a></h1>
+        <h2 class="site-description">Major in Computer science</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a href="https://codefmeister.github.io" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/pointconv%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">PointConv论文阅读笔记</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Jan 06, 2021</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <h1 id="abstract">Abstract</h1>
+<p>本文发表于CVPR。 其主要内容正如标题，是提出了一个对点云进行卷积的Module，称为PointConv。由于点云的无序性和不规则性，因此应用卷积比较困难。</p>
+<p>其主要的思路是，将卷积核当做是一个由权值函数和密度函数组成的三维点的局部坐标的非线性函数。通过MLP学习权重函数，然后通过核密度估计得到密度函数。</p>
+<p>还有一个主要的贡献在于，使用了一种高效计算的方法，转换了公式的计算分时，使得PointConv的卷积操作变得memory efficient，从而加深网络的深度。</p>
+<p>This paper first published on CVPR. In this paper, author proposed a novel convolution operation which can be directly used on point cloud. As we all know, unlike image whose pixels are fixed, point cloud is irregular and unordered. So directly extend convolution operation into 3D pointcloud can be difficult.</p>
+<p>Author treat convolution kernels as nonlinear functions of the local coordinates of 3D points comprised of weight function and density function. The wight function is learned by multi-layer perceptron networks, the density function is learned through kernel density estimation.</p>
+<p>Another main contribution of their work is that they reformulate the proposed convolution method to make it more memory efficient which significantly improves the depth of the network.</p>
+<h1 id="about-pointconv">About PointConv</h1>
+<p>作者提出了一种全新的，<!-- raw HTML omitted -->考虑到非均匀采样<!-- raw HTML omitted -->，对三维点云进行卷积的途径。 我们知道，卷积操作可以被看做是连续意义上的卷积函数的离散化近似。 在三维空间中，我们将卷积算子的权重函数视为是在以某个三维点为参考点的局部坐标系下的连续函数。该函数可以使用多层感知机进行模拟。这部分工作在之前已经有人做过，但是全部没有考虑到<!-- raw HTML omitted -->非均匀采样的问题<!-- raw HTML omitted -->。</p>
+<p>基于这个Motivation，我们进一步使用一个逆密度尺度来对MLP学到的权重函数进行重新计算，对应于原连续卷积函数的蒙特卡罗近似。我们将其称为PointConv。 PointConv以点云的位姿作为输入，通过MLP学习权重函数，然后再应用一个inverse density scale， 对权重函数进行重新计算，以弥补点云数据是由非均匀采样采得所带来的影响。</p>
+<p>PointConv最简单的实现是很消耗内存的，当输出通道的维度很大时，会给训练带来很大难度。 为了减少PointConv的内存消耗，作者通过改变加和顺序对公式进行了重写，大大提高了效率。</p>
+<p>此外，由于PointConv是卷积操作的完整近似，所以很容易就能从Conv推广到DeConv。DeConv层，也就是反卷积层，能够充分利用从粗糙层得到的信息，并将之传送到精细层去。而之前的很多卷积操作，不是full approxiamtion，所以就无法反卷积。对性能有很大影响。</p>
+<p>Author proposed a novel approach to apply convolution operation on 3D point clouds with consideration on non-uniform sampling. Note that convolution operation can be viewed as a discrete approximation of a continuous convolution operator. In 3D space, we can treat the weights of this convolution operator to be a continous function of the local 3D point coordinates with respect to a reference 3D point. The continuous function can be approximated by a multi-layer perceptron(MLP). This work has be done before, but all of them didn&rsquo;t take non-uniform sampling into consideration.</p>
+<p>Based on this motivation, author used an inverse density scale to re-weight the continuous function learned by MLP, which correspond to the Monte Carlo approximation of the continuous convolution. PointConv involves taking the positions of point clouds as input and learning an MLP to approximate a weight function, as well as applying a inverse density scale on learned weights to compensate the non-uniform sampling.</p>
+<p>The naive implementation of PointConv is memory inefficient when the channel size of the output features is very large and hence hard to train and scale up to large networks.  In order to reduce the memory consumption of PointConv, author introduced an approach which is able to greatly increase the memory efficiency using a reformulation that changes the summation order.</p>
+<p>PointConv is full approximation of the convolution, it&rsquo;s natural to extend PointConv to a PointDeconv, which an fully untilize the information in coarse layer and propagate to finer layers while most state of art algorithm cannot perform deconvolution because they are not the full approximation.</p>
+<h1 id="convolution-on-3d-point-clouds">Convolution on 3D Point Clouds</h1>
+<p>d维向量的卷积定义如下：
+$$
+(f*g)(x) = \iint\limits_{\tau  \in {\mathbb{R}^d}} {f(\tau )g(x + \tau )d\tau }
+$$</p>
+<p>二维图像image的像素点是固定的。每个像素点会固定在某个体素网格。而点云不同，一个点云可以被表示为一个三维点集，其中每个点都包含着一个位置向量，同时还有其特征如颜色，表面向量等。不同于图像，点云有着更加灵活的形状，一个点的坐标(x,y,z)不会位于某个确定的网格上，而是可以取一个任意的连续值。因此，局部区域内不同点之间的相对位置是十分多变的。传统的光栅图像离散卷积滤波器不能够直接应用于3D点云上。</p>
+<p>为了得到一个能够应用于三维点云的卷积操作，首先回到连续的三维卷积：
+$$
+Conv{(W,F)<em>{xyz}} = \iiint\limits</em>{({\delta _x},{\delta _y},{\delta _z}) \in G} {W({\delta _x},{\delta _y},{\delta _z})F(x + {\delta _x},y + {\delta _y},z + {\delta _z})d{\delta _x}{\delta _y}{\delta _z}}
+$$</p>
+<p>其中$F(x+\delta_x,y+\delta_y,z+\delta_z)$是以$(x,y,z)$为中心的局部区域$G$中点的特征。点云可以被看做是从连续空间$\mathbb{R}^3$中非均匀采样得到的。${\delta _x},{\delta _y},{\delta _z}$是局部区域内的任意位置的三维坐标。</p>
+<p>那么PointConv定义如下：
+$$
+PointConv{(S,W,F)<em>{xyz}} = \sum\limits</em>{({\delta _x},{\delta _y},{\delta _z}) \in G} {S({\delta _x},{\delta _y},{\delta _z})W({\delta _x},{\delta _y},{\delta _z})F(x + {\delta _x},y + {\delta _y},z + {\delta _z})} 
+$$</p>
+<p>对连续函数的离散化近似从上可窥一见。 其中$S({\delta _x},{\delta _y},{\delta _z})$是点$({\delta _x},{\delta _y},{\delta _z})$处的逆密度inverse density。由于点云采样的非均匀性，$S({\delta _x},{\delta _y},{\delta _z})$是十分有必要的。直觉上讲，点云内不同局部区域内的点的个数是很不相同的。</p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/PointConv_fig1.png" alt="image"  /></p>
+<p>如上图，因为点$p_3,p_5,p_6,p_7,p_8,p_9,p_{10}$之间离得都很近，所以它们每一个的贡献度应该更小。<!-- raw HTML omitted -->inverse density<!-- raw HTML omitted -->的原因。就是采样密度越大，这里点的人均贡献度应该越小。</p>
+<p>PointConv的公式如上。</p>
+<h1 id="pointconv的具体实现">PointConv的具体实现</h1>
+<p>我们使用MLP来从三维坐标$({\delta _x},{\delta _y},{\delta _z})$中近似得到权重函数$W({\delta _x},{\delta _y},{\delta _z})$. 而逆密度函数$S({\delta _x},{\delta _y},{\delta _z})$ 则由一个核密度估计及紧随其后的一个由MLP实现的非线性转换实现。</p>
+<p>计算权重函数的MLP的参数是在所有点上共享的，以达到扰动不变性的目的。 而逆密度函数首先需要估计点云在某点处的密度(kernel density estimation(KDE))，然后将这个估计出来的密度送入一个MLP来进行一个一维的非线性变换。其目的是在于让网络决定，是否去使用密度估计。</p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/PointConv_fig2.png" alt="image"  /></p>
+<p>首先得明确上图这个网络的输入和输出。</p>
+<p>输入是$F_{in}$，shape是$K \times C_{in}$， 也就是说要对某个点进行卷积，那么它的输入是k个邻居的feature（当前维的feature是$C_{in}$). 此外输入还有$P_{local}, Density$，一个是k近邻的局部坐标，${K \times 3}$, 一个是k近邻处的密度, $K \times 1$。</p>
+<p>输出是$F_{out}$，shape为$1 \times C_{out}$。</p>
+<p>$C_{in}, C_{out}$是输入输出feature的通道数。$k, c_{in}, c_{out}$分别指第$k$个邻接点，输入feature的第$c_{in}$个通道， 输出feature的第$c_{out}$个通道。</p>
+<p>因为每个点的权重函数不同，且其用于将$C_{in}$变换到$C_{out}$, 所以weight function的shape应该为$K \times (C_{in} \times C_{out})$， 即 $W \in \mathbb{R}^{K \times (C_{in} \times C_{out})}$. 那么第k个点处应用于第$c_{in}$个通道上的weight function应该是一个向量： $W(k,c_{in}) \in \mathbb{R}^{C_{out}}$</p>
+<p>所以有：
+$$
+{F_{out}} = \sum\limits_{k = 1}^K {\sum\limits_{{c_{in}} = 1}^{{C_{in}}} {S(k)W(k,{c_{in}}){F_{in}}(k,{c_{in}})} } 
+$$</p>
+<p>上图中有tile的操作，相当于人为广播broadcast.</p>
+<p>PointConv通过网络学习得到权重函数W的离散化模拟，对于每个输入点，通过MLP使用其相对坐标来计算权重。下图(a)举了一个连续的权重函数用于卷积的例子，而点云是对连续输入（i.e.空间）的离散化处理（i.e.采样），我们通过图(b)类似的方式进行离散化卷积来抽象出局部特征（对于不同的采样会输出不同的W和S，所以其效果也不同）。 需要说明的是，对于光栅图像，其某个局部区域内的相对坐标都是固定的（体素化网格），所以经过PointConv时，对于整个图像，会输出相同的权重函数W和密度函数S，会变为传统的离散卷积。（所以作者还在后文专门进行了实验，将二维图像升维到三维空间中，通过PointConv，结果确实和二维一致。所以证明了PointConv确实是三维连续卷积的full approximation。</p>
+<h1 id="pointdeconv">PointDeConv</h1>
+<h1 id="efficient-pointconv">Efficient PointConv</h1>
+<p>这两个part搁置一下。因为我感觉这篇paper其实不是那么棒。后面的用到的时候再深究。就先不记笔记了。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+    integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+    integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+    crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+    integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.querySelector(`.article-content`));"></script>
+<script>
+var katex_config = {
+    delimiters: 
+    [
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false}
+    ]
+};
+</script>
+<script defer src="https://cdn.bootcss.com/KaTeX/0.11.1/contrib/auto-render.min.js" onload="renderMathInElement(document.body,katex_config)"></script>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "codefmeister" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 Codefmeister
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="1.1.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+            </main>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
+    integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin="anonymous"></script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<link rel="stylesheet" href="/css/highlight/light.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="/css/highlight/dark.min.css" media="(prefers-color-scheme: dark)">
+
+    </body>
+</html>

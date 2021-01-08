@@ -757,6 +757,12 @@ $$</p>
 <h1 id="结语">结语</h1>
 <p>以上就是我个人对DCP的笔记记录以及一些解读。</p>
 <p><!-- raw HTML omitted -->疑惑: LayerNorm的作用机制如何？</p>
+<h1 id="dcp的缺点">DCP的缺点</h1>
+<p>DCP 的文章主要有如下问题：</p>
+<ol>
+<li>实验进行的数据集是ModelNet40， ModelNet40严格上来讲适用于分类任务，所有点基本都是均匀采样的，没有离群点， 即使有噪声也是人为添加的高斯噪声，这就使得文章的结论很缺乏说服力。</li>
+<li>DCP没有涉及裁剪率的问题，只能对默认两个点云之间是满射，这是不对的。在应用中也会有很多问题。</li>
+</ol>
 <p>如果觉得文章对您有帮助，欢迎点赞留言交流。给作者买杯咖啡就更感激不过了！
 <img src="https://raw.githubusercontent.com/Codefmeister/MarkdownResource/master/PayCode.jpg" alt="image"  /></p>
 
