@@ -6,7 +6,25 @@
     <description>Recent content in 点云配准 on Codefmeister</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 22 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/%E7%82%B9%E4%BA%91%E9%85%8D%E5%87%86/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 10 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/%E7%82%B9%E4%BA%91%E9%85%8D%E5%87%86/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Learning Multiview 3D point Cloud Registration</title>
+      <link>https://codefmeister.github.io/p/learning-multiview-3d-point-cloud-registration/</link>
+      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/learning-multiview-3d-point-cloud-registration/</guid>
+      <description>Learning multiview 3D point cloud registration Abstract 提出了一种全新的，端到端的，可学习的多视角三维点云配准算法。 多视角配准往往需要两个阶段：第一个阶段进行初始化配准，给定点云各帧之间两两的初始化刚体变换关系；第二个阶段在全局意义上进行不断精细化处理。前者往往由于点云之间的低重叠率，对称性，或者重复的场景片段而导致配准精度较差。因此，紧随其后的全局优化（Global Refinement）的目标就是在多个点云帧中建立一种循环一致性(cyclic consistency).
+而此文章提出了一种算法，将两个阶段融合在一起进行端对端的交替学习。在公认的基准数据集上的实验评估表明，其方法显著优于state-of-art，而且又是端到端可训练的，所需要的计算资源也更少。此外，其还进行了详细的分析和烧蚀试验去验证其方法的novel part.
+1. Introduction 三维计算机视觉的下游任务，如语义分割和目标检测，通常需要场景的整体表示。因此，将仅覆盖环境一小部分的单个点云配准和融合为一个全局一致的完整表示的能力是十分重要的，而且在增强现实和机器人技术中有着不少用例。相邻片段之间的双视角配准是一个被深入研究过的问题，传统的基于几何约束[51, 66, 56] 和手工设计的特征描述符[37, 27, 54, 69]的配准方法在某种程度上取得了成功。然而， 近些年，用于双视角三维点云配准的局部描述符的研究聚焦于深度学习方法[67: 3DMatch, 38, 21: Ppfnet, 64, 19: Ppf-foldnet, 28: perfect match]，这些方法成功捕捉并编码了隐藏在手工特征符下的证据。在此基础上，一些全新的端到端的双视角点云配准方法最近被提出[62: DCP, 42: Deepvcp]。 虽然双视角配准在很多任务中展现出了不错的性能，但对场景中的多个点云帧进行配准时，其存在一些概念上的缺陷：(1) 相邻点云之间的低重合率会导致不精确或者错误的匹配。(2) 点云配准必须依赖于非常局部的特征，对于3D场景结构简单或者重复结构较多的情况十分有害。(3)在两两配准之后，需要进行单独的处理来将所有双视角配准结果组合为一个全局表示。与双视角配准相比，应用于无组织的点云片段上的全局一致的多视角配准方法能够更充分的从深度学习技术取得的进步中获益。 现有的领先方法仍然常常依赖于双视角映射的良好初始化（良好的初值），然后再在后续的步骤中通过一系列解耦的步骤进行全局优化。这种分层处理的一大缺点在于，姿态图所有节点上的全局噪声分布在配准结束后远不是随机的。也就是说，由于配准结果和初始的双视角映射高度相关，会存在着不可忽视的误差。
+在这篇论文中，作者提出了第一个端到端的，数据驱动的多视角点云配准算法。其方法以可能存在重叠关系的点云集合为输入，对每个点云帧输出一个刚体变换矩阵。我们从传统的两阶段方法中跳脱出来，让各个阶段彼此分离，直接学习以一种全局一致的方式对所有点云帧进行配准。
+其工作的主要贡献在于：
+  将传统的两阶段方法用端到端的神经网络的方式阐述，在其前传过程中，主要解决了两个可微分的最优化问题：(i)对两两点云之间刚体变换参数估计的Procrustes问题。(ii) 刚体变换同步的谱松弛(spectral relaxation)问题
+  提出了一个置信度估计模块，其使用了一个新颖的overlap pooling layer重叠池化层来预测估算得到的双视角刚体变换参数的可信度。
+  将多视角三维点云配准问题转换为迭代重加权最小二乘问题(IRLS)，迭代地优化两两配准之间的刚体变换估计和绝对坐标意义下的刚体变换估计（全局）。
+  因为以上所提到的工作，所提出的多视角点云配准算法是(i) 计算效率很高 (ii) 可以达到更加精确的配准结果，因为残差会以一种迭代的方式被送回双视角配准网络中去。 (iii)不论是双视角配准还是多视角配准，都比现有的方法的精度要高，效果要好。
+2. Related Work Pairwise registration: 传统的双视角配准pipeline包含两个阶段： the coarse alignment stage（粗配准）， 为相对刚体变换参数提供一个初始估计；the refinement stage 通过迭代最小化配准误差，不断优化刚体变换参数。</description>
+    </item>
+    
     <item>
       <title>DCP论文阅读笔记</title>
       <link>https://codefmeister.github.io/p/dcp%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
