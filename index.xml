@@ -225,13 +225,13 @@ $$
 (f*g)(x) = \iint\limits_{\tau  \in {\mathbb{R}^d}} {f(\tau )g(x + \tau )d\tau }
 $$&lt;/p&gt;
 &lt;p&gt;二维图像image的像素点是固定的。每个像素点会固定在某个体素网格。而点云不同，一个点云可以被表示为一个三维点集，其中每个点都包含着一个位置向量，同时还有其特征如颜色，表面向量等。不同于图像，点云有着更加灵活的形状，一个点的坐标(x,y,z)不会位于某个确定的网格上，而是可以取一个任意的连续值。因此，局部区域内不同点之间的相对位置是十分多变的。传统的光栅图像离散卷积滤波器不能够直接应用于3D点云上。&lt;/p&gt;
-&lt;p&gt;为了得到一个能够应用于三维点云的卷积操作，首先回到连续的三维卷积：
-$$
+&lt;p&gt;为了得到一个能够应用于三维点云的卷积操作，首先回到连续的三维卷积：&lt;/p&gt;
+&lt;p&gt;$$
 Conv{(W,F)&lt;em&gt;{xyz}} = \iiint\limits&lt;/em&gt;{({\delta _x},{\delta _y},{\delta _z}) \in G} {W({\delta _x},{\delta _y},{\delta _z})F(x + {\delta _x},y + {\delta _y},z + {\delta _z})d{\delta _x}{\delta _y}{\delta _z}}
 $$&lt;/p&gt;
 &lt;p&gt;其中$F(x+\delta_x,y+\delta_y,z+\delta_z)$是以$(x,y,z)$为中心的局部区域$G$中点的特征。点云可以被看做是从连续空间$\mathbb{R}^3$中非均匀采样得到的。${\delta _x},{\delta _y},{\delta _z}$是局部区域内的任意位置的三维坐标。&lt;/p&gt;
-&lt;p&gt;那么PointConv定义如下：
-$$
+&lt;p&gt;那么PointConv定义如下：&lt;/p&gt;
+&lt;p&gt;$$
 PointConv{(S,W,F)&lt;em&gt;{xyz}} = \sum\limits&lt;/em&gt;{({\delta _x},{\delta _y},{\delta _z}) \in G} {S({\delta _x},{\delta _y},{\delta _z})W({\delta _x},{\delta _y},{\delta _z})F(x + {\delta _x},y + {\delta _y},z + {\delta _z})} 
 $$&lt;/p&gt;
 &lt;p&gt;对连续函数的离散化近似从上可窥一见。 其中$S({\delta _x},{\delta _y},{\delta _z})$是点$({\delta _x},{\delta _y},{\delta _z})$处的逆密度inverse density。由于点云采样的非均匀性，$S({\delta _x},{\delta _y},{\delta _z})$是十分有必要的。直觉上讲，点云内不同局部区域内的点的个数是很不相同的。&lt;/p&gt;
