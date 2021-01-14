@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>特征提取网络 on Codefmeister</title>
+    <link>https://codefmeister.github.io/tags/%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96%E7%BD%91%E7%BB%9C/</link>
+    <description>Recent content in 特征提取网络 on Codefmeister</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 13 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>FCGF论文阅读笔记</title>
+      <link>https://codefmeister.github.io/p/fcgf%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/fcgf%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>0. Abstract 从三维点云或者扫描帧中提取出几何特征是许多任务例如配准，场景重建等的第一步。现有的领先的方法都是将low-level的特征作为输入，或者在有限的感受野上提取得到基于patch的特征。本文提出的是一个全卷积几何特征提取网络，名为fully-convolutional geometric features。 通过一个3D的全卷积网络的一次pass，即可得到几何特征。 同时提出了一个新的度量学习的loss函数，可以显著的提高网络的性能。 FCGF的几何特征十分紧凑，可以捕捉广阔的上下文空间，并缩放到大型场景中。在室内（3D Match）和室外（KITTI）数据集上进行验证的结果显示，其达到了state-of-art的精确率，而且并不需要数据的预处理，并且很紧凑（32维的特征），比其余最精确的方法快290倍。
+1. Introduction 寻找几何意义上的点对关系是很多三维任务十分重要的一步。因此，大量的工作集中于设计三维特征，以捕捉具有可判别性的局部几何机构，来建立点对关系。
+基于学习的三维特征由于其鲁棒性与出色的性能表现，在最近得到了广泛的关注。现有的基于学习的特征提取工作大都依赖于低阶的几何特征作为输入，例如角度偏差，点的分布，或者体积距离函数等。随后，对每个兴趣点(point of interest)提取一个三维patch，然后通过多层感知机或者三维卷积层将之映射到一个低维的特征空间。这个过程计算代价高昂，而且只能够提取得到降采样后兴趣点处的特征，因此会降低后续配准步骤中的空间分辨率。
+上述的基于patch的处理过程效率很低，因为其中间网络的激活结果并没有在相邻的patch上进行复用。用2D卷积进行类比，对某个兴趣点提取其三维patch与对某个像素块提取其周围的一个像素patch类似。不仅如此，现有的pipeline仅局限于对空间范围有限的patch进行卷积，限制了空间语境的解读。
+不同于上文所述，我们应用一个可以作用于整个输入的三维卷积操作，而不需要裁剪片段，该操作是通过将卷积转换为全卷积的子项来完成的（convolution组装得到一个fully convolution）。 相似的，我们将MLP中的全连接层用一系列卷积层来替代，其卷积核的size为1x1x1。 全卷积网络与非全卷积网络相比，可以捕捉更广阔的上下文，更快，内存效率更高。其原因在于中间的激活结果在重叠的区域上进行了复用。
+尽管有这些优势，全卷积网络因为三维数据的(一些)特点并未在三维特征提取中得到广泛的应用。一个对三维数据进行卷积的卷积网络的标准输入代表是一个稠密的四维tensor，其中三维是空间维度，还有一个特征维。这种表示方式对内存消耗很大，很多voxel都是空的。
+在本文的工作中，采用了一种稀疏的tensor表示法。同时，针对全卷积上的度量学习，提出了一个新的loss函数。因为观察到全卷积特征不同于传统的度量学习的假设，传统的度量学习由于锚点都是随机采样的，所以假设样本是独立同分布的，而在全卷积网络中，相邻的点的特征是高度相关的。并不符合独立同分布的假设，所以需要重新设计loss函数。同时，该方法并不需要对数据进行低阶的预处理，或者提取三维patch，可以快速的生成高分辨率的， 具有state-of-art的判别潜力的特征。
+FCGF在室内室外数据集上均进行了测试，可以达到state-of-art的性能表现，比最快的快9倍，比最好的快290倍。
+2. Related Work Hand-craft 3D feature：早期对三维特征的描述集中在手工的，能够有区别的（有基于feature鉴别的潜力 discriminatively）的对局部几何特征进行刻画的描述符。Spin Images [16] use a projection of adjacent points onto the tangent plane. USC [29] uses covariance matrices of point pairs. SHOT [26] creates a 3D histogram of normal vectors. PFH [24] and FPFH [23] build an oriented histogram using pairwise geometric properties.</description>
+    </item>
+    
+  </channel>
+</rss>
