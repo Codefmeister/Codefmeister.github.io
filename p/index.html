@@ -161,95 +161,72 @@ Example &amp;gt;&amp;gt;&amp;gt; np.arange(3) array([0, 1, 2]) &amp;gt;&amp;gt;&
 </header>
 
     <section class="article-content">
-    <h1 id="高斯混合模型">高斯混合模型</h1>
-<h2 id="混合模型概述">混合模型概述</h2>
-<blockquote>
-<p>In statistics, a mixture model is a probabilistic model for representing the presence of subpopulations within an overall population, without requiring that an observed data set should identify the sub-population to which an individual observation belongs. Formally a mixture model corresponds to the mixture distribution that represents the probability distribution of observations in the overall population. However, while problems associated with &ldquo;mixture distributions&rdquo; relate to deriving the properties of the overall population from those of the sub-populations, &ldquo;mixture models&rdquo; are used to make statistical inferences about the properties of the sub-populations given only observations on the pooled population, without sub-population identity information.</p>
+    <blockquote>
+<p>Reference: <a class="link" href="https://en.wikipedia.org/wiki/Bayesian_inference"  target="_blank" rel="noopener"
+    >Wikipedia:Bayesian_inference</a></p>
 </blockquote>
-<p>从统计学角度来说，一个混合模型就是一种概率模型，用于表示总体当中子总体的存在，而不需要观测数据集识别出这个观测数据属于哪一个子总体(子分布)。<br>
-形式上讲，对应混合分布的一个混合模型，就代表了这个总体的概率密度分布。然而，但需要从子总体的性质推导总体的一些性质时，混合模型能够直接根据总体池的观测值来对子总体的特性进行统计推断，而不需要知道他们的归属信息(属于哪一个子总体)。</p>
-<h2 id="mixture-model-structure">Mixture Model Structure</h2>
+<hr>
 <blockquote>
-<p>A typical finite-dimensional mixture model is a hierarchical model consisting of the following components:</p>
-<ul>
-<li>N random variables that are observed, each distributed according to a mixture of K components, with the components belonging to the same parametric family of distributions (e.g., all normal, all Zipfian, etc.) but with different parameters</li>
-<li>N random latent variables specifying the identity of the mixture component of each observation, each distributed according to a K-dimensional categorical distribution</li>
-<li>A set of K mixture weights, which are probabilities that sum to 1.</li>
-<li>A set of K parameters, each specifying the parameter of the corresponding mixture component. In many cases, each &ldquo;parameter&rdquo; is actually a set of parameters. For example, if the mixture components are Gaussian distributions, there will be a mean and variance for each component. If the mixture components are categorical distributions (e.g., when each observation is a token from a finite alphabet of size V), there will be a vector of V probabilities summing to 1.</li>
-</ul>
-<p>In addition, in a Bayesian setting, the mixture weights and parameters will themselves be random variables, and prior distributions will be placed over the variables. In such a case, the weights are typically viewed as a K-dimensional random vector drawn from a Dirichlet distribution (the conjugate prior of the categorical distribution), and the parameters will be distributed according to their respective conjugate priors.</p>
+<p>Bayesian inference is a method of statistical inference in which Bayes' theorem is used to update the probability for a hypothesis as more evidence or information becomes available. Bayesian inference is an important technique in statistics, and especially in mathematical statistics. Bayesian updating is particularly important in the dynamic analysis of a sequence of data. Bayesian inference has found application in a wide range of activities, including science, engineering, philosophy, medicine, sport, and law. In the philosophy of decision theory, Bayesian inference is closely related to subjective probability, often called &ldquo;Bayesian probability&rdquo;.</p>
 </blockquote>
-<p>一个典型的有限维度的混合模型是一个分层的模型，有着如下的<code>components</code>:</p>
+<p>贝叶斯推理是一种统计推理方法，利用贝叶斯定理更新假设的概率，来获得更多的证据与信息。贝叶斯推理是统计学尤其是数理统计中的一项重要技术。贝叶斯更新在对于序列化数据的动态分析中非常重要。贝叶斯推断被广泛应用于科学研究，工程等领域。在决策理论哲学中，贝叶斯推理与主观概率密切相关，经常被称为贝叶斯概率。</p>
+<h1 id="贝叶斯规则简介introduction-to-bayes-rule">贝叶斯规则简介(<code>Introduction to Bayes' rule</code>)</h1>
+<h2 id="形式化解释formal-explanation">形式化解释(<code>Formal explanation</code>)</h2>
+<blockquote>
+<p>Bayesian inference derives the posterior probability as a consequence of two antecedents: a prior probability and a &ldquo;likelihood function&rdquo; derived from a statistical model for the observed data. Bayesian inference computes the posterior probability according to Bayes' theorem.</p>
+</blockquote>
+<p>贝叶斯推理根据两个前因式的结果来得到后验概率：一个<strong>先验概率</strong>；一个由观测数据的统计模型得出的<strong>似然函数</strong>。贝叶斯推理根据贝叶斯公式来计算后验概率。</p>
+<p>贝叶斯公式：</p>
+<pre><code class="language-math" data-lang="math">P(H|E) = \frac{{P(E|H) \cdot P(H)}}{{P(E)}}
+</code></pre><p>上述公式中：</p>
 <ul>
-<li><code>$N$</code>个被观测的随机变量<code>random variables</code>，每个随机变量都按<code>$K$</code>个子分布(<code>component</code>)构成的混合模型而分布，这些子分布都属于同一类分布，但是具体的参数值不同。</li>
-<li><code>$N$</code>个隐变量<code>latent variables</code>，每一个隐变量都说明了对应的随机变量所属的子分布是哪一个。每一个隐变量都按<code>$K$</code>维分类分布（即隐变量的取值只有<code>$K$</code>个）</li>
-<li><code>$K$</code>个混合权重，每个混合权重指定了某个子分布所占的总体的权重。混合权重的和加起来应等于1.</li>
-<li><code>$K$</code>个参数组，每一个参数组都对应着一个子分布。如高斯混合模型中，每个参数组中的参数有均值和方差。</li>
+<li><code>$H$</code>代表其概率可能受到数据（下称证据<em>evidence</em>)影响的任何假设。通常这些假设是相互竞争的，而我们的任务就是决定哪一个是最有可能的。</li>
+<li><code>$P(H)$</code>,<strong>先验概率</strong>(<em>prior probability</em>),是在数据<code>$E$</code>（即当前得到的证据）被观测到前，对假设<code>$H$</code>的概率估计。</li>
+<li><code>$E$</code>,即<strong>证据</strong>(<em>evidence</em>),指那些未被用于计算先验概率的新数据。</li>
+<li><code>$P(H|E)$</code>，<strong>后验概率</strong>（<em>posterior probability</em>），是指<code>$H$</code>给予<code>$E$</code>以后的概率，即在观测到证据<code>$E$</code>以后，更新的概率。后验概率就是我们想要得到的：在当前观测到的证据下，某个假设发生的概率有多大。</li>
+<li><code>$P(E|H)$</code>, 是在假设<code>$H$</code>的前提下观测到证据<code>$E$</code>的概率，被称为<strong>似然函数</strong>(<em>likelihood</em>)。作为固定<code>$H$</code>下<code>$E$</code>的函数，它体现了当前证据与给定假设的相容性。似然函数是证据<code>$E$</code>的函数，而后验概率是假设<code>$H$</code>的函数。</li>
+<li><code>$P(E)$</code>，被称作<strong>边际似然函数</strong>或者<strong>模型证据</strong>。该因子对所有被考虑到的可能的假设都相同（可以明显的看出，符号表达式中并没有<code>$H$</code>），所以该因子不会影响各个假设间的相对概率。</li>
 </ul>
-<p>此外，在贝叶斯假设下，混合权重和参数组将本身就是随机变量，每个都会有一个先验分布。在这种情况下，混合权重可以被视为一个<code>$K$</code>维的随机向量，由狄利克雷分布(分类分布的共轭先验)得出，而参数组将根据各自的先验共轭分布而分布。（关于先验概率与后验概率在这里不表。）</p>
-<p>从数学角度出发，一个基础的参数化的混合模型可以被以下参数所描述：
-<img src="B3A612BB18074788B100784FCB4F70D9" alt="image"  /></p>
-<p>参数解读：<br>
-<code>$K$</code> 表示<code>mixture component</code>的个数，即混合分布中子分布的个数。<br>
-<code>$N$</code> 表示被观测的随机变量的个数。<br>
-<code>${\theta _{{\rm{i}} = 1...K}}$</code>表示第<code>$i$</code>个子分布<code>component</code>的参数值。<br>
-<code>${\phi _{{\rm{i}} = 1...K}}$</code>表示混合权重，即某个具体的子分布<code>component</code>的先验概率。<br>
-<code>$\Phi$</code>表示由<code>${\phi _{{\rm{i}} = 1...K}}$</code>组成的K维向量，和为1.<br>
-<code>${z _{{\rm{i}} = 1...N}}$</code>表示第<code>$i$</code>个观测值所属的<code>component</code>(子分布)。<br>
-<code>${x _{{\rm{i}} = 1...N}}$</code>表示第<code>$i$</code>个观测的随机变量。<br>
-<code>$F(x|\theta )$</code>表示某个被观测的随机变量在参数组为<code>$\theta$</code>下的概率分布。<br>
-<code>${z _{{\rm{i}} = 1...N}}$</code>服从以<code>$\Phi$</code>为概率的分类分布（共<code>$K$</code>类）。 即：<code>${z_{i = 1...N}} \sim Categorical(\Phi )$</code><br>
-<code>${x_{i = 1...N}}|{z_{i = 1...N}}$</code> 服从<code>$F(\theta _{z_i} )$</code>，即随机变量<code>$x_i$</code>服从其对应<code>component</code>（子分布）<code>$z_i$</code>的参数组<code>$\theta _{z_i}$</code>指定的概率分布。</p>
-<p><strong>注意</strong>：以上参数都是在不是在贝叶斯假设下的。</p>
-<p>在贝叶斯假设下，所有参数都与随机变量相关，如下图：
-<img src="A57CC57659D44B56BF8FA958F4FC5603" alt="image"  /></p>
-<p>参数解读：<br>
-<code>$K$</code>： 同上<br>
-<code>$N$</code>： 同上<br>
-<code>$\theta _{i=1...K}$</code>： 同上<br>
-<code>$\phi _{i=1...K}$</code>： 同上<br>
-<code>$\Phi$</code>： 同上<br>
-<code>$z _{i=1...N}$</code>：同上<br>
-<code>$x_{i=1...N}$</code>：同上<br>
-<code>$F(x|\theta)$</code>：同上<br>
-<code>$\alpha$</code>：各子分布<code>component</code>参数的共用的超参数<br>
-<code>$\beta$</code>: 混合权重的共用的超参数<br>
-<code>$H(\theta|\alpha)$</code>： 子分布<code>component</code>参数的先验概率分布，基于参数<code>$\alpha$</code>。<br>
-<code>$\theta _{i=1...K}$</code>： 服从概率分布<code>$H(\theta|\alpha)$</code>,即<code>$ \theta _ {i=1...K} \sim H(\theta|\alpha)$</code><br>
-<code>$\Phi$</code>： 服从<code>$Symmetric-Dirichlet _K(\beta)$</code>分布。<br>
-<code>$z_{i=1...N}|\Phi$</code>：服从<code>$Categorical(\phi)$</code>，即以<code>$\Phi$</code>为概率的分类分布。<br>
-<code>$x_{i=1...N}|z_{i=1...N},\theta_{i=1...K}$</code>：服从<code>$F(\theta_{z_i})$</code>的分布。</p>
-<p>我们使用<code>$F$</code>和<code>$H$</code>来对观测值和参数进行任意描述。一般来说，<code>$H$</code>是<code>$F$</code>的共轭先验。两个最常见的<code>$F$</code>的选择是：高斯分布，即正态分布（对实值观测值），或者是分类分布（对离散观测值）。其他常见的可以作为混合组件的概率分布有：</p>
+<p>对于不同的<code>$H$</code>，只有<code>$P(H)$</code>和<code>$P(E|H)$</code>这两项在分子上的因子会影响后验概率<code>$P(H|E)$</code>的值。也就是说，后验概率与其先验概率（固有的可能性）和新获得的似然函数（与新获得的证据的相容性）成正比。</p>
+<p>贝叶斯规则也可以被写成如下形式：</p>
+<pre><code class="language-math" data-lang="math">\frac{{P(E|H)P(H)}}{{P(E)}} = \frac{{P(E|H)P(H)}}{{P(E|H)P(H) + P(E|\neg H)P(\neg H)}} = \frac{1}{{1 + (\frac{1}{{P(H)}} - 1)\frac{{P(E|\neg H)}}{{P(E|H)}}}}
+</code></pre><p>这是由于：</p>
+<pre><code class="language-math" data-lang="math">P(E) = {P(E|H)P(H) + P(E|\neg H)P(\neg H)}  
+
+P(H)+P(\neg H)=1
+</code></pre><h1 id="贝叶斯推理的形式化描述formal-description-of-bayesian-inference">贝叶斯推理的形式化描述(<code>Formal description of Bayesian inference</code>)</h1>
+<h2 id="定义-definitions">定义 <code>Definitions</code></h2>
 <ul>
-<li>二项分布<code>Binomial distribution</code>: 对于某一事物总数固定，统计其<code>positive occurrence</code>。如投票等。</li>
-<li>多项分布<code>Multinomial distribution</code>： 类似于二项分布，不过事情的结果可能不止有两个。</li>
-<li>负二项分布<code>Negative binomial distribution</code>： 对于二项分布类型的观测值，感兴趣的是在某个给定的次数的<code>positive</code>结果出现前，<code>negative</code>结果出现的次数。</li>
-<li>泊松分布<code>Poisson distribution</code>：统计某一事件在给定时间内发生的次数，该事件具有固定的发生率。</li>
-<li>指数分布<code>Exponential distribution</code>：某个事件下一次出现所需要的的时间的分布，该事件具有固定的发生率。</li>
-<li>对数正态分布<code>Log-normal distribution</code>： 用于那些假定呈指数增长的正实数，如收入或者价格。</li>
-<li>多元正态分布<code>Multivariate normal distribution</code>：即多元高斯分布。结果向量的每一个分量都是一个高斯分布。</li>
-<li>多元t分布<code>Multivariate Student's-t distribution</code>：用于重尾相关结果的向量。</li>
-<li>伯努利分布值的向量，对应于例如黑白图像，每个值代表一个像素，可应用于手写识别。</li>
+<li><code>$x$</code>： 一个数据点，事实上可能是一个值向量<code>vector</code>。</li>
+<li><code>$\theta$</code>，数据点所对应的分布的参数，即<code>$x \sim p(x|\theta)$</code>。事实上，<code>$\theta$</code>可能是许多参数组成的向量。</li>
+<li><code>$\alpha$</code>，参数分布的超参数，即<code>$\theta \sim p(\theta | \alpha)$</code>。可能是由很多超参数构成的一个向量。</li>
+<li><code>$X$</code>代表采样，一个由<code>$n$</code>个观测的数据点构成的集合。即<code>$x_1,...,x_n$</code></li>
+<li><code>${\tilde x}$</code>，一个新的数据点，其分布需要被预测。</li>
 </ul>
-<h2 id="非贝叶斯假设下的高斯混合模型">非贝叶斯假设下的高斯混合模型</h2>
-<p>其各个参数为：<br>
-<img src="16877F0AFF554BAB959BFBDFE1B7E062" alt="image"  /></p>
-<p>对应上文很容易理解，不再赘述。<br>
-图示：
-<img src="78680242A7444DDF9DA77D19A51FFB16" alt="image"  /></p>
-<h2 id="贝叶斯假设下的高斯混合模型">贝叶斯假设下的高斯混合模型</h2>
-<p>其各个参数为：</p>
-<p><img src="13052BB3F4344EC1A6E698E3FBDDE94E" alt="image"  /></p>
-<p>其中值得特殊说明的是：<br>
-<code>${\mu _0},\lambda ,\nu ,\sigma _0^2$</code>: 是<code>$\theta$</code>即<code>$\mu $</code>与<code>$\sigma$</code>共享的超参数。<br>
-<code>$\mu_{i=1...K}$</code>：<code>$\mu_{i=1...K} \sim N(\mu_0,\lambda\sigma _i^2)$</code>,即参数<code>$\mu$</code>服从以<code>$mu_0,\lambda\sigma _i^2$</code>为参数的高斯分布。<br>
-<code>$\sigma_{i=1...K}^2$</code>：<code>$\sigma_{i=1...K}^2 \sim Inverse-Gamma(\nu,\sigma_0^2)$</code>。</p>
-<h2 id="多元高斯混合模型">多元高斯混合模型</h2>
-<p>一个贝叶斯高斯混合模型常常被推广去拟合未知的参数向量(下面用粗体表示），或者多元正态分布。在多元分布中（即对具有<code>$N$</code>个随机变量的向量<code>$\bm{x}$</code>），我们可以使用高斯混合模型的先验分布的矢量估计来对该<code>$\bm{x}$</code>进行建模：<br>
-<img src="35B511A935934CA78E4C6A1C3CCDAA2F" alt="image"  /></p>
-<p>其中第<code>$i$</code>个向量子分布<code>component</code>被权重为<code>${\phi _i}$</code>,方差为<code>$\bm{\mu}$</code>，协方差矩阵为<code>$\bm{\sum _i}$</code>的正态分布所定义。为了将这个先验分布纳入贝叶斯估计，这个先验要与已知的分布<code>$p(\bm{x}|\bm{\theta})$</code>相乘，该分布是数据<code>$\bm{x}$</code>在待估参数<code>$\bm{\theta}$</code>上的分布。根据如上阐述，那么后验分布<code>$p(\bm{\theta}|\bm{x})$</code>也是一个高斯混合分布：</p>
-<pre><code class="language-math" data-lang="math">p(\bm{\theta} |\bm{x}) = \sum\limits_{i = 1}^K {{{\tilde \phi }_i}N({\bm{\tilde \mu }_i},{\bm{\tilde \Sigma }_i})} 
-</code></pre><p>其中的参数：<code>${\tilde \phi }_i$</code>，<code>${\bm{\tilde \mu }_i}$</code>和<code>${\bm{\tilde \Sigma }_i}$</code>可以使用<strong>EM</strong>算法进行更新。虽然关于EM算法的参数更新已经很完善了，但是提供对这些参数的初始估计仍然是一个十分活跃的研究领域。必须说明的是，该公式产生了一个完全后验分布的一个封闭形式的解。随机变量<code>$\bm{\theta}$</code>的估计值可以通过取其中几个估计量的其中一个来获得，如取后验分布的均值或者最大值。</p>
+<h2 id="贝叶斯推理-bayesian-inference">贝叶斯推理 <code>Bayesian inference</code></h2>
+<ul>
+<li><strong>先验分布</strong> <em>prior distribution</em>，是指参数在没有任何新数据被观测到的情况下的概率分布，即<code>$p(\theta|\alpha)$</code>。先验分布可能不容易确定，在这种情况下，我们可以先采用<a class="link" href="https://en.wikipedia.org/wiki/Jeffreys_prior"  target="_blank" rel="noopener"
+    >Jeffrets Prior</a>去获得一个先验分布的初始值，然后使用观测到的数据进行更新迭代。</li>
+<li><strong>采样分布</strong> <em>sample distribution</em>，是指观测数据<code>$X$</code>在其参数条件下的分布，即<code>$p(X|\theta)$</code>，更确切的说，由于<code>$\theta$</code>服从参数条件<code>$\alpha$</code>下的概率分布，采样分布也可以写为<code>$p(X|\theta,\alpha)$</code>。但是为了不引起歧义与混淆，我们一般都写为<code>$p(X|\theta)$</code>。采样分布有时候也被称为<strong>似然函数</strong>, 尤其是当其被视为是参数<code>$\theta$</code>的函数时。有时候写作<code>$L(\theta|X) = p(X|\theta)$</code>。</li>
+<li><strong>边际似然函数</strong> <em>marginal likelihood</em>，有时也被称为证据<em>evidence</em>，是观测数据<code>marginalized out</code> <code>$\theta$</code>后得到的边缘分布，即<code>$p(X|\alpha ) = \int_\theta  {p(X|\theta )p(\theta |\alpha )d\theta }$</code></li>
+<li><strong>后验分布</strong> <em>posterior distribution</em> 是指在考虑新观测的数据后的参数分布。它由贝叶斯规则决定，形成了贝叶斯推理的核心。</li>
+</ul>
+<pre><code class="language-math" data-lang="math">p(\theta |X,\alpha ) = \frac{{p(\theta ,X,\alpha )}}{{p(X,\alpha )}} = \frac{{p(X|\theta ,\alpha )p(\theta ,\alpha )}}{{p(X|\alpha )p(\alpha )}} = \frac{{p(X|\theta ,\alpha )p(\theta |\alpha )}}{{p(X|\alpha )}} \propto p(X|\theta ,\alpha )p(\theta |\alpha )
+</code></pre><p>用语言描述就是：<strong>后验正比于先验乘以似然。</strong> <strong>后验等于似然乘以先验除以证据</strong>。</p>
+<blockquote>
+<p>&ldquo;posterior is proportional to likelihood times prior&rdquo;, or sometimes as &ldquo;posterior = likelihood times prior, over evidence&rdquo;</p>
+</blockquote>
+<h2 id="贝叶斯预测-bayesian-prediction">贝叶斯预测 <code>Bayesian Prediction</code></h2>
+<ul>
+<li><strong>后验预测分布</strong> <em>Posterior predictive distribution</em>，是新的数据点的概率分布。通过将后验概率边缘化而得到的。</li>
+</ul>
+<pre><code class="language-math" data-lang="math">p(\tilde x|X,\alpha ) = \int {p(\tilde x|\theta )p(\theta |X,\alpha )d\theta } 
+</code></pre><ul>
+<li><strong>先验预测分布</strong> <em>Prior predictive distribution</em>， 是新的数据点的概率分布，在先验概率上边缘化得到的。</li>
+</ul>
+<pre><code class="language-math" data-lang="math">p(\tilde x|\alpha ) = \int {p(\tilde x|\theta )p(\theta |\alpha )d\theta } 
+</code></pre><p>贝叶斯理论要求使用后验预测分布来进行预测推断，即预测新的，未观测到的数据点的分布。也就是说，<strong>不再将一个固定点作为预测结果，而是返回一个可能点的分布。</strong> 只有这样才能使用参数<code>$\theta$</code>的整个后验分布。相比之下，频率统计学中的预测常常需要寻找当前参数下的一个最优点估计，例如通过最大似然或者最大后验估计（MAP）。然后将这个最优点代入点的分布公式中。这样做的缺点是，它没有考虑任何参数的不确定性，所以会降低预测分布的方差。</p>
+<p>两种类型的预测分布都有复合概率分布的形式（所以才有边际似然函数）。事实上，如果先验分布是共轭先验，那么先验分布和后验分布便来自于同一族，可以很容易看出，先验预测分布和后验预测分布同样来自于同一族的复合分布。唯一的不同在于，后验预测分布使用超参数更新后的值，而先验预测分布使用先验分布中出现的超参数的值。</p>
 
 </section>
 
