@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>特征描述算子 on Codefmeister</title>
+    <link>https://codefmeister.github.io/tags/%E7%89%B9%E5%BE%81%E6%8F%8F%E8%BF%B0%E7%AE%97%E5%AD%90/</link>
+    <description>Recent content in 特征描述算子 on Codefmeister</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 02 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/%E7%89%B9%E5%BE%81%E6%8F%8F%E8%BF%B0%E7%AE%97%E5%AD%90/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Harris 角点</title>
+      <link>https://codefmeister.github.io/p/harris-%E8%A7%92%E7%82%B9/</link>
+      <pubDate>Tue, 02 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/harris-%E8%A7%92%E7%82%B9/</guid>
+      <description>Moravec Detector Moravec角点检测是第一个提出兴趣点(interest points)的Paper。它的主要思想是：以每个像素为中心，有一个固定的滑动窗口。该方法计算并在八个方向上（纵横以及斜对角）搜索每个像素的最小强度变化，如果最小值大于给定阈值，则检测出感兴趣点。
+其可以用数学公式表达为：$E(u, v)=\sum_{x, y} w(x, y)[I(x+u, y+v)-I(x, y)]^{2}$
+  $E(u,v)$代表像素中心$(x,y)$在偏移量$(u,v)$的方向上的强度变化。
+  $w(x,y)$是一个指示函数，当$(x,y)$在滑动窗口内时，为1，若在滑动窗口外，则为0.
+  $I(x,y)$指的是在像素点(x,y)处的光强或者说是灰度值。
+  值得说明的是，这个式子是Harris总结的。
+Harris Corner Detector Moravec存在着许多不足。非常重要的一点就是：由于对于灰度值变化的梯度判断是离散的进行在8个方向，所以不具有旋转不变性；同时还会出现误判，尤其是当一条线不平行于这八个方向时，线上的点也会被误检测为角点。
+为了进一步改进Moravec角点检测，Harris提出了著名的Harris角点检测。
+$$ \begin{aligned} &amp;amp;E(u, v)=\sum_{(x, y)} w(x, y)[I(x+u, y+v)-I(x, y)]^{2}\
+&amp;amp;\approx \sum_{(x, y)} w(x, y)\left[I(x, y)+\frac{\partial I}{\partial x}(x, y) u+\frac{\partial I}{\partial y}(x, y) v-I(x, y)\right]^{2}\qquad\text { (一阶泰勒展开) }\
+&amp;amp;\approx \sum_{(x, y)} w(x, y)\left[\frac{\partial I}{\partial x}(x, y) u+\frac{\partial I}{\partial y}(x, y) v\right]^{2} \qquad \text { (消除重复项) }\</description>
+    </item>
+    
+  </channel>
+</rss>

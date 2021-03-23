@@ -269,6 +269,7 @@ c_{i j}^{(k+1)}:=\zeta_{\text {iter }}\left(\boldsymbol{\Gamma}^{(k+1)}, \hat{\m
 $$</p>
 <h1 id="4network-architecture">4.Network Architecture</h1>
 <p>我们将提出的多视角配准算法实现为了一个深度神经网络，在这一节中，我们首先描述用于近似$\phi(\cdot)$, $\psi_{\text{init}}(\cdot)$, $\psi_{\text{iter}}(\cdot)$, $\zeta_{\text{init}}(\cdot)$和$\zeta_{\text{iter}}(\cdot)$的网络架构。随后再把它们集成为一个完全可微的，端到端的，可训练算法。</p>
+<h2 id="41-learned-correspondence-function">4.1 Learned correspondence function</h2>
 <p><strong>Learned correspondence function</strong>: 对对应关系函数$\phi(\cdot)$的近似拓展了一个最近提出的全卷积的三维特征描述子FCGF，和一个软分配层(soft assignment layer)。 FCGF在稀疏的张量上进行操作，通过一次pass，为稀疏点云中的每一个点计算得到一个32维的特征描述子。值得一提的是，我们对$\phi(\cdot)$的模拟可以用任何一个最近提出的基于学习的特征描述网络，如PPFNet等。之所以选择FCGF是由于其具有高准确性，而计算复杂度又很低。</p>
 <p>令$\mathbf{F_P},\mathbf{F_Q}$代表点云P，Q经过相同网络权重的FCGF(即shared)后得到的embedding特征。随后，每个点的对应关系${\phi(\cdot)}$可以通过在高维特征空间中的最近邻搜索(NN)而得到。 然而，这样一种hard assignment的选择规则不是可微分的。因此我们通过计算一个分类分布的概率向量$\mathbf{s}$，将最近邻选择(NN-selection)以概率的方式进行了re-form. 则点$\mathbf{p}$在点云$\mathbf{Q}$中的推测的对应关系被定义为：
 $$
@@ -283,7 +284,69 @@ $$
 &amp;\left.+0.5\left[m_{n}-\min _{k \in \mathcal{N}} d\left(\mathbf{f}_{j}, \mathbf{f}_{k}\right)\right]_{+}^{2} /\left|\mathcal{N}_{j}\right|\right}
 \end{aligned}
 $$
-其中$\mathcal{P}$</p>
+其中$\mathcal{P}$是FCGF的mini batch $N_{\text{FCGF}}$中所有positive pair的集合， 而$\mathcal{N}$是用于最难负例挖掘的随机采样得到的子集。$m_p = 0.1$和$m_n = 1.4$是positive pair 和 negative pair的margin.  关于这个part如果感到困惑的话，可以参考另一篇blog：<a class="link" href="https://blog.csdn.net/weixin_43977640/article/details/112642898"  target="_blank" rel="noopener"
+    >FCGF论文阅读笔记</a></p>
+<p>$\phi(\cdot)$ 详细的网络结构和训练设置，参数等如下：</p>
+<p>网络架构： FCGF特征描述子是在sparse tensor上的。三维数据的稀疏张量表示为坐标$C$和相关特征$F$的集合：</p>
+<p>$$
+C=\left[\begin{array}{cccc}
+x_{1} &amp; y_{1} &amp; z_{1} &amp; b_{1} \<br>
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \<br>
+x_{N} &amp; y_{N} &amp; z_{N} &amp; b_{N}
+\end{array}\right], F=\left[\begin{array}{c}
+\mathbf{f}_{1}^{T} \<br>
+\vdots \<br>
+\mathbf{f}_{N}^{T}
+\end{array}\right]
+\tag{1}
+$$</p>
+<p>其中$x_{i}, y_{i}, z_{i} \in \mathbb{Z}$是第i个三维坐标, $b_i$是batch的索引，为batch processing 提供了一个额外的维度，$\mathbf{f_i}$是与第i个点相关的特征。FCGF是使用Minkowski engine实现的，Minkowski engine是一个auto-differentiation库，它提供了对稀疏卷积的支持，并实现了所有基本的深度学习层。 我们采用了FCGF原本的全卷积网络设计，其结构如下图：</p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/LMPCR_fig4.png" alt="image"  /></p>
+<p>它使用了UNet架构，利用了skip connection 和 ResNet模块为每个点提取一个32维的特征描述子。为了得到独特的坐标$C$，我们使用在GPU上实现的体素网格下采样， voxel size $v := 2.5 \text{cm}$</p>
+<h2 id="42-deep-pairwise-registration">4.2 Deep pairwise registration</h2>
+<p>尽管FCGF的特征描述子的性能表现很好，还是会有一些假定的对应关系$\boldsymbol{\Gamma}^{\prime} \subset \boldsymbol{\Gamma}$ 将会是错误的。此外，inliers 和 outliers并不像噪音那样分布，而是呈现出某种规律性。因此我们的目标就是利用深度神经网络学习这种规律性。最近，人们提出了一些网络，用来表示用于过滤二维或三维特征对应关系的复杂权重函数。</p>
+<p>在这里，我们提出基于[46: Learning to find good correspondences] 用[68: Learning two-view correspondences and geometry using order-aware network]中的Order-aware block(顺序感知模块)，来扩展3D outlier 过滤网络[29: Robust point-wise correspondences for point cloud based deformation monitoring of natural scenes].  具体来说，我们创建了一个pairwise的配准模块 $f_{\theta}: \mathbb{R}^{N_{\mathbf{P}} \times 6} \mapsto \mathbb{R}^{N_{\mathbf{P}}}$， 其输入是假定的对应关系$\mathbf{\Gamma}$的坐标，输出是权重$\mathbf{w}:=\psi_{\text {init }}(\boldsymbol{\Gamma}):=\tanh \left(\operatorname{ReLU}\left(f_{\theta}(\mathbf{\Gamma})\right)\right)$。随后将权重$\mathbf{w}$与对应关系$\mathbf{\Gamma}$一起, 送入Eq.4的封闭解中去解得$\hat{\mathbf{R}}_{i j}$ 和 $\hat{\mathbf{t}}_{i j}$。 受到[53]和[68]的启发，我们在网络中添加了另一个配准模块$\psi_{\text{iter}}(\cdot)$，并将权重$\mathbf{w}$和点对之间的残差$\mathbf{r}$ append到原有的输入中去，服从于：$\mathbf{w}^{(k)} :=\psi_{i t e r}\left(\operatorname{cat}\left(\left[\boldsymbol{\Gamma}^{(k)}, \mathbf{w}^{(k-1)}, \mathbf{r}^{(k-1)}\right]\right)\right)$. 权重$\mathbf{w}^{(k)}$随后再次与初始对应关系$\mathbf{\Gamma}$一同被送入Eq.4的封闭解中，去获得refined 后的双视角刚体变换参数。 为了保证$f_{\theta}(\cdot)$的扰动不变性，在每个回归模块中均采用了一种类似PointNet的架构，其对每个单独的对应关系进行操作。因为每个branch只对单独的点对对应关系进行操作，局部的三维上下文信息便通过使用了symmetric context normalization[65] 和 order-aware filtering layers的中间层进行提取。 配准模块的详细架构在supplementary里有。 registration network的训练是通过对batch上的$N_{\mathrm{reg}}$个样例定义的配准误差进行监督的：
+$$
+\mathcal{L}_{\mathrm{reg}}=\alpha_{\mathrm{reg}} L_{\mathrm{class}}+\beta_{\mathrm{reg}} L_{\mathrm{trans}} \tag{10}
+$$</p>
+<p>其中$\mathcal{L}<em>{\mathrm{class}}$是普通的二元交叉熵损失函数(<!-- raw HTML omitted -->此处存疑？？分明不是分类任务，为何在这里用了二元交叉熵损失函数<!-- raw HTML omitted -->) ， 而 $\mathcal{L}</em>{\mathrm{trans}}$则定义如下：
+$$
+\mathcal{L}<em>{\text {trans }}=\frac{1}{N</em>{\text {reg }}} \sum_{(i, j)} \frac{1}{N_{\mathbf{P}}} \sum_{l=1}^{N_{\mathbf{P}}}\left|\hat{\mathbf{M}}_{i j} \otimes \mathbf{p}_{l}-\mathbf{M}_{i j}^{\mathrm{GT}} \otimes \mathbf{p}_{l}\right|_{2} \tag{11}
+$$</p>
+<p>$\mathcal{L}<em>{\mathrm{trans}}$用于惩罚与ground truth的偏移量。$\alpha</em>{\mathrm{reg}}$ 和 $\beta_{\mathrm{reg}}$是用于控制contribution的权重。</p>
+<h2 id="43-confidence-estimation-block">4.3 Confidence estimation block</h2>
+<p>在我们估计得到的相对刚体变换参数$\hat \mathbf{M}<em>{ij}$之间，图$\mathcal{G}$中的边encode了这些估计间的置信度$c</em>{ij}$。图中每个边encode的置信度都由两部分构成：(i) 两两刚体变换估计的局部置信度$c_{ij}^{\mathrm{local}}$. (ii) 从刚体变换同步(transformation synchronization)衍生得到的全局置信度$c_{ij}^{\mathrm{global}}$. 我们将$c_{ij}^{\mathrm{local}}$的估计任务视作一个分类任务，并认为其一些必要的信息包含在在registration block的倒数第二层的特征中。 令$\mathbf{X}_{i j}^{\text {conf }}=f_{\theta}^{(-2)}(\cdot)$ 表示registration block中的倒数第二层的输出。 我们提出了一个 *overlap pooling layer* 重叠池化层来通过加权平均池化提取全局特征$\mathbf{x}_{i j}^{\mathrm{conf}}$:
+$$
+\mathbf{x}_{i j}^{\mathrm{conf}}=\mathbf{w}_{i j}^{\mathrm{T}} \mathbf{X}_{i j}^{\mathrm{conf}} \tag{12}
+$$</p>
+<p>得到的全局特征与inlier的比率$\delta_{i j}$(即权重比给定阈值高的点对对应关系的数量)进行concatenate。随后送入置信度估计网络，该网络由三个全连接层构成(129-64-32-1)，其后跟随一个ReLU激活函数。 所以local confidence局部置信度可以被表示为:
+$$
+c_{i j}^{\text {local }}:=\zeta_{\text {init }}(\boldsymbol{\Gamma}):=\operatorname{MLP}\left(\operatorname{cat}\left(\left[\mathbf{x}_{i j}^{\text {conf }}, \delta_{i j}\right]\right)\right) \tag{13}
+$$</p>
+<p>confidence estimation block置信度估计模块的训练由置信度损失函数(confidence loss function) $\mathcal{L}<em>{\mathrm{conf}} = \frac{1}{N} \sum</em>{(i, j)} \operatorname{BCE}\left(c_{i j}^{\text {local }}, c_{i j}^{\text {GT }}\right)$ 进行监督, 其中BCE指代二元交叉熵，ground truth confidence $c_{i j}^{\mathrm{GT}}$是在运行时，通过控制角度误差的阈值$\tau_{a} = \arccos \left(\frac{\operatorname{Tr}\left(\hat{\mathbf{R}}_{i j}^{T} \mathbf{R}_{i j}^{\mathrm{GT}}\right)-1}{2}\right)$来计算得到的。</p>
+<p><!-- raw HTML omitted -->在这里反思，原来作者所说的将其当做一个分类问题实质是上是一个二分类问题，$c_{ij}$的取值只有两个，要么是0， 要么是1。<!-- raw HTML omitted --></p>
+<p>$\zeta_{\text {init }}(\cdot)$函数计算得到了相对刚体变换参数的局部置信度。在另一方面，刚体变换同步层的输出(即全局刚体变换信息)提供了输入的相对刚体变换是如何与其他边之间保持全局一致的信息。 事实上，传统的同步算法[13,4,24]仅仅使用了其全局信息去在迭代中为每个边重新计算权重，原因在于他们并没有获得局部置信度的途径。相对刚体变换参数的全局置信度$c_{ij}^{\mathrm{global}}$可以被表示为柯西权重函数[33,4]：
+$$
+c_{i j}^{\text {global }}=1 /\left(1+r_{i j}^{*} / b\right) \tag{14}
+$$
+其中$r_{i j}^{*}=\left|\hat{\mathbf{M}}_{i j}-\mathbf{M}_{i}^{*} \mathbf{M}_{j}^{*^{T}}\right|_{F}$， 跟随[33,4]的思想，$b=1.482 \gamma \operatorname{med}\left(\left|\mathbf{r}^{*}-\operatorname{med}\left(\mathbf{r}^{*}\right)\right|\right)$, 而$\mathrm{med}(\cdot)$代表一个平均算子(median operator)。$\mathbf{r}^*$ 是残差$r_{ij}^*$的向量表达形式。<!-- raw HTML omitted -->此处存疑，$\gamma$ 是啥？是对应关系？那这个怎么能混到实值计算里来呢？<!-- raw HTML omitted --> 由于局部置信度与全局置信度提供了关于相对刚体变换参数的完整信息，我们使用其调和平均数将其结合为一个联合置信度$c_{ij}$:
+$$
+c_{i j}:=\zeta_{i t e r}\left(c_{i j}^{\text {local }}, c_{i j}^{\text {global }}\right):=\frac{\left(1+\beta^{2}\right) c_{i j}^{\text {global }} \cdot c_{i j}^{\text {local }}}{\beta^{2} c_{i j}^{\text {global }}+c_{i j}^{\text {local }}} \tag{15}
+$$
+其中$\beta$用于平衡局部置信度与全局置信度估计的贡献度，是在训练中学习得到的。</p>
+<p><!-- raw HTML omitted -->仍存疑，这里与上面$c_{ij}^{\mathrm{local}}$的0,1判断显然矛盾。那么$c_{ij}^{\mathrm{local}}$到底怎么计算的？ 难道是误差$\tau$与阈值的比值？？<!-- raw HTML omitted --></p>
+<h2 id="44-end-to-end-multiview-3d-registration">4.4 End-to-end multiview 3D registration</h2>
+<p>网络中每个独立的part 按照下图所示，连接成为一个端到端的多视角三维配准算法。</p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/LMPCR_fig5.png" alt="image"  /></p>
+<p><!-- raw HTML omitted -->我们先对对每个子网络进行预训练(pretrain)， 然后再在3DMatch数据集上以端到端的方式，使用官方的训练测试集划分来微调整个模型<!-- raw HTML omitted -->。 在微调阶段我们使用$N_{\mathrm{FCGF}} = 4$来提取FCGF的特征，并从每个片段中随机采样2048个点的特征向量。这些feature被用于soft NN，来形成假定的$\left(\begin{array}{c}N_{\mathcal{S}} \ 2\end{array}\right)$组点对对应关系，随后被送入双视角配准网络。双视角配准的输出用于构建整个图，随后被输入刚体变换同步层。刚体变换参数迭代求精的过程共进行四次。我们使用联合多视角配准损失函数来对微调过程进行监督学习：
+$$
+\mathcal{L}=\mathcal{L}_{\mathrm{c}}+\mathcal{L}_{\mathrm{reg}}+\mathcal{L}_{\mathrm{conf}}+\mathcal{L}_{\mathrm{sync}} \tag{16}
+$$</p>
+<p>其中刚体变换同步损失函数$\mathcal{L}<em>{\text {sync }}$记做：
+$$
+\mathcal{L}</em>{\text {sync }}=\frac{1}{N} \sum_{(i, j)}\left(\left|\mathbf{R}_{i j}^{*}-\mathbf{R}_{i j}^{G T}\right|_{F}+\left|\mathbf{t}_{i j}^{*}-\mathbf{t}_{i j}^{G T}\right|_{2}\right) \tag{17}
+$$</p>
+<p>我们对网络参数微调的过程共进行了2400次迭代，使用Adam优化器，学习率为$5 \times 10 ^{-6}$</p>
 
 </section>
 
@@ -342,6 +405,18 @@ var katex_config = {
         <h2 class="section-title">Related contents</h2>
         <div class="related-contents">
             <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/rpm-net%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">RPM-Net论文阅读笔记</h2>
+        </div>
+    </a>
+</article>
                 
                     
 <article class="">

@@ -6,7 +6,18 @@
     <description>Recent content in 数学原理 on Codefmeister</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 16 Dec 2020 09:40:49 +0800</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 06 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8E%9F%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Stochastic Matrix, Doubly Stochastic Matrix, Permutation Matrix</title>
+      <link>https://codefmeister.github.io/p/stochastic-matrix-doubly-stochastic-matrix-permutation-matrix/</link>
+      <pubDate>Sat, 06 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/stochastic-matrix-doubly-stochastic-matrix-permutation-matrix/</guid>
+      <description>Stochastic Matrix  Definition:
+In mathematics, a stochastic matrix is a square matrix used to describe the transitions of a Markov chain. Each of its entries is a nonnegative real number representing a probability. It is also called a probability matrix, transition matrix, substitution matrix, or Markov matrix. There are several different definitions and types of stochastic matrices
+A right stochastic matrix is a real square matrix, with each row summing to 1.</description>
+    </item>
+    
     <item>
       <title>Conv1d与Conv2d</title>
       <link>https://codefmeister.github.io/p/conv1d%E4%B8%8Econv2d/</link>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Abstract ICP算法可以解决刚体点云配准问题，其首先进行hard-assignment，寻找空间中的最近点对的对应关系。其次再解决最小二乘问题。 基于空间最近距离的hard-assignment 对于初始的位姿以及噪音和离群点十分敏感，所以鲁棒性不高，经常会收敛到局部最优。
+在此Paper中，作者提出了RPM-Net，一个对于初始刚体变换不敏感，同时更加鲁棒的，基于深度学习的点云配准方法。为了达到这个目的，作者使用了可微分的Sinkhorn层，随后利用从空间坐标和局部几何结构中学习得到的混合特征，退火(annealing)得到点对间的soft assignment软匹配结果。 同时，为了进一步的提高配准的精度，我们引入了一个二次网络，用于预测最优的退火(annealing)参数。 不同于目前已有的方法，RPM-Net可以处理缺失对应点对关系和部分重叠的点云。实验结果表明，RPM-Net可以达到state-of-art。
+Introduction 点云配准问题，是指给定的两帧未知对应点对关系的点云，寻找刚体变换关系，将其配准在一起。不论是获得点对之间的对应关系，还是得到刚体变换参数，都会使剩下的问题微不足道。
+ICP，广泛应用。 对初始变换关系和噪音和离群点敏感，容易收敛到局部最优。ICP算法的深度学习实现(Deep Closest Point)通过深度学习得到的特征来进行对应点对关系，使得其对初始位姿不敏感，但其仍对outliers不鲁棒， 同时对于部分重叠的点云无法很好的工作。
+为了解决ICP的问题，人们提出了许多方法。其中非常突出的一篇便是&amp;quot;RPM&amp;quot;，Robust Point Matching，它首先对点对对应关系进行soft assignment， 然后逐步通过确定的退火策略一步步harden 对应关系。纵然RPM比ICP更加鲁棒，但其仍然对于初始刚体变化十分敏感，容易陷入局部最优，原因在于其点对对应关系只是单独的从空间距离中得到的。另一方面，基于特征的方法避免了初始位姿的问题，其通过挖掘独特的keypoint，同时使用特征描述符对keypoint局部几何特征进行描述。使用这些keypoint进行match， 然后使用鲁棒的RANSAC（随机抽样一致性）策略，来鲁棒地计算出刚体变换关系。此类方法只对几何特征显著的点云效果很好。
+此Paper中提出了，基于深度学习的RPM策略，RPM-Net： 一个端到端的可微分的深度网络，不但保留了RPM对于噪音和离群点的鲁棒性，同时从学习到的特征距离而不是spatial的点对对应关系来对初始化进行脱敏处理。为了达到此目的，我们设计了一个特征提取网络，从逐点的空间坐标以及几何特征中，计算得到其混合特征。随后使用Sinkhorn层与退火策略，从混合特征中得到soft assignment.空间坐标与几何属性的混合，与从数据中的学习过程，改进了点对关系。这对初始化刚体变换关系进行了脱敏处理，同时增加了对于缺失对应点对关系以及部分重叠的点云之间的配准能力。类似于ICP算法以及其变种，RPM-Net也是迭代地对刚体变换进行求精。进一步，我们引入了一个子网络，基于当前的配准状态，来预测最优的退火参数。也就是说，我们的退火策略并不是固定好的某个模式，而是在学习过程中动态生成的。因为使用了混合特征，我们的算法可以在很小的几次迭代后就收敛。
+其贡献:
+ 其用于配准的网络架构 其引入的用于预测退火参数的子网络 提出一个改良的倒角距离度量Modified Chamfer distance metric， 用于度量部分重叠的配准质量。 对比实验  Background 该工作是基于RPM框架完成的，这里将简单介绍RPM的工作。
+首先定义一个Match Matrix匹配矩阵$\mathbf{M}={0,1}^{J \times K}$, 来表示点的对应关系的分配。其中每个元素： $$ m_{j k}=\left{\begin{array}{ll} 1 &amp;amp; \text { if point } \mathbf{x}_{j} \text { corresponds to } \mathbf{y}_{k} \
+0 &amp;amp; \text { otherwise } \end{array}\right. \tag{1} $$'><title>RPM-Net论文阅读笔记</title>
+
+<link rel='canonical' href='https://codefmeister.github.io/p/rpm-net%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='RPM-Net论文阅读笔记'>
+<meta property='og:description' content='Abstract ICP算法可以解决刚体点云配准问题，其首先进行hard-assignment，寻找空间中的最近点对的对应关系。其次再解决最小二乘问题。 基于空间最近距离的hard-assignment 对于初始的位姿以及噪音和离群点十分敏感，所以鲁棒性不高，经常会收敛到局部最优。
+在此Paper中，作者提出了RPM-Net，一个对于初始刚体变换不敏感，同时更加鲁棒的，基于深度学习的点云配准方法。为了达到这个目的，作者使用了可微分的Sinkhorn层，随后利用从空间坐标和局部几何结构中学习得到的混合特征，退火(annealing)得到点对间的soft assignment软匹配结果。 同时，为了进一步的提高配准的精度，我们引入了一个二次网络，用于预测最优的退火(annealing)参数。 不同于目前已有的方法，RPM-Net可以处理缺失对应点对关系和部分重叠的点云。实验结果表明，RPM-Net可以达到state-of-art。
+Introduction 点云配准问题，是指给定的两帧未知对应点对关系的点云，寻找刚体变换关系，将其配准在一起。不论是获得点对之间的对应关系，还是得到刚体变换参数，都会使剩下的问题微不足道。
+ICP，广泛应用。 对初始变换关系和噪音和离群点敏感，容易收敛到局部最优。ICP算法的深度学习实现(Deep Closest Point)通过深度学习得到的特征来进行对应点对关系，使得其对初始位姿不敏感，但其仍对outliers不鲁棒， 同时对于部分重叠的点云无法很好的工作。
+为了解决ICP的问题，人们提出了许多方法。其中非常突出的一篇便是&amp;quot;RPM&amp;quot;，Robust Point Matching，它首先对点对对应关系进行soft assignment， 然后逐步通过确定的退火策略一步步harden 对应关系。纵然RPM比ICP更加鲁棒，但其仍然对于初始刚体变化十分敏感，容易陷入局部最优，原因在于其点对对应关系只是单独的从空间距离中得到的。另一方面，基于特征的方法避免了初始位姿的问题，其通过挖掘独特的keypoint，同时使用特征描述符对keypoint局部几何特征进行描述。使用这些keypoint进行match， 然后使用鲁棒的RANSAC（随机抽样一致性）策略，来鲁棒地计算出刚体变换关系。此类方法只对几何特征显著的点云效果很好。
+此Paper中提出了，基于深度学习的RPM策略，RPM-Net： 一个端到端的可微分的深度网络，不但保留了RPM对于噪音和离群点的鲁棒性，同时从学习到的特征距离而不是spatial的点对对应关系来对初始化进行脱敏处理。为了达到此目的，我们设计了一个特征提取网络，从逐点的空间坐标以及几何特征中，计算得到其混合特征。随后使用Sinkhorn层与退火策略，从混合特征中得到soft assignment.空间坐标与几何属性的混合，与从数据中的学习过程，改进了点对关系。这对初始化刚体变换关系进行了脱敏处理，同时增加了对于缺失对应点对关系以及部分重叠的点云之间的配准能力。类似于ICP算法以及其变种，RPM-Net也是迭代地对刚体变换进行求精。进一步，我们引入了一个子网络，基于当前的配准状态，来预测最优的退火参数。也就是说，我们的退火策略并不是固定好的某个模式，而是在学习过程中动态生成的。因为使用了混合特征，我们的算法可以在很小的几次迭代后就收敛。
+其贡献:
+ 其用于配准的网络架构 其引入的用于预测退火参数的子网络 提出一个改良的倒角距离度量Modified Chamfer distance metric， 用于度量部分重叠的配准质量。 对比实验  Background 该工作是基于RPM框架完成的，这里将简单介绍RPM的工作。
+首先定义一个Match Matrix匹配矩阵$\mathbf{M}={0,1}^{J \times K}$, 来表示点的对应关系的分配。其中每个元素： $$ m_{j k}=\left{\begin{array}{ll} 1 &amp;amp; \text { if point } \mathbf{x}_{j} \text { corresponds to } \mathbf{y}_{k} \
+0 &amp;amp; \text { otherwise } \end{array}\right. \tag{1} $$'>
+<meta property='og:url' content='https://codefmeister.github.io/p/rpm-net%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
+<meta property='og:site_name' content='Codefmeister'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='深度学习' /><meta property='article:tag' content='点云配准' /><meta property='article:published_time' content='2021-01-31T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-01-31T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="RPM-Net论文阅读笔记">
+<meta name="twitter:description" content="Abstract ICP算法可以解决刚体点云配准问题，其首先进行hard-assignment，寻找空间中的最近点对的对应关系。其次再解决最小二乘问题。 基于空间最近距离的hard-assignment 对于初始的位姿以及噪音和离群点十分敏感，所以鲁棒性不高，经常会收敛到局部最优。
+在此Paper中，作者提出了RPM-Net，一个对于初始刚体变换不敏感，同时更加鲁棒的，基于深度学习的点云配准方法。为了达到这个目的，作者使用了可微分的Sinkhorn层，随后利用从空间坐标和局部几何结构中学习得到的混合特征，退火(annealing)得到点对间的soft assignment软匹配结果。 同时，为了进一步的提高配准的精度，我们引入了一个二次网络，用于预测最优的退火(annealing)参数。 不同于目前已有的方法，RPM-Net可以处理缺失对应点对关系和部分重叠的点云。实验结果表明，RPM-Net可以达到state-of-art。
+Introduction 点云配准问题，是指给定的两帧未知对应点对关系的点云，寻找刚体变换关系，将其配准在一起。不论是获得点对之间的对应关系，还是得到刚体变换参数，都会使剩下的问题微不足道。
+ICP，广泛应用。 对初始变换关系和噪音和离群点敏感，容易收敛到局部最优。ICP算法的深度学习实现(Deep Closest Point)通过深度学习得到的特征来进行对应点对关系，使得其对初始位姿不敏感，但其仍对outliers不鲁棒， 同时对于部分重叠的点云无法很好的工作。
+为了解决ICP的问题，人们提出了许多方法。其中非常突出的一篇便是&amp;quot;RPM&amp;quot;，Robust Point Matching，它首先对点对对应关系进行soft assignment， 然后逐步通过确定的退火策略一步步harden 对应关系。纵然RPM比ICP更加鲁棒，但其仍然对于初始刚体变化十分敏感，容易陷入局部最优，原因在于其点对对应关系只是单独的从空间距离中得到的。另一方面，基于特征的方法避免了初始位姿的问题，其通过挖掘独特的keypoint，同时使用特征描述符对keypoint局部几何特征进行描述。使用这些keypoint进行match， 然后使用鲁棒的RANSAC（随机抽样一致性）策略，来鲁棒地计算出刚体变换关系。此类方法只对几何特征显著的点云效果很好。
+此Paper中提出了，基于深度学习的RPM策略，RPM-Net： 一个端到端的可微分的深度网络，不但保留了RPM对于噪音和离群点的鲁棒性，同时从学习到的特征距离而不是spatial的点对对应关系来对初始化进行脱敏处理。为了达到此目的，我们设计了一个特征提取网络，从逐点的空间坐标以及几何特征中，计算得到其混合特征。随后使用Sinkhorn层与退火策略，从混合特征中得到soft assignment.空间坐标与几何属性的混合，与从数据中的学习过程，改进了点对关系。这对初始化刚体变换关系进行了脱敏处理，同时增加了对于缺失对应点对关系以及部分重叠的点云之间的配准能力。类似于ICP算法以及其变种，RPM-Net也是迭代地对刚体变换进行求精。进一步，我们引入了一个子网络，基于当前的配准状态，来预测最优的退火参数。也就是说，我们的退火策略并不是固定好的某个模式，而是在学习过程中动态生成的。因为使用了混合特征，我们的算法可以在很小的几次迭代后就收敛。
+其贡献:
+ 其用于配准的网络架构 其引入的用于预测退火参数的子网络 提出一个改良的倒角距离度量Modified Chamfer distance metric， 用于度量部分重叠的配准质量。 对比实验  Background 该工作是基于RPM框架完成的，这里将简单介绍RPM的工作。
+首先定义一个Match Matrix匹配矩阵$\mathbf{M}={0,1}^{J \times K}$, 来表示点的对应关系的分配。其中每个元素： $$ m_{j k}=\left{\begin{array}{ll} 1 &amp;amp; \text { if point } \mathbf{x}_{j} \text { corresponds to } \mathbf{y}_{k} \
+0 &amp;amp; \text { otherwise } \end{array}\right. \tag{1} $$">
+    </head>
+    <body class="">
+        <div class="container flex on-phone--column align-items--flex-start extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/Icon_hua25ec96b536dfdbbcc947accbc1cb594_86128_300x0_resize_q75_box.jpg" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://codefmeister.github.io">Codefmeister</a></h1>
+        <h2 class="site-description">Major in Computer science</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a href="https://codefmeister.github.io" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/rpm-net%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">RPM-Net论文阅读笔记</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Jan 31, 2021</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <h1 id="abstract">Abstract</h1>
+<p>ICP算法可以解决刚体点云配准问题，其首先进行hard-assignment，寻找空间中的最近点对的对应关系。其次再解决最小二乘问题。 基于空间最近距离的hard-assignment 对于初始的位姿以及噪音和离群点十分敏感，所以鲁棒性不高，经常会收敛到局部最优。</p>
+<p>在此Paper中，作者提出了RPM-Net，一个对于初始刚体变换不敏感，同时更加鲁棒的，基于深度学习的点云配准方法。为了达到这个目的，作者使用了可微分的Sinkhorn层，随后利用从空间坐标和局部几何结构中学习得到的混合特征，退火(annealing)得到点对间的soft assignment软匹配结果。 同时，为了进一步的提高配准的精度，我们引入了一个二次网络，用于预测最优的退火(annealing)参数。 不同于目前已有的方法，RPM-Net可以处理缺失对应点对关系和部分重叠的点云。实验结果表明，RPM-Net可以达到state-of-art。</p>
+<h1 id="introduction">Introduction</h1>
+<p>点云配准问题，是指给定的两帧未知对应点对关系的点云，寻找刚体变换关系，将其配准在一起。不论是获得点对之间的对应关系，还是得到刚体变换参数，都会使剩下的问题微不足道。</p>
+<p>ICP，广泛应用。 对初始变换关系和噪音和离群点敏感，容易收敛到局部最优。ICP算法的深度学习实现(Deep Closest Point)通过深度学习得到的特征来进行对应点对关系，使得其对初始位姿不敏感，但其仍对outliers不鲁棒， 同时对于部分重叠的点云无法很好的工作。</p>
+<p>为了解决ICP的问题，人们提出了许多方法。其中非常突出的一篇便是&quot;RPM&quot;，Robust Point Matching，它首先对点对对应关系进行soft assignment， 然后逐步通过确定的退火策略一步步harden 对应关系。纵然RPM比ICP更加鲁棒，但其仍然对于初始刚体变化十分敏感，容易陷入局部最优，原因在于其点对对应关系只是单独的从空间距离中得到的。另一方面，基于特征的方法避免了初始位姿的问题，其通过挖掘独特的keypoint，同时使用特征描述符对keypoint局部几何特征进行描述。使用这些keypoint进行match， 然后使用鲁棒的RANSAC（随机抽样一致性）策略，来鲁棒地计算出刚体变换关系。此类方法只对几何特征显著的点云效果很好。</p>
+<p>此Paper中提出了，基于深度学习的RPM策略，RPM-Net： 一个端到端的可微分的深度网络，不但保留了RPM对于噪音和离群点的鲁棒性，同时从学习到的特征距离而不是spatial的点对对应关系来对初始化进行脱敏处理。为了达到此目的，我们设计了一个特征提取网络，从逐点的空间坐标以及几何特征中，计算得到其混合特征。随后使用Sinkhorn层与退火策略，从混合特征中得到soft assignment.空间坐标与几何属性的混合，与从数据中的学习过程，改进了点对关系。这对初始化刚体变换关系进行了脱敏处理，同时增加了对于缺失对应点对关系以及部分重叠的点云之间的配准能力。类似于ICP算法以及其变种，RPM-Net也是迭代地对刚体变换进行求精。进一步，我们引入了一个子网络，基于当前的配准状态，来预测最优的退火参数。也就是说，我们的退火策略并不是固定好的某个模式，而是在学习过程中动态生成的。因为使用了混合特征，我们的算法可以在很小的几次迭代后就收敛。</p>
+<p>其贡献:</p>
+<ul>
+<li>其用于配准的网络架构</li>
+<li>其引入的用于预测退火参数的子网络</li>
+<li>提出一个改良的倒角距离度量Modified Chamfer distance metric， 用于度量部分重叠的配准质量。</li>
+<li>对比实验</li>
+</ul>
+<h1 id="background">Background</h1>
+<p>该工作是基于RPM框架完成的，这里将简单介绍RPM的工作。</p>
+<p>首先定义一个Match Matrix匹配矩阵$\mathbf{M}={0,1}^{J \times K}$, 来表示点的对应关系的分配。其中每个元素：
+$$
+m_{j k}=\left{\begin{array}{ll}
+1 &amp; \text { if point } \mathbf{x}_{j} \text { corresponds to } \mathbf{y}_{k} \<br>
+0 &amp; \text { otherwise }
+\end{array}\right. \tag{1}
+$$</p>
+<p>首先考虑每个点都有其对应点（即one to one）的情况，在这种情况下，$\mathbf{M}$是一个方阵。配准问题可以被表示为寻找将点云$\mathbf{X}$上的点映射到$\mathbf{Y}$的最优刚体变换关系${\mathbf{R}, \mathbf{t}}$ 和对应矩阵$\mathbf{M}$. 即：
+$$
+\underset{\mathbf{M}, \mathbf{R}, \mathbf{t}}{\arg \min } \sum_{j=1}^{J} \sum_{k=1}^{K} m_{j k}\left(\left|\mathbf{R} \mathbf{x}_{j}+\mathbf{t}-\mathbf{y}_{k}\right|_{2}^{2}-\alpha\right) \tag{2}
+$$
+且服从如下约束：
+$\sum_{k=1}^{K} m_{j k}=1, \forall j;  \sum_{j=1}^{J} m_{j k}=1, \forall k; m_{j k} \in{0,1}, \forall j k$.</p>
+<p>这三个约束使得$\mathbf{M}$成为一个置换矩阵 <em>Permutation Matrix</em>。 $\alpha$ 是控制对应关系数量的参数，用来拒绝离群点： 对于任意点对$\left(\mathbf{x}<em>{j}, \mathbf{y}</em>{k}\right)$, 如果其距离$\left|\mathbf{R} \mathbf{x}<em>{j}+\mathbf{t}-\mathbf{y}</em>{k}\right|<em>{2}^{2}&lt;\alpha$， 其会被考虑为inlier， 因为此时将$m</em>{jk}$设置为1，可以降低Eq.2的cost.</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+        
+            <a href="/tags/%E7%82%B9%E4%BA%91%E9%85%8D%E5%87%86/">点云配准</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+    integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+    integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+    crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+    integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.querySelector(`.article-content`));"></script>
+<script>
+var katex_config = {
+    delimiters: 
+    [
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false}
+    ]
+};
+</script>
+<script defer src="https://cdn.bootcss.com/KaTeX/0.11.1/contrib/auto-render.min.js" onload="renderMathInElement(document.body,katex_config)"></script>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">Related contents</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/fcgf%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">FCGF论文阅读笔记</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/learning-multiview-3d-point-cloud-registration/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Learning Multiview 3D point Cloud Registration</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/dcp%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">DCP论文阅读笔记</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/dgcnn%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">DGCNN论文解读</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "codefmeister" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 Codefmeister
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="1.1.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+            </main>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
+    integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin="anonymous"></script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<link rel="stylesheet" href="/css/highlight/light.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="/css/highlight/dark.min.css" media="(prefers-color-scheme: dark)">
+
+    </body>
+</html>

@@ -230,6 +230,11 @@ $$</p>
 <p><strong>Sparse fully-convolutional features:</strong> 全卷积网络纯粹由平移不变操作构成，例如卷积操作和基于元素的非线性操作。相似的，如果我们对一个稀疏张量应用一个稀疏的卷积网络，我们会得到一个稀疏的输出张量。我们将这个输出的张量叫做&quot;fully convolutional features&quot;。 我们使用一个带有skip connection 和 残差模块的UNet架构去提取fully convolutional features. 其架构如下图：</p>
 <p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/FGCF_fig1.png" alt="image"  /></p>
 <p>白色块代表着输入和输出层，每个block都由三个参数指定: kernel size, stride, channel dimensionality. 所有的卷积操作（除了最后一层）后都应用了一个batch norm和一个ReLU.</p>
+<p>如果对sparse tensor 和 dense tensor以及对应的卷积操作仍有些迷糊，可以看下图：</p>
+<p>Dense Tensor and its convolution</p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/FCGF_gif1.gif" alt="image"  /></p>
+<p>Sparse Tensor and its convolution</p>
+<p><img src="https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/FCGF_gif2.gif" alt="image"  /></p>
 <h1 id="4-fully-convolutional-metric-learning">4. Fully-convolutional Metric Learning</h1>
 <p>在本节中，我们首先简单回顾一些标准的度量学习损失函数，以及负样本挖掘技术(negative-mining)。随后，我们描述了在全卷积设置下的度量学习，提出了全卷积特征的变种(variants for fully-convolutional features) ， 其将负样本挖掘技术整合于二元误差(contrastive loss)和三元组误差(triplet loss)中。将这种新的loss称为“hardest-contrastive”和&quot;hardest-triplet&quot;.</p>
 <p>度量学习的出发点有两个约束：<!-- raw HTML omitted -->相似的feature之间要彼此很近。$D\left(\mathbf{f}<em>{i}, \mathbf{f}</em>{j}\right) \rightarrow 0 \quad \forall(i, j) \in \mathcal{P}$, 而不相似的特征之间的必须要有一个margin以上的距离。$D\left(\mathbf{f}<em>{i}, \mathbf{f}</em>{j}\right)&gt;m \quad \forall(i, j) \in \mathcal{N}$，<!-- raw HTML omitted --> 其中$D(\cdot, \cdot)$是距离度量函数。将之间的差距进行平方后就能得到一个标准的contrastive loss。但是Lin指出，positive pairs的约束太过严苛，$D\left(\mathbf{f}<em>{i}, \mathbf{f}</em>{j}\right) \rightarrow 0 \quad \forall(i, j) \in \mathcal{P}$，可能会导致过拟合，于是将0也替换为了一个Positive Margin。
@@ -326,6 +331,18 @@ var katex_config = {
         <h2 class="section-title">Related contents</h2>
         <div class="related-contents">
             <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/rpm-net%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">RPM-Net论文阅读笔记</h2>
+        </div>
+    </a>
+</article>
                 
                     
 <article class="">

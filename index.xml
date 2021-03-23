@@ -6,7 +6,163 @@
         <description>Recent content on Codefmeister</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Wed, 13 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 02 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Harris 角点</title>
+        <link>https://codefmeister.github.io/p/harris-%E8%A7%92%E7%82%B9/</link>
+        <pubDate>Tue, 02 Mar 2021 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/harris-%E8%A7%92%E7%82%B9/</guid>
+        <description>&lt;h1 id=&#34;moravec-detector&#34;&gt;Moravec Detector&lt;/h1&gt;
+&lt;p&gt;Moravec角点检测是第一个提出兴趣点(interest points)的Paper。它的主要思想是：以每个像素为中心，有一个固定的滑动窗口。该方法计算并在八个方向上（纵横以及斜对角）搜索每个像素的最小强度变化，如果最小值大于给定阈值，则检测出感兴趣点。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Moravec_fig1.png&#34; alt=&#34;Moravec示意图&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;其可以用数学公式表达为：$E(u, v)=\sum_{x, y} w(x, y)[I(x+u, y+v)-I(x, y)]^{2}$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$E(u,v)$代表像素中心$(x,y)$在偏移量$(u,v)$的方向上的强度变化。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$w(x,y)$是一个指示函数，当$(x,y)$在滑动窗口内时，为1，若在滑动窗口外，则为0.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$I(x,y)$指的是在像素点(x,y)处的光强或者说是灰度值。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;值得说明的是，这个式子是Harris总结的。&lt;/p&gt;
+&lt;h1 id=&#34;harris-corner-detector&#34;&gt;Harris Corner Detector&lt;/h1&gt;
+&lt;p&gt;Moravec存在着许多不足。非常重要的一点就是：由于对于灰度值变化的梯度判断是离散的进行在8个方向，所以不具有旋转不变性；同时还会出现误判，尤其是当一条线不平行于这八个方向时，线上的点也会被误检测为角点。&lt;/p&gt;
+&lt;p&gt;为了进一步改进Moravec角点检测，Harris提出了著名的Harris角点检测。&lt;/p&gt;
+&lt;p&gt;$$
+\begin{aligned}
+&amp;amp;E(u, v)=\sum_{(x, y)} w(x, y)[I(x+u, y+v)-I(x, y)]^{2}\&lt;br&gt;
+&amp;amp;\approx \sum_{(x, y)} w(x, y)\left[I(x, y)+\frac{\partial I}{\partial x}(x, y) u+\frac{\partial I}{\partial y}(x, y) v-I(x, y)\right]^{2}\qquad\text { (一阶泰勒展开) }\&lt;br&gt;
+&amp;amp;\approx \sum_{(x, y)} w(x, y)\left[\frac{\partial I}{\partial x}(x, y) u+\frac{\partial I}{\partial y}(x, y) v\right]^{2} \qquad \text { (消除重复项) }\&lt;br&gt;
+&amp;amp;=\sum_{x, y} w(x, y)\left(u^{2} f_{x}^{2}(x, y)+2 u v f_{x}(x, y) f_{y}(x, y)+v^{2} f_{y}^{2}(x, y)\right)\text {  }\&lt;br&gt;
+&amp;amp;\begin{array}{l}
+=\sum_{x, y} w(x, y)\left(u^{2} I_{x}^{2}+2 u v I_{x} I_{y}+v^{2} I_{y}^{2}\right)\qquad \text { (简化) } \&lt;br&gt;
+=\left[\begin{array}{ll}
+u &amp;amp; v
+\end{array}\right]\left(\sum w(x, y)\left[\begin{array}{cc}
+I_{x}^{2} &amp;amp; I_{x} I_{y} \&lt;br&gt;
+I_{x} I_{y} &amp;amp; I_{y}^{2}
+\end{array}\right]\right)\left[\begin{array}{l}
+u \&lt;br&gt;
+v
+\end{array}\right] \&lt;br&gt;
+=\left[\begin{array}{l}
+u \&lt;br&gt;
+v
+\end{array}\right]^{T} H\left[\begin{array}{l}
+u \&lt;br&gt;
+v
+\end{array}\right]
+\end{array}
+\end{aligned}
+$$
+可以看到，E的变化主要与H的大小相关。所以只需要分析H的变化就可以得到E的变化趋势。&lt;/p&gt;
+&lt;p&gt;图像梯度：$\Delta I(x, y)=\left(\frac{\partial I}{\partial x}(x, y), \frac{\partial I}{\partial y}(x, y)\right)$&lt;/p&gt;
+&lt;p&gt;Harris矩阵：$H=\left[\begin{array}{cc}\sum_{(x, y)} w(x, y)\left(\frac{\partial I}{\partial x}(x, y)\right)^{2} &amp;amp; \left.\sum_{(x, y)} w(x, y)\left(\frac{\partial I}{\partial x}(x, y)\right) \frac{\partial I}{\partial y}(x, y)\right) \ \left.\sum_{(x, y)} w(x, y)\left(\frac{\partial I}{\partial x}(x, y)\right) \frac{\partial I}{\partial y}(x, y)\right) &amp;amp; \sum_{(x, y)} w(x, y)\left(\frac{\partial I}{\partial y}(x, y)\right)^{2}\end{array}\right]$&lt;/p&gt;
+&lt;p&gt;w：表示权重，可以是0/1， 也可以是以点为中心的高斯权重。&lt;/p&gt;
+&lt;p&gt;图像的水平梯度与垂直梯度：$I_{x}=\frac{\partial I(x+u, y+v)}{\partial x} \quad I_{y}=\frac{\partial I(x+u, y+v)}{\partial y}$&lt;/p&gt;
+&lt;h2 id=&#34;harris矩阵的特征值分析&#34;&gt;Harris矩阵的特征值分析&lt;/h2&gt;
+&lt;p&gt;对于图像：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;平坦区域：梯度方向各异，但是梯度幅值变化不大&lt;/li&gt;
+&lt;li&gt;线性边缘：梯度幅值改变较大，梯度方向改变不大&lt;/li&gt;
+&lt;li&gt;角点：梯度方向和梯度幅值变化都较大&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$\mathbf{H}$就是Harris矩阵。对其进行奇异值分解，两个特征值分别反映互相垂直方向上的梯度变化情况，分别代表最快和最慢的方向。特征值大的变化快，特征值小的变化慢。&lt;/p&gt;
+&lt;p&gt;进行特征值分解：$S V D(H)=U \sum V,\left(\lambda_{1}, \lambda_{2}\right), \quad \lambda_{1}&amp;gt;\lambda_{2}$&lt;/p&gt;
+&lt;p&gt;那么就有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;特征值都比较大，则窗口中含有角点。&lt;/li&gt;
+&lt;li&gt;特征值一个比较大，一个比较小，则窗口中含有边缘线。&lt;/li&gt;
+&lt;li&gt;特征值都比较小，则处在平坦区域。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Morris_fig1.png&#34; alt=&#34;Morris检测&#34;  /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;harris角点准则&#34;&gt;Harris角点准则&lt;/h2&gt;
+&lt;p&gt;$$\operatorname{det} H=\lambda_{1} \lambda_{2}$$&lt;/p&gt;
+&lt;p&gt;$$\operatorname{trace} H=\lambda_{1}+\lambda_{2}$$&lt;/p&gt;
+&lt;p&gt;所以某点的响应函数：&lt;/p&gt;
+&lt;p&gt;$R=\operatorname{det}(H)-\operatorname{ktrace}(H)^{2}=\lambda_{1} \lambda_{2}-k\left(\lambda_{1}+\lambda_{2}\right)^{2}, k=0.04$&lt;/p&gt;
+&lt;p&gt;利用C与阈值比较判断，来判断其是否是角点。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$R&amp;lt;0$  边缘点&lt;/li&gt;
+&lt;li&gt;$R \approx 0$ 平坦点&lt;/li&gt;
+&lt;li&gt;$R &amp;gt; 0$ 角点&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;shi-tomasi-角点检测&#34;&gt;Shi-Tomasi 角点检测&lt;/h1&gt;
+&lt;p&gt;在Harris角点检测的基础上，Shi和Tomasi 在1993的一篇论文《Good Features to track》中提出了基于Harris角点检测的Shi-Tomasi方法。&lt;/p&gt;
+&lt;p&gt;Harris角点检测的稳定性与k值有关，而k是个经验值。不好设定。&lt;/p&gt;
+&lt;p&gt;在此基础上，Shi与Tomasi发现，焦点的稳定性与矩阵的娇小的特征值有关，直接使用较小的特征值作为分数。&lt;/p&gt;
+&lt;p&gt;所以：
+$R=\min \left(\lambda_{1}, \lambda_{2}\right)$&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Stochastic Matrix, Doubly Stochastic Matrix, Permutation Matrix</title>
+        <link>https://codefmeister.github.io/p/stochastic-matrix-doubly-stochastic-matrix-permutation-matrix/</link>
+        <pubDate>Sat, 06 Feb 2021 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/stochastic-matrix-doubly-stochastic-matrix-permutation-matrix/</guid>
+        <description>&lt;h1 id=&#34;stochastic-matrix&#34;&gt;Stochastic Matrix&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Definition:&lt;/p&gt;
+&lt;p&gt;In mathematics, a stochastic matrix is a square matrix used to describe the transitions of a Markov chain. Each of its entries is a nonnegative real number representing a probability. It is also called a probability matrix, transition matrix, substitution matrix, or Markov matrix. There are several different definitions and types of stochastic matrices&lt;/p&gt;
+&lt;p&gt;A right stochastic matrix is a real square matrix, with each row summing to 1.&lt;/p&gt;
+&lt;p&gt;A left stochastic matrix is a real square matrix, with each column summing to 1.&lt;/p&gt;
+&lt;p&gt;A doubly stochastic matrix is a square matrix of nonnegative real numbers with each row and column summing to 1&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;在数学上，随机矩阵Stochastic Matrix 是一个用于描述马尔科夫链转移的方阵，其每个元素都是一个非负实值，代表一个概率。 它也被称为 概率矩阵 Probability Matrix, 转移矩阵Transition Matrix, 替代矩阵 Substitution Matrix, 或者 马尔科夫矩阵 Markov Matrix.&lt;/p&gt;
+&lt;h2 id=&#34;right-stochastic-matrix&#34;&gt;Right stochastic matrix&lt;/h2&gt;
+&lt;p&gt;Right stochastic matrix 是一个实值方阵，其每一行的和是1.&lt;/p&gt;
+&lt;h2 id=&#34;left-stochastic-matrix&#34;&gt;Left stochastic matrix&lt;/h2&gt;
+&lt;p&gt;Left stochastic matrix 是一个实值方阵，其每一列的和是1.&lt;/p&gt;
+&lt;h2 id=&#34;doubly-stochastic-matrix&#34;&gt;Doubly stochastic matrix&lt;/h2&gt;
+&lt;p&gt;Doubly stochastic matrix 是一个方阵，其行列的和均为1.&lt;/p&gt;
+&lt;h1 id=&#34;permutation-matrix&#34;&gt;Permutation Matrix&lt;/h1&gt;
+&lt;p&gt;Permutation Matrix， 置换矩阵，是一种特殊的Doubly stochastic matrix. 其元素是0与1，置换矩阵的每一行和每一列都恰好有一个1，其余元素都是0&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>RPM-Net论文阅读笔记</title>
+        <link>https://codefmeister.github.io/p/rpm-net%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+        <pubDate>Sun, 31 Jan 2021 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/rpm-net%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+        <description>&lt;h1 id=&#34;abstract&#34;&gt;Abstract&lt;/h1&gt;
+&lt;p&gt;ICP算法可以解决刚体点云配准问题，其首先进行hard-assignment，寻找空间中的最近点对的对应关系。其次再解决最小二乘问题。 基于空间最近距离的hard-assignment 对于初始的位姿以及噪音和离群点十分敏感，所以鲁棒性不高，经常会收敛到局部最优。&lt;/p&gt;
+&lt;p&gt;在此Paper中，作者提出了RPM-Net，一个对于初始刚体变换不敏感，同时更加鲁棒的，基于深度学习的点云配准方法。为了达到这个目的，作者使用了可微分的Sinkhorn层，随后利用从空间坐标和局部几何结构中学习得到的混合特征，退火(annealing)得到点对间的soft assignment软匹配结果。 同时，为了进一步的提高配准的精度，我们引入了一个二次网络，用于预测最优的退火(annealing)参数。 不同于目前已有的方法，RPM-Net可以处理缺失对应点对关系和部分重叠的点云。实验结果表明，RPM-Net可以达到state-of-art。&lt;/p&gt;
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;点云配准问题，是指给定的两帧未知对应点对关系的点云，寻找刚体变换关系，将其配准在一起。不论是获得点对之间的对应关系，还是得到刚体变换参数，都会使剩下的问题微不足道。&lt;/p&gt;
+&lt;p&gt;ICP，广泛应用。 对初始变换关系和噪音和离群点敏感，容易收敛到局部最优。ICP算法的深度学习实现(Deep Closest Point)通过深度学习得到的特征来进行对应点对关系，使得其对初始位姿不敏感，但其仍对outliers不鲁棒， 同时对于部分重叠的点云无法很好的工作。&lt;/p&gt;
+&lt;p&gt;为了解决ICP的问题，人们提出了许多方法。其中非常突出的一篇便是&amp;quot;RPM&amp;quot;，Robust Point Matching，它首先对点对对应关系进行soft assignment， 然后逐步通过确定的退火策略一步步harden 对应关系。纵然RPM比ICP更加鲁棒，但其仍然对于初始刚体变化十分敏感，容易陷入局部最优，原因在于其点对对应关系只是单独的从空间距离中得到的。另一方面，基于特征的方法避免了初始位姿的问题，其通过挖掘独特的keypoint，同时使用特征描述符对keypoint局部几何特征进行描述。使用这些keypoint进行match， 然后使用鲁棒的RANSAC（随机抽样一致性）策略，来鲁棒地计算出刚体变换关系。此类方法只对几何特征显著的点云效果很好。&lt;/p&gt;
+&lt;p&gt;此Paper中提出了，基于深度学习的RPM策略，RPM-Net： 一个端到端的可微分的深度网络，不但保留了RPM对于噪音和离群点的鲁棒性，同时从学习到的特征距离而不是spatial的点对对应关系来对初始化进行脱敏处理。为了达到此目的，我们设计了一个特征提取网络，从逐点的空间坐标以及几何特征中，计算得到其混合特征。随后使用Sinkhorn层与退火策略，从混合特征中得到soft assignment.空间坐标与几何属性的混合，与从数据中的学习过程，改进了点对关系。这对初始化刚体变换关系进行了脱敏处理，同时增加了对于缺失对应点对关系以及部分重叠的点云之间的配准能力。类似于ICP算法以及其变种，RPM-Net也是迭代地对刚体变换进行求精。进一步，我们引入了一个子网络，基于当前的配准状态，来预测最优的退火参数。也就是说，我们的退火策略并不是固定好的某个模式，而是在学习过程中动态生成的。因为使用了混合特征，我们的算法可以在很小的几次迭代后就收敛。&lt;/p&gt;
+&lt;p&gt;其贡献:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;其用于配准的网络架构&lt;/li&gt;
+&lt;li&gt;其引入的用于预测退火参数的子网络&lt;/li&gt;
+&lt;li&gt;提出一个改良的倒角距离度量Modified Chamfer distance metric， 用于度量部分重叠的配准质量。&lt;/li&gt;
+&lt;li&gt;对比实验&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;background&#34;&gt;Background&lt;/h1&gt;
+&lt;p&gt;该工作是基于RPM框架完成的，这里将简单介绍RPM的工作。&lt;/p&gt;
+&lt;p&gt;首先定义一个Match Matrix匹配矩阵$\mathbf{M}={0,1}^{J \times K}$, 来表示点的对应关系的分配。其中每个元素：
+$$
+m_{j k}=\left{\begin{array}{ll}
+1 &amp;amp; \text { if point } \mathbf{x}_{j} \text { corresponds to } \mathbf{y}_{k} \&lt;br&gt;
+0 &amp;amp; \text { otherwise }
+\end{array}\right. \tag{1}
+$$&lt;/p&gt;
+&lt;p&gt;首先考虑每个点都有其对应点（即one to one）的情况，在这种情况下，$\mathbf{M}$是一个方阵。配准问题可以被表示为寻找将点云$\mathbf{X}$上的点映射到$\mathbf{Y}$的最优刚体变换关系${\mathbf{R}, \mathbf{t}}$ 和对应矩阵$\mathbf{M}$. 即：
+$$
+\underset{\mathbf{M}, \mathbf{R}, \mathbf{t}}{\arg \min } \sum_{j=1}^{J} \sum_{k=1}^{K} m_{j k}\left(\left|\mathbf{R} \mathbf{x}_{j}+\mathbf{t}-\mathbf{y}_{k}\right|_{2}^{2}-\alpha\right) \tag{2}
+$$
+且服从如下约束：
+$\sum_{k=1}^{K} m_{j k}=1, \forall j;  \sum_{j=1}^{J} m_{j k}=1, \forall k; m_{j k} \in{0,1}, \forall j k$.&lt;/p&gt;
+&lt;p&gt;这三个约束使得$\mathbf{M}$成为一个置换矩阵 &lt;em&gt;Permutation Matrix&lt;/em&gt;。 $\alpha$ 是控制对应关系数量的参数，用来拒绝离群点： 对于任意点对$\left(\mathbf{x}&lt;em&gt;{j}, \mathbf{y}&lt;/em&gt;{k}\right)$, 如果其距离$\left|\mathbf{R} \mathbf{x}&lt;em&gt;{j}+\mathbf{t}-\mathbf{y}&lt;/em&gt;{k}\right|&lt;em&gt;{2}^{2}&amp;lt;\alpha$， 其会被考虑为inlier， 因为此时将$m&lt;/em&gt;{jk}$设置为1，可以降低Eq.2的cost.&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>FCGF论文阅读笔记</title>
         <link>https://codefmeister.github.io/p/fcgf%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
         <pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate>
@@ -56,6 +212,11 @@ $$&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Sparse fully-convolutional features:&lt;/strong&gt; 全卷积网络纯粹由平移不变操作构成，例如卷积操作和基于元素的非线性操作。相似的，如果我们对一个稀疏张量应用一个稀疏的卷积网络，我们会得到一个稀疏的输出张量。我们将这个输出的张量叫做&amp;quot;fully convolutional features&amp;quot;。 我们使用一个带有skip connection 和 残差模块的UNet架构去提取fully convolutional features. 其架构如下图：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/FGCF_fig1.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
 &lt;p&gt;白色块代表着输入和输出层，每个block都由三个参数指定: kernel size, stride, channel dimensionality. 所有的卷积操作（除了最后一层）后都应用了一个batch norm和一个ReLU.&lt;/p&gt;
+&lt;p&gt;如果对sparse tensor 和 dense tensor以及对应的卷积操作仍有些迷糊，可以看下图：&lt;/p&gt;
+&lt;p&gt;Dense Tensor and its convolution&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/FCGF_gif1.gif&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;Sparse Tensor and its convolution&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/FCGF_gif2.gif&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
 &lt;h1 id=&#34;4-fully-convolutional-metric-learning&#34;&gt;4. Fully-convolutional Metric Learning&lt;/h1&gt;
 &lt;p&gt;在本节中，我们首先简单回顾一些标准的度量学习损失函数，以及负样本挖掘技术(negative-mining)。随后，我们描述了在全卷积设置下的度量学习，提出了全卷积特征的变种(variants for fully-convolutional features) ， 其将负样本挖掘技术整合于二元误差(contrastive loss)和三元组误差(triplet loss)中。将这种新的loss称为“hardest-contrastive”和&amp;quot;hardest-triplet&amp;quot;.&lt;/p&gt;
 &lt;p&gt;度量学习的出发点有两个约束：&lt;!-- raw HTML omitted --&gt;相似的feature之间要彼此很近。$D\left(\mathbf{f}&lt;em&gt;{i}, \mathbf{f}&lt;/em&gt;{j}\right) \rightarrow 0 \quad \forall(i, j) \in \mathcal{P}$, 而不相似的特征之间的必须要有一个margin以上的距离。$D\left(\mathbf{f}&lt;em&gt;{i}, \mathbf{f}&lt;/em&gt;{j}\right)&amp;gt;m \quad \forall(i, j) \in \mathcal{N}$，&lt;!-- raw HTML omitted --&gt; 其中$D(\cdot, \cdot)$是距离度量函数。将之间的差距进行平方后就能得到一个标准的contrastive loss。但是Lin指出，positive pairs的约束太过严苛，$D\left(\mathbf{f}&lt;em&gt;{i}, \mathbf{f}&lt;/em&gt;{j}\right) \rightarrow 0 \quad \forall(i, j) \in \mathcal{P}$，可能会导致过拟合，于是将0也替换为了一个Positive Margin。
@@ -180,6 +341,7 @@ c_{i j}^{(k+1)}:=\zeta_{\text {iter }}\left(\boldsymbol{\Gamma}^{(k+1)}, \hat{\m
 $$&lt;/p&gt;
 &lt;h1 id=&#34;4network-architecture&#34;&gt;4.Network Architecture&lt;/h1&gt;
 &lt;p&gt;我们将提出的多视角配准算法实现为了一个深度神经网络，在这一节中，我们首先描述用于近似$\phi(\cdot)$, $\psi_{\text{init}}(\cdot)$, $\psi_{\text{iter}}(\cdot)$, $\zeta_{\text{init}}(\cdot)$和$\zeta_{\text{iter}}(\cdot)$的网络架构。随后再把它们集成为一个完全可微的，端到端的，可训练算法。&lt;/p&gt;
+&lt;h2 id=&#34;41-learned-correspondence-function&#34;&gt;4.1 Learned correspondence function&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;Learned correspondence function&lt;/strong&gt;: 对对应关系函数$\phi(\cdot)$的近似拓展了一个最近提出的全卷积的三维特征描述子FCGF，和一个软分配层(soft assignment layer)。 FCGF在稀疏的张量上进行操作，通过一次pass，为稀疏点云中的每一个点计算得到一个32维的特征描述子。值得一提的是，我们对$\phi(\cdot)$的模拟可以用任何一个最近提出的基于学习的特征描述网络，如PPFNet等。之所以选择FCGF是由于其具有高准确性，而计算复杂度又很低。&lt;/p&gt;
 &lt;p&gt;令$\mathbf{F_P},\mathbf{F_Q}$代表点云P，Q经过相同网络权重的FCGF(即shared)后得到的embedding特征。随后，每个点的对应关系${\phi(\cdot)}$可以通过在高维特征空间中的最近邻搜索(NN)而得到。 然而，这样一种hard assignment的选择规则不是可微分的。因此我们通过计算一个分类分布的概率向量$\mathbf{s}$，将最近邻选择(NN-selection)以概率的方式进行了re-form. 则点$\mathbf{p}$在点云$\mathbf{Q}$中的推测的对应关系被定义为：
 $$
@@ -194,7 +356,69 @@ $$
 &amp;amp;\left.+0.5\left[m_{n}-\min _{k \in \mathcal{N}} d\left(\mathbf{f}_{j}, \mathbf{f}_{k}\right)\right]_{+}^{2} /\left|\mathcal{N}_{j}\right|\right}
 \end{aligned}
 $$
-其中$\mathcal{P}$&lt;/p&gt;
+其中$\mathcal{P}$是FCGF的mini batch $N_{\text{FCGF}}$中所有positive pair的集合， 而$\mathcal{N}$是用于最难负例挖掘的随机采样得到的子集。$m_p = 0.1$和$m_n = 1.4$是positive pair 和 negative pair的margin.  关于这个part如果感到困惑的话，可以参考另一篇blog：&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/weixin_43977640/article/details/112642898&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;FCGF论文阅读笔记&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;$\phi(\cdot)$ 详细的网络结构和训练设置，参数等如下：&lt;/p&gt;
+&lt;p&gt;网络架构： FCGF特征描述子是在sparse tensor上的。三维数据的稀疏张量表示为坐标$C$和相关特征$F$的集合：&lt;/p&gt;
+&lt;p&gt;$$
+C=\left[\begin{array}{cccc}
+x_{1} &amp;amp; y_{1} &amp;amp; z_{1} &amp;amp; b_{1} \&lt;br&gt;
+\vdots &amp;amp; \vdots &amp;amp; \vdots &amp;amp; \vdots \&lt;br&gt;
+x_{N} &amp;amp; y_{N} &amp;amp; z_{N} &amp;amp; b_{N}
+\end{array}\right], F=\left[\begin{array}{c}
+\mathbf{f}_{1}^{T} \&lt;br&gt;
+\vdots \&lt;br&gt;
+\mathbf{f}_{N}^{T}
+\end{array}\right]
+\tag{1}
+$$&lt;/p&gt;
+&lt;p&gt;其中$x_{i}, y_{i}, z_{i} \in \mathbb{Z}$是第i个三维坐标, $b_i$是batch的索引，为batch processing 提供了一个额外的维度，$\mathbf{f_i}$是与第i个点相关的特征。FCGF是使用Minkowski engine实现的，Minkowski engine是一个auto-differentiation库，它提供了对稀疏卷积的支持，并实现了所有基本的深度学习层。 我们采用了FCGF原本的全卷积网络设计，其结构如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/LMPCR_fig4.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;它使用了UNet架构，利用了skip connection 和 ResNet模块为每个点提取一个32维的特征描述子。为了得到独特的坐标$C$，我们使用在GPU上实现的体素网格下采样， voxel size $v := 2.5 \text{cm}$&lt;/p&gt;
+&lt;h2 id=&#34;42-deep-pairwise-registration&#34;&gt;4.2 Deep pairwise registration&lt;/h2&gt;
+&lt;p&gt;尽管FCGF的特征描述子的性能表现很好，还是会有一些假定的对应关系$\boldsymbol{\Gamma}^{\prime} \subset \boldsymbol{\Gamma}$ 将会是错误的。此外，inliers 和 outliers并不像噪音那样分布，而是呈现出某种规律性。因此我们的目标就是利用深度神经网络学习这种规律性。最近，人们提出了一些网络，用来表示用于过滤二维或三维特征对应关系的复杂权重函数。&lt;/p&gt;
+&lt;p&gt;在这里，我们提出基于[46: Learning to find good correspondences] 用[68: Learning two-view correspondences and geometry using order-aware network]中的Order-aware block(顺序感知模块)，来扩展3D outlier 过滤网络[29: Robust point-wise correspondences for point cloud based deformation monitoring of natural scenes].  具体来说，我们创建了一个pairwise的配准模块 $f_{\theta}: \mathbb{R}^{N_{\mathbf{P}} \times 6} \mapsto \mathbb{R}^{N_{\mathbf{P}}}$， 其输入是假定的对应关系$\mathbf{\Gamma}$的坐标，输出是权重$\mathbf{w}:=\psi_{\text {init }}(\boldsymbol{\Gamma}):=\tanh \left(\operatorname{ReLU}\left(f_{\theta}(\mathbf{\Gamma})\right)\right)$。随后将权重$\mathbf{w}$与对应关系$\mathbf{\Gamma}$一起, 送入Eq.4的封闭解中去解得$\hat{\mathbf{R}}_{i j}$ 和 $\hat{\mathbf{t}}_{i j}$。 受到[53]和[68]的启发，我们在网络中添加了另一个配准模块$\psi_{\text{iter}}(\cdot)$，并将权重$\mathbf{w}$和点对之间的残差$\mathbf{r}$ append到原有的输入中去，服从于：$\mathbf{w}^{(k)} :=\psi_{i t e r}\left(\operatorname{cat}\left(\left[\boldsymbol{\Gamma}^{(k)}, \mathbf{w}^{(k-1)}, \mathbf{r}^{(k-1)}\right]\right)\right)$. 权重$\mathbf{w}^{(k)}$随后再次与初始对应关系$\mathbf{\Gamma}$一同被送入Eq.4的封闭解中，去获得refined 后的双视角刚体变换参数。 为了保证$f_{\theta}(\cdot)$的扰动不变性，在每个回归模块中均采用了一种类似PointNet的架构，其对每个单独的对应关系进行操作。因为每个branch只对单独的点对对应关系进行操作，局部的三维上下文信息便通过使用了symmetric context normalization[65] 和 order-aware filtering layers的中间层进行提取。 配准模块的详细架构在supplementary里有。 registration network的训练是通过对batch上的$N_{\mathrm{reg}}$个样例定义的配准误差进行监督的：
+$$
+\mathcal{L}_{\mathrm{reg}}=\alpha_{\mathrm{reg}} L_{\mathrm{class}}+\beta_{\mathrm{reg}} L_{\mathrm{trans}} \tag{10}
+$$&lt;/p&gt;
+&lt;p&gt;其中$\mathcal{L}&lt;em&gt;{\mathrm{class}}$是普通的二元交叉熵损失函数(&lt;!-- raw HTML omitted --&gt;此处存疑？？分明不是分类任务，为何在这里用了二元交叉熵损失函数&lt;!-- raw HTML omitted --&gt;) ， 而 $\mathcal{L}&lt;/em&gt;{\mathrm{trans}}$则定义如下：
+$$
+\mathcal{L}&lt;em&gt;{\text {trans }}=\frac{1}{N&lt;/em&gt;{\text {reg }}} \sum_{(i, j)} \frac{1}{N_{\mathbf{P}}} \sum_{l=1}^{N_{\mathbf{P}}}\left|\hat{\mathbf{M}}_{i j} \otimes \mathbf{p}_{l}-\mathbf{M}_{i j}^{\mathrm{GT}} \otimes \mathbf{p}_{l}\right|_{2} \tag{11}
+$$&lt;/p&gt;
+&lt;p&gt;$\mathcal{L}&lt;em&gt;{\mathrm{trans}}$用于惩罚与ground truth的偏移量。$\alpha&lt;/em&gt;{\mathrm{reg}}$ 和 $\beta_{\mathrm{reg}}$是用于控制contribution的权重。&lt;/p&gt;
+&lt;h2 id=&#34;43-confidence-estimation-block&#34;&gt;4.3 Confidence estimation block&lt;/h2&gt;
+&lt;p&gt;在我们估计得到的相对刚体变换参数$\hat \mathbf{M}&lt;em&gt;{ij}$之间，图$\mathcal{G}$中的边encode了这些估计间的置信度$c&lt;/em&gt;{ij}$。图中每个边encode的置信度都由两部分构成：(i) 两两刚体变换估计的局部置信度$c_{ij}^{\mathrm{local}}$. (ii) 从刚体变换同步(transformation synchronization)衍生得到的全局置信度$c_{ij}^{\mathrm{global}}$. 我们将$c_{ij}^{\mathrm{local}}$的估计任务视作一个分类任务，并认为其一些必要的信息包含在在registration block的倒数第二层的特征中。 令$\mathbf{X}_{i j}^{\text {conf }}=f_{\theta}^{(-2)}(\cdot)$ 表示registration block中的倒数第二层的输出。 我们提出了一个 *overlap pooling layer* 重叠池化层来通过加权平均池化提取全局特征$\mathbf{x}_{i j}^{\mathrm{conf}}$:
+$$
+\mathbf{x}_{i j}^{\mathrm{conf}}=\mathbf{w}_{i j}^{\mathrm{T}} \mathbf{X}_{i j}^{\mathrm{conf}} \tag{12}
+$$&lt;/p&gt;
+&lt;p&gt;得到的全局特征与inlier的比率$\delta_{i j}$(即权重比给定阈值高的点对对应关系的数量)进行concatenate。随后送入置信度估计网络，该网络由三个全连接层构成(129-64-32-1)，其后跟随一个ReLU激活函数。 所以local confidence局部置信度可以被表示为:
+$$
+c_{i j}^{\text {local }}:=\zeta_{\text {init }}(\boldsymbol{\Gamma}):=\operatorname{MLP}\left(\operatorname{cat}\left(\left[\mathbf{x}_{i j}^{\text {conf }}, \delta_{i j}\right]\right)\right) \tag{13}
+$$&lt;/p&gt;
+&lt;p&gt;confidence estimation block置信度估计模块的训练由置信度损失函数(confidence loss function) $\mathcal{L}&lt;em&gt;{\mathrm{conf}} = \frac{1}{N} \sum&lt;/em&gt;{(i, j)} \operatorname{BCE}\left(c_{i j}^{\text {local }}, c_{i j}^{\text {GT }}\right)$ 进行监督, 其中BCE指代二元交叉熵，ground truth confidence $c_{i j}^{\mathrm{GT}}$是在运行时，通过控制角度误差的阈值$\tau_{a} = \arccos \left(\frac{\operatorname{Tr}\left(\hat{\mathbf{R}}_{i j}^{T} \mathbf{R}_{i j}^{\mathrm{GT}}\right)-1}{2}\right)$来计算得到的。&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;在这里反思，原来作者所说的将其当做一个分类问题实质是上是一个二分类问题，$c_{ij}$的取值只有两个，要么是0， 要么是1。&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;p&gt;$\zeta_{\text {init }}(\cdot)$函数计算得到了相对刚体变换参数的局部置信度。在另一方面，刚体变换同步层的输出(即全局刚体变换信息)提供了输入的相对刚体变换是如何与其他边之间保持全局一致的信息。 事实上，传统的同步算法[13,4,24]仅仅使用了其全局信息去在迭代中为每个边重新计算权重，原因在于他们并没有获得局部置信度的途径。相对刚体变换参数的全局置信度$c_{ij}^{\mathrm{global}}$可以被表示为柯西权重函数[33,4]：
+$$
+c_{i j}^{\text {global }}=1 /\left(1+r_{i j}^{*} / b\right) \tag{14}
+$$
+其中$r_{i j}^{*}=\left|\hat{\mathbf{M}}_{i j}-\mathbf{M}_{i}^{*} \mathbf{M}_{j}^{*^{T}}\right|_{F}$， 跟随[33,4]的思想，$b=1.482 \gamma \operatorname{med}\left(\left|\mathbf{r}^{*}-\operatorname{med}\left(\mathbf{r}^{*}\right)\right|\right)$, 而$\mathrm{med}(\cdot)$代表一个平均算子(median operator)。$\mathbf{r}^*$ 是残差$r_{ij}^*$的向量表达形式。&lt;!-- raw HTML omitted --&gt;此处存疑，$\gamma$ 是啥？是对应关系？那这个怎么能混到实值计算里来呢？&lt;!-- raw HTML omitted --&gt; 由于局部置信度与全局置信度提供了关于相对刚体变换参数的完整信息，我们使用其调和平均数将其结合为一个联合置信度$c_{ij}$:
+$$
+c_{i j}:=\zeta_{i t e r}\left(c_{i j}^{\text {local }}, c_{i j}^{\text {global }}\right):=\frac{\left(1+\beta^{2}\right) c_{i j}^{\text {global }} \cdot c_{i j}^{\text {local }}}{\beta^{2} c_{i j}^{\text {global }}+c_{i j}^{\text {local }}} \tag{15}
+$$
+其中$\beta$用于平衡局部置信度与全局置信度估计的贡献度，是在训练中学习得到的。&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;仍存疑，这里与上面$c_{ij}^{\mathrm{local}}$的0,1判断显然矛盾。那么$c_{ij}^{\mathrm{local}}$到底怎么计算的？ 难道是误差$\tau$与阈值的比值？？&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;h2 id=&#34;44-end-to-end-multiview-3d-registration&#34;&gt;4.4 End-to-end multiview 3D registration&lt;/h2&gt;
+&lt;p&gt;网络中每个独立的part 按照下图所示，连接成为一个端到端的多视角三维配准算法。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/LMPCR_fig5.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;我们先对对每个子网络进行预训练(pretrain)， 然后再在3DMatch数据集上以端到端的方式，使用官方的训练测试集划分来微调整个模型&lt;!-- raw HTML omitted --&gt;。 在微调阶段我们使用$N_{\mathrm{FCGF}} = 4$来提取FCGF的特征，并从每个片段中随机采样2048个点的特征向量。这些feature被用于soft NN，来形成假定的$\left(\begin{array}{c}N_{\mathcal{S}} \ 2\end{array}\right)$组点对对应关系，随后被送入双视角配准网络。双视角配准的输出用于构建整个图，随后被输入刚体变换同步层。刚体变换参数迭代求精的过程共进行四次。我们使用联合多视角配准损失函数来对微调过程进行监督学习：
+$$
+\mathcal{L}=\mathcal{L}_{\mathrm{c}}+\mathcal{L}_{\mathrm{reg}}+\mathcal{L}_{\mathrm{conf}}+\mathcal{L}_{\mathrm{sync}} \tag{16}
+$$&lt;/p&gt;
+&lt;p&gt;其中刚体变换同步损失函数$\mathcal{L}&lt;em&gt;{\text {sync }}$记做：
+$$
+\mathcal{L}&lt;/em&gt;{\text {sync }}=\frac{1}{N} \sum_{(i, j)}\left(\left|\mathbf{R}_{i j}^{*}-\mathbf{R}_{i j}^{G T}\right|_{F}+\left|\mathbf{t}_{i j}^{*}-\mathbf{t}_{i j}^{G T}\right|_{2}\right) \tag{17}
+$$&lt;/p&gt;
+&lt;p&gt;我们对网络参数微调的过程共进行了2400次迭代，使用Adam优化器，学习率为$5 \times 10 ^{-6}$&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -3150,6 +3374,35 @@ True返回最大值，False返回最小值。&lt;/p&gt;
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://codefmeister.github.io/p/</guid>
+        <description>&lt;h1 id=&#34;如何设置随机种子&#34;&gt;如何设置随机种子&lt;/h1&gt;
+&lt;h2 id=&#34;设置随机种子&#34;&gt;设置随机种子&lt;/h2&gt;
+&lt;p&gt;应该为torch, numpy,以及Python设置随机种子，并提高torch卷积精度。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;set_seed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;seed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;random&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;seed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;seed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;random&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;seed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;seed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;os&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;environ&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;PYTHONHASHSEED&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;str&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;seed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;manual_seed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;seed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cuda&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;manual_seed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;seed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cuda&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;manual_seed_all&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;seed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;backends&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cudnn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;deterministic&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;backends&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cudnn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;benchmark&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;bp&#34;&gt;False&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;设置随机种子之后仍然发现训练结果不同考虑是数据采样的问题&#34;&gt;设置随机种子之后，仍然发现训练结果不同？考虑是数据采样的问题&lt;/h2&gt;
+&lt;p&gt;背景： 数据集需要对数据进行随机采样。从全体数据中sample得到部分。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;踩坑： 在DataLoader中，num_worker会影响在已经设置好的随机种子下，对数据的采样结果，导致每次拿到的数据均不同。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解决方法：&lt;/strong&gt; 删除num_worker.&lt;/p&gt;
+&lt;p&gt;原始： 相同seed下，每次提取的数据都不一致。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span class=&#34;n&#34;&gt;trainLoader&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DataLoader&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dataset&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;batch_size&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;shuffle&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;num_worker&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;修改：相同seed下，每次随机得到的数据一致。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span class=&#34;n&#34;&gt;trainLoader&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DataLoader&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dataset&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;batch_size&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;shuffle&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;实验对比发现，即使num_worker=1，仍然会导致无法复现。原因分析，num_worker是用于数据提取的多线程数，多线程情况下线程同步问题会导致随机种子在多次实验中波动。删除num_worker即可。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;为什么要有tensorcontiguous&#34;&gt;为什么要有Tensor.contiguous()&lt;/h1&gt;
 &lt;h2 id=&#34;tensorcontiguous作用&#34;&gt;Tensor.contiguous()作用&lt;/h2&gt;
 &lt;blockquote&gt;
@@ -3573,6 +3826,89 @@ weights can be used to assign probabilities to observation vectors.&lt;/p&gt;
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://codefmeister.github.io/p/</guid>
+        <description>&lt;h1 id=&#34;corner-feature-detectorintensity-based&#34;&gt;Corner Feature Detector(Intensity-Based)&lt;/h1&gt;
+&lt;p&gt;基于光强比较的角点检测，直接比较光强（像素灰度值），而不计算梯度。所以实时性更好，所需的存储空间更小。&lt;/p&gt;
+&lt;h2 id=&#34;susan-角点检测&#34;&gt;SUSAN 角点检测&lt;/h2&gt;
+&lt;p&gt;SUSAN 全称Smallest univalue segment assimilating nucleus，最小核同值区。提出者Smith与Brady, 1997.&lt;/p&gt;
+&lt;p&gt;SUSAN 使用一个圆形模板和一个圆的中心点，通过圆的中心点象素值与模板圆内其他象素值的比较，统计出与圆中心点象素值近似的象素数量，当这样的象素数量小于某一阈值时，则该圆中心点就被认为是角点。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;圆形模板：通常是半径为3.5，37个像素的圆形&lt;/li&gt;
+&lt;li&gt;圆形模板中心点：圆心位置的像素&lt;/li&gt;
+&lt;li&gt;最小核同值区：像素值与圆心位置像素值接近的区域和（颜色接近的区域）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;有两种划分（了解）：&lt;/p&gt;
+&lt;p&gt;平滑划分：$c\left(\vec{r}, \vec{r}&lt;em&gt;{0}\right)=e^{-\left(\frac{I(r)-I\left(r&lt;/em&gt;{0}\right)}{t}\right)^{6}}$&lt;/p&gt;
+&lt;p&gt;直接划分：$c\left(\vec{r}, \vec{r}&lt;em&gt;{0}\right)=\left{\begin{array}{ll}1 &amp;amp; \text { if }\left|I(\vec{r})-I\left(\vec{r}&lt;/em&gt;{0}\right)\right| \leq t \ 0 &amp;amp; \text { if }\left|I(\vec{r})-I\left(\vec{r}_{0}\right)\right|&amp;gt;t\end{array}\right.$&lt;/p&gt;
+&lt;p&gt;像素个数：$n\left(x_{0}, y_{0}\right)=\sum_{(x, y) \neq\left(x_{0}, y_{0}\right)} c(x, y)$&lt;/p&gt;
+&lt;p&gt;像素个数与阈值$g$进行比较，以此判断角点。
+$$
+R\left(\vec{r}&lt;em&gt;{0}\right)=\left{\begin{array}{cc}
+g-n\left(\vec{r}&lt;/em&gt;{0}\right) &amp;amp; n\left(\vec{r}_{0}\right)&amp;lt;g \&lt;br&gt;
+0 &amp;amp; \text { otherwise }
+\end{array}\right.
+$$&lt;/p&gt;
+&lt;h2 id=&#34;fast-角点检测&#34;&gt;FAST 角点检测&lt;/h2&gt;
+&lt;p&gt;实时性好，不具有旋转不变性。&lt;/p&gt;
+&lt;p&gt;主要思想：比较中心像素与圆内（这里的圆内指的是圆边经过的像素）16个像素，如果圆内存在n个相邻的像素块都比中心像素的亮度$I_p$加上一个阈值$t$亮，或者都比$I_p - t$暗，则就判断其为角点。n通常选择为12. FAST uses binary comparison with each pixel along a circle pattern against the central pixel。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/FAST_fig1.png&#34; alt=&#34;FAST算法描述，Cover知乎@南沙渔阳&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;算法描述：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;以候选的像素角点为中心，画一个半径为3的圆，这样圆上就会有16个像素块。&lt;/li&gt;
+&lt;li&gt;比较pixel 1、pixel 9与中心像素的亮度值。如果它们距离$I_p$都在$p$的阈值内，即比$I_p + t$亮或比$I_p - t$暗，则该像素$p$不可能是角点。&lt;/li&gt;
+&lt;li&gt;如果未能排除角点可能性，则判断pixel 5、pixel 13（可以观察到5、13是正交于1和9的）。如果$p$是角点，那么在1,9,5,13中至少有3个像素全部比$I_p + t$亮或全部比$I_p - t$暗。如果未满足该条件，则像素$p$不可能是角点。&lt;/li&gt;
+&lt;li&gt;若还不能排除角点的可能性，则对所有16个像素块进行测试。判断n与12的大小。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在SUSAN上进行了改进，FAST效率极高，具有高重复性。但仍然存在一些问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;如果圆环上的16个像素，一半明显比中心暗，一半明显比中心亮，则也有可能是角点。但会被FAST拒绝。&lt;/li&gt;
+&lt;li&gt;检测器的相率取决于像素点判断的顺序，无法保证最优。&lt;/li&gt;
+&lt;li&gt;相邻的几个特征像素点容易被重复检测为角点（可以使用非极大值抑制）。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;fast-er-角点检测&#34;&gt;FAST-ER 角点检测&lt;/h2&gt;
+&lt;p&gt;FAST-ER，Rosten 2010年提出的对FAST算法的改进。&lt;/p&gt;
+&lt;p&gt;主要改进在于：使用ID3决策树策略对FAST进行了加速，使得其更快。&lt;/p&gt;
+&lt;p&gt;关于ID3决策树，可以参考：https://blog.csdn.net/weixin_43977640/article/details/114336485&lt;/p&gt;
+&lt;p&gt;每个像素点$x$都能将全部像素构成的集合$P$分为三个集合$P_d, P_b, P_s$，即比$I_p-t$暗，比$I_p+t$亮，与之类似。这样就可以根据像素点$x$来对决策树进行进一步的划分。&lt;/p&gt;
+&lt;p&gt;一个任意的角点集合的信息熵：
+$$
+H(Q)=(c+\bar{c}) \log _{2}(c+\bar{c})-c \log _{2} c-\bar{c} \log _{2} \bar{c}
+$$&lt;/p&gt;
+&lt;p&gt;$c$是集合中的角点数量，$\bar c$是集合中的非角点数量。就是传统的信息熵计算方法。只不过把概率拆开写了。&lt;/p&gt;
+&lt;p&gt;而依据$x$会将训练集中的全部像素构成的集合划分为三个子集，作者规定他们的贡献度都一样，所以$x$的信息增益：
+$$
+H_{g}=H(P)-H\left(P_{d}\right)-H\left(P_{s}\right)-H\left(P_{b}\right)
+$$&lt;/p&gt;
+&lt;p&gt;计算周围16个像素点的信息增益，选择增益最大的$x$，然后进一步递归构建决策树，直到递归结束。&lt;/p&gt;
+&lt;p&gt;这样构建出来的决策树可以正确分类训练集中的所有角点，因此非常近似地体现了FAST角点检测器的规则。&lt;/p&gt;
+&lt;h2 id=&#34;agast-角点检测&#34;&gt;AGAST 角点检测&lt;/h2&gt;
+&lt;p&gt;FAST-ER存在的问题：ID3是贪心算法，可能只是局部最优；构造的树为三叉树，对于机器来说二叉树效率更高。&lt;/p&gt;
+&lt;p&gt;AGAST通过在一个扩展的配置空间上训练一个最优的决策树，来优化角点判断的决策。&lt;/p&gt;
+&lt;p&gt;这篇Paper我没看。所以只简略说明一下。&lt;/p&gt;
+&lt;h2 id=&#34;orb&#34;&gt;ORB&lt;/h2&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;语言模型&#34;&gt;语言模型&lt;/h1&gt;
 &lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
 &lt;p&gt;DCP用到了&lt;code&gt;Transformer&lt;/code&gt;，其很多实现的Motivation都来自于Sq2Sq的启发。所以重新回顾学习语言模型。&lt;/p&gt;
@@ -3679,6 +4015,23 @@ P(H)+P(\neg H)=1
 &lt;p&gt;给定一组独立同分布的数据点&lt;code&gt;$X = ({x_1}, \ldots ,{x_n})$&lt;/code&gt;,其中&lt;code&gt;${x_i} \sim p({x_i}|\theta )$&lt;/code&gt;,&lt;code&gt;$p({x_i}|\theta )$&lt;/code&gt;是一个概率分布，其参数为&lt;code&gt;$\theta$&lt;/code&gt;，其中&lt;code&gt;$\theta$&lt;/code&gt;本身就是一个随机变量，可以用一个概率分布来描述，即&lt;code&gt;$\theta  \sim p(\theta |\alpha )$&lt;/code&gt;。而&lt;strong&gt;边际似然函数就是求概率&lt;code&gt;$p(X|\alpha)$&lt;/code&gt;是多少，其中参数&lt;code&gt;$\theta$&lt;/code&gt;被边缘化（&lt;em&gt;marginalized out&lt;/em&gt;)而消失&lt;/strong&gt;:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;p(X|\alpha ) = \int_\theta  {p(X|\theta )p(\theta |\alpha )d\theta } 
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;上述定义是在贝叶斯统计下提出的。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
+        <description>&lt;h1 id=&#34;今日收获&#34;&gt;今日收获&lt;/h1&gt;
+&lt;h2 id=&#34;收获&#34;&gt;收获&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;可以使用TopK来代替NearestNeighbor，可以加快计算的速度。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
+&lt;p&gt;今天的主要问题还是：KNN的反向传播问题。不论是KNN还是TopK，都无法反向传播梯度，为整体训练带来困难。&lt;/p&gt;
+&lt;p&gt;找到两个非常有用的网页：
+1.&lt;/p&gt;
 </description>
         </item>
         <item>

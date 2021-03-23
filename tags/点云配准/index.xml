@@ -6,7 +6,25 @@
     <description>Recent content in 点云配准 on Codefmeister</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 13 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/%E7%82%B9%E4%BA%91%E9%85%8D%E5%87%86/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 31 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://codefmeister.github.io/tags/%E7%82%B9%E4%BA%91%E9%85%8D%E5%87%86/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RPM-Net论文阅读笔记</title>
+      <link>https://codefmeister.github.io/p/rpm-net%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sun, 31 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/rpm-net%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Abstract ICP算法可以解决刚体点云配准问题，其首先进行hard-assignment，寻找空间中的最近点对的对应关系。其次再解决最小二乘问题。 基于空间最近距离的hard-assignment 对于初始的位姿以及噪音和离群点十分敏感，所以鲁棒性不高，经常会收敛到局部最优。
+在此Paper中，作者提出了RPM-Net，一个对于初始刚体变换不敏感，同时更加鲁棒的，基于深度学习的点云配准方法。为了达到这个目的，作者使用了可微分的Sinkhorn层，随后利用从空间坐标和局部几何结构中学习得到的混合特征，退火(annealing)得到点对间的soft assignment软匹配结果。 同时，为了进一步的提高配准的精度，我们引入了一个二次网络，用于预测最优的退火(annealing)参数。 不同于目前已有的方法，RPM-Net可以处理缺失对应点对关系和部分重叠的点云。实验结果表明，RPM-Net可以达到state-of-art。
+Introduction 点云配准问题，是指给定的两帧未知对应点对关系的点云，寻找刚体变换关系，将其配准在一起。不论是获得点对之间的对应关系，还是得到刚体变换参数，都会使剩下的问题微不足道。
+ICP，广泛应用。 对初始变换关系和噪音和离群点敏感，容易收敛到局部最优。ICP算法的深度学习实现(Deep Closest Point)通过深度学习得到的特征来进行对应点对关系，使得其对初始位姿不敏感，但其仍对outliers不鲁棒， 同时对于部分重叠的点云无法很好的工作。
+为了解决ICP的问题，人们提出了许多方法。其中非常突出的一篇便是&amp;quot;RPM&amp;quot;，Robust Point Matching，它首先对点对对应关系进行soft assignment， 然后逐步通过确定的退火策略一步步harden 对应关系。纵然RPM比ICP更加鲁棒，但其仍然对于初始刚体变化十分敏感，容易陷入局部最优，原因在于其点对对应关系只是单独的从空间距离中得到的。另一方面，基于特征的方法避免了初始位姿的问题，其通过挖掘独特的keypoint，同时使用特征描述符对keypoint局部几何特征进行描述。使用这些keypoint进行match， 然后使用鲁棒的RANSAC（随机抽样一致性）策略，来鲁棒地计算出刚体变换关系。此类方法只对几何特征显著的点云效果很好。
+此Paper中提出了，基于深度学习的RPM策略，RPM-Net： 一个端到端的可微分的深度网络，不但保留了RPM对于噪音和离群点的鲁棒性，同时从学习到的特征距离而不是spatial的点对对应关系来对初始化进行脱敏处理。为了达到此目的，我们设计了一个特征提取网络，从逐点的空间坐标以及几何特征中，计算得到其混合特征。随后使用Sinkhorn层与退火策略，从混合特征中得到soft assignment.空间坐标与几何属性的混合，与从数据中的学习过程，改进了点对关系。这对初始化刚体变换关系进行了脱敏处理，同时增加了对于缺失对应点对关系以及部分重叠的点云之间的配准能力。类似于ICP算法以及其变种，RPM-Net也是迭代地对刚体变换进行求精。进一步，我们引入了一个子网络，基于当前的配准状态，来预测最优的退火参数。也就是说，我们的退火策略并不是固定好的某个模式，而是在学习过程中动态生成的。因为使用了混合特征，我们的算法可以在很小的几次迭代后就收敛。
+其贡献:
+ 其用于配准的网络架构 其引入的用于预测退火参数的子网络 提出一个改良的倒角距离度量Modified Chamfer distance metric， 用于度量部分重叠的配准质量。 对比实验  Background 该工作是基于RPM框架完成的，这里将简单介绍RPM的工作。
+首先定义一个Match Matrix匹配矩阵$\mathbf{M}={0,1}^{J \times K}$, 来表示点的对应关系的分配。其中每个元素： $$ m_{j k}=\left{\begin{array}{ll} 1 &amp;amp; \text { if point } \mathbf{x}_{j} \text { corresponds to } \mathbf{y}_{k} \
+0 &amp;amp; \text { otherwise } \end{array}\right. \tag{1} $$</description>
+    </item>
+    
     <item>
       <title>FCGF论文阅读笔记</title>
       <link>https://codefmeister.github.io/p/fcgf%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
