@@ -2513,6 +2513,20 @@ for epoch in range(100):
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://codefmeister.github.io/p/</guid>
+        <description>&lt;h1 id=&#34;iverson-bracket&#34;&gt;Iverson Bracket&lt;/h1&gt;
+&lt;p&gt;Iverson Bracket 又称 艾弗森括号。常用方括号来表示。满足括号内的条件则值为1， 不满足条件则值为0.&lt;/p&gt;
+&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
+&lt;p&gt;$$
+\hat{\mathbf{R}}, \hat{\mathbf{t}}=\arg \max &lt;em&gt;{\mathbf{R}^{\prime}, \mathbf{t}^{\prime}} \sum&lt;/em&gt;{i}^{|C|} \llbracket\left|\mathbf{R}^{\prime} x_{i}+\mathbf{t}^{\prime}-y_{i}\right|&amp;lt;\tau \rrbracket
+$$&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;numpyarange&#34;&gt;numpy.arange()&lt;/h1&gt;
 &lt;h2 id=&#34;语法&#34;&gt;语法&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;x = numpy.arange(start,end,step,dtype=None)&lt;/code&gt;&lt;/p&gt;
@@ -3138,6 +3152,113 @@ True
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://codefmeister.github.io/p/</guid>
+        <description>&lt;p&gt;#! &lt;a href=&#34;https://zhuanlan.zhihu.com/p/435196716&#34;&gt;https://zhuanlan.zhihu.com/p/435196716&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;prml-第一章习题解&#34;&gt;PRML 第一章习题解&lt;/h1&gt;
+&lt;h2 id=&#34;11-多项式最小二乘法的封闭解&#34;&gt;1.1 多项式最小二乘法的封闭解&lt;/h2&gt;
+&lt;p&gt;已知：
+$E=\frac{1}{2} \sum_{n=1}^{N}\left{\left(\sum_{j=0}^{M} \omega_{j} x_{n}^{j}\right)-t_{n}\right}^{2}$
+，由于Sigma函数的特殊性，我们考虑对每一项进行求解：&lt;/p&gt;
+&lt;p&gt;对于$E_{n}=\frac{1}{2}\left(\sum_{j=0}^{N} \omega_{j} x_{n}^{j}-t_{n}\right)^{2}$，令$q_{n}=\sum_{j=0}^{n}  \omega_{j} x_{n}^{j}-t_{n}$,则有：$E_{n}=\frac{1}{2} q_{n}^{2}$&lt;/p&gt;
+&lt;p&gt;则：
+$$
+\begin{aligned}
+\frac{\partial E_{n}}{\partial \omega_{i}}=\frac{\partial E_{n}}{\partial q_{n}} \cdot \frac{\partial q_{n}}{\partial \omega_{i}} &amp;amp;=q_{n} \cdot x_{n}^{i} \&lt;br&gt;
+&amp;amp;=\left(\sum_{j=0}^{M} \omega_{j} \cdot x_{n}^{j}-t_{n}\right) \cdot x_{n}^{i} \&lt;br&gt;
+&amp;amp;=\sum_{j=0}^{M} \omega_{j} \cdot x_{n}^{i+j}-t_{n} \cdot x_{n}^{i}
+\end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;那么对于$
+E=\sum_{n=1}^{N} E_{n}
+$，有：&lt;/p&gt;
+&lt;p&gt;$$
+\begin{aligned}
+\frac{\partial E}{\partial \omega_{i}} &amp;amp;=\sum_{n=1}^{N} \frac{\partial E_{n}}{\partial \omega_{i}} \&lt;br&gt;
+&amp;amp;=\sum_{n=1}^{N}\left(\sum_{j=0}^{M} \omega_{j} \cdot x_{n}^{i+j}-t_{n} \cdot x_{n}^{i}\right) \&lt;br&gt;
+&amp;amp;=\sum_{n=1}^{N} \sum_{j=0}^{M} \omega_{j} \cdot x_{n}^{i+j}-\sum_{n=1}^{N} t_{n} x_{n}^{i}
+\end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;令$\frac{\partial E}{\partial \omega_{i}}=0$, 则有：&lt;/p&gt;
+&lt;p&gt;$$\sum_{n=1}^{N} \sum_{j=0}^{M} \omega_{j} \cdot x_{n}^{i+j}=\sum_{n=1}^{N} t_{n} \cdot x_{n}^{i}$$&lt;/p&gt;
+&lt;p&gt;证毕。&lt;/p&gt;
+&lt;h2 id=&#34;12-带l2正则的最小二乘法封闭解&#34;&gt;1.2 带L2正则的最小二乘法封闭解&lt;/h2&gt;
+&lt;p&gt;$\widetilde{E}(\vec{\omega})=\frac{1}{2} \sum_{n=1}^{N}\left{y\left(x_{n}, \vec{\omega}\right)-t_{n}\right}^{2}+\frac{\lambda}{2}|\vec \omega|^{2}$&lt;/p&gt;
+&lt;p&gt;$$
+\begin{aligned}
+\frac{\partial \widetilde{E}}{\partial \omega_{i}} &amp;amp;=\sum_{n=1}^{N} \sum_{j=0}^{M} \omega_{j} \cdot x_{n}^{i+j}-\sum_{n=1}^{N} t_{n} x_{n}^{i} + \frac{1}{2} \lambda \frac{\partial(\omega_1^2+\omega_2^2+ &amp;hellip; + \omega_j^2)}{\partial \omega_i} \&lt;br&gt;
+&amp;amp;=\sum_{n=1}^{N} \sum_{j=0}^{M} \omega_{j} x_{n}^{i+j}-\sum_{n=1}^{N} {t_n} x_{n}^{i}+\lambda \omega_{i} .
+\end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;令$
+\frac{\partial \widetilde{E}}{\partial \omega_{i}}=0
+$，可得：
+$$
+\sum_{j=0}^{M} \omega_{j} \sum_{n=1}^{N} x_{n}^{i+j}+\lambda \omega_{i}=\sum_{n=1}^{N} t_{n} x_{n}^{i}
+$$
+即：
+$$
+\sum_{j=0}^{M} \omega_{j}\left(\sum_{n=1}^{N} x_{n}^{t+j}+\lambda \delta_{i j}\right)=\sum_{n=1}^{N} {t_n} x_{n}^{i}
+$$
+其中，
+$$
+\delta_{ij}= \begin{cases}0 &amp;amp; i \neq j \ 1 &amp;amp; i=j\end{cases}
+$$&lt;/p&gt;
+&lt;h2 id=&#34;13-贝叶斯公式的简单应用&#34;&gt;1.3 贝叶斯公式的简单应用&lt;/h2&gt;
+&lt;h2 id=&#34;14-概率密度的变换线性变换&#34;&gt;1.4 概率密度的变换：线性变换&lt;/h2&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
+        <description>&lt;h1 id=&#34;标量向量矩阵求导&#34;&gt;标量、向量、矩阵求导&lt;/h1&gt;
+&lt;h2 id=&#34;向量对向量求导&#34;&gt;向量对向量求导&lt;/h2&gt;
+&lt;p&gt;对向量进行求导时，除了遵循雅克比矩阵外，常常容易会被矩阵的排列所混淆。&lt;/p&gt;
+&lt;p&gt;在做PRML1.9时，遇到了行向量对列向量求导的问题，着实让我迷惑了许久。&lt;/p&gt;
+&lt;p&gt;查阅资料后，得出如下结论，记录在此：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;排列方式均可，但需保持一致。无需太过纠结。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可以直接按照如下公式进行求导，因为如果你选择其他排列方式，结果就是差一个转置而已。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;$$
+\frac{\partial A \vec{x}}{\partial \vec{x}}=A^{T}
+$$
+$$
+\frac{\partial A \vec{x}}{\partial \vec{x}^{T}}=A
+$$
+$$
+\frac{\partial\left(\vec{x}^{T} A\right)}{\partial \vec{x}}=A
+$$&lt;/p&gt;
+&lt;p&gt;可以看出来，多转置则结果也会多一个转置。&lt;/p&gt;
+&lt;p&gt;不同文献给出了不同的结果——超越矩阵，存在争议。&lt;/p&gt;
+&lt;h2 id=&#34;标量对向量求偏导&#34;&gt;标量对向量求偏导&lt;/h2&gt;
+&lt;p&gt;记$
+y=\vec{x}^{T} \cdot A \cdot \vec{x}
+$， 则有：&lt;/p&gt;
+&lt;p&gt;$$
+\frac{\partial y}{\partial \vec{x}}=\frac{\partial\left(\vec{x}^{T} \cdot A \cdot \vec{x}\right)}{\partial \vec{x}}=\left(A^{T}+A\right) \cdot \vec{x}
+$$&lt;/p&gt;
+&lt;p&gt;若$A$为对称阵，则：
+$$
+\frac{\partial\left(\vec{x}^{T} A \vec{x}\right)}{\partial \vec{x}}=2 A \vec{x}
+$$&lt;/p&gt;
+&lt;p&gt;标量$det(A)$对方阵$A$求导：
+$$
+\frac{\partial|A|}{\partial A}=\left(A^{*}\right)^{T}=|A| \cdot\left(A^{-1}\right)^{T}
+$$&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;python如何使得list中的元素是ndarray&#34;&gt;python如何使得&lt;code&gt;list&lt;/code&gt;中的元素是&lt;code&gt;ndarray&lt;/code&gt;&lt;/h1&gt;
 &lt;p&gt;在一个代码实现时，会想要类似MATLAB一样，拥有一个&lt;code&gt;struct&lt;/code&gt;类型的数组，数组中的每个&lt;code&gt;cell&lt;/code&gt;都是一个&lt;code&gt;ndarray&lt;/code&gt;。因为在某些维度上&lt;code&gt;shape&lt;/code&gt;不同，所以不能整合为一个大的&lt;code&gt;ndarray&lt;/code&gt;。&lt;br&gt;
 要实现上述需求，可以进行如下操作:&lt;/p&gt;
@@ -3395,6 +3516,358 @@ True返回最大值，False返回最小值。&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;修改：相同seed下，每次随机得到的数据一致。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span class=&#34;n&#34;&gt;trainLoader&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DataLoader&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dataset&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;batch_size&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;shuffle&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;实验对比发现，即使num_worker=1，仍然会导致无法复现。原因分析，num_worker是用于数据提取的多线程数，多线程情况下线程同步问题会导致随机种子在多次实验中波动。删除num_worker即可。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
+        <description>&lt;p&gt;#! &lt;a href=&#34;https://zhuanlan.zhihu.com/p/430893923&#34;&gt;https://zhuanlan.zhihu.com/p/430893923&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;a-baseline-for-detecting-misclassified-and-out-of-distribution-examples-in-nerual-networks-论文阅读笔记&#34;&gt;A Baseline for detecting misclassified and out-of-distribution examples in nerual networks 论文阅读笔记&lt;/h1&gt;
+&lt;p&gt;本文发表在ICLR2017，作者Dan Hendrycks. 是不确定性最朴素的baseline做法。&lt;/p&gt;
+&lt;h2 id=&#34;motivation&#34;&gt;Motivation&lt;/h2&gt;
+&lt;p&gt;为了检测样本是否被误分类以及样本是否属于OOD样本，作者提出了一个简单的baseline做法，即使用softmax输出的最大预测概率作为依据来辨别。实验发现，正确分类的样本输出会拥有比错误分类样本或者OOD样本更大的softmax输出。&lt;/p&gt;
+&lt;p&gt;two question:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;error and success precdiction&lt;/li&gt;
+&lt;li&gt;in- and out-of-distribution detection&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;metrics&#34;&gt;Metrics&lt;/h2&gt;
+&lt;p&gt;作者使用AUROC 和 AUPR作为指标。&lt;/p&gt;
+&lt;p&gt;AUROC以真阳性率与假阳性率为横纵坐标画图。反应模型的查全率。perfect model 其AUROC应该为100%，一个完全随机模型其AUROC为50%。 当正负例的base rate有很大不同时，AUROC不那么完美。&lt;/p&gt;
+&lt;p&gt;而AUPR以精度和召回率为横纵坐标画图，反应模型的查准率。 一个perfect model其AUPR应该为100%。&lt;/p&gt;
+&lt;h2 id=&#34;method&#34;&gt;Method&lt;/h2&gt;
+&lt;p&gt;对于任意一个样本，计算其softmax的最大输出概率。以此为依据计算AUROC，AUPR，可以发现，正常样本下的AUROC、AUPR显著高于异常样本下的AUROC、AUPR。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/baseline_ood_fig1.png&#34; alt=&#34;实验结果1&#34;  /&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
+        <description>&lt;p&gt;#! &lt;a href=&#34;https://zhuanlan.zhihu.com/p/427073494&#34;&gt;https://zhuanlan.zhihu.com/p/427073494&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;evidential-deep-learning-to-quantify-classification-uncertainty-论文阅读笔记&#34;&gt;Evidential Deep Learning to Quantify Classification Uncertainty 论文阅读笔记&lt;/h1&gt;
+&lt;h2 id=&#34;motivation&#34;&gt;Motivation&lt;/h2&gt;
+&lt;p&gt;在当下的机器学习以及深度学习领域，重要的不是Accuracy，而是更重要的鲁棒性、安全性等方面。&lt;/p&gt;
+&lt;p&gt;问题：&lt;!-- raw HTML omitted --&gt;当我们在MNIST上训练一个手写体识别网络的时候，网络可以达到很好的分类识别性能，但是当我们给网络输入一个猫的图片的时候，尽管这个样本网络并不熟悉，网络还是会输出一个标签，而不是简单的告诉我们，他不认识或者说他不知道。&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;p&gt;这类样本称为OOD(out-of-distribution )的样本，由此，我们引入Uncertainty的概念。&lt;/p&gt;
+&lt;h2 id=&#34;subjective-logic-主观逻辑&#34;&gt;Subjective Logic 主观逻辑&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;在此我仅就个人理解对主观逻辑在多元分类问题下进行形式化描述，对此有兴趣的读者可以进一步阅读书籍《Subjective Logic》&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;不同于普通的概率学，我们引入主观逻辑Subjective Logic对模型的不确定性进行度量。&lt;/p&gt;
+&lt;p&gt;对于多元分类问题，其有$K$个标签，对于样本$i$，我们预测输出概率$\mathbf{p}=[p_1, p_2, &amp;hellip;,p_k]$，则我们对每个标签所属的概率$p_k$赋予一个belief mass，记为$b_k$，则：
+$$
+u+\sum_{k=1}^{K} b_{k}=1
+$$&lt;/p&gt;
+&lt;p&gt;其中$u$为uncertainty, 且对于$k = 1, &amp;hellip; ,K$，$u \geq 0$, $b_k \geq 0$。&lt;/p&gt;
+&lt;p&gt;如何获得$b_k$此刻便成为了主要问题。为此，我们引入证据evidence，记为$e_k$. 则：
+$$
+b_{k}=\frac{e_{k}}{S} \quad \text  { and } \quad u=\frac{K}{S}
+$$&lt;/p&gt;
+&lt;p&gt;其中$S=\sum_{i=1}^{K}\left(e_{i}+1\right)$. 需要注意的是，事实上，$S=\sum_{i=1}^{K}\left(e_{i}+a_i\right)$. $a_i$为先验。在此，其实对先验进行了简化处理。在此处，直接取1，其实代表了没有预知信息，所以取均匀分布。&lt;/p&gt;
+&lt;p&gt;对一个样本的belief assignment可以与一个Dirichlet 分布对应起来。$\alpha_{k}=e_{k}+1$. 狄利克雷分布度量了各个概率$p_k$的概率分布，即二阶概率。狄利克雷分布由$\boldsymbol{\alpha}=\left[\alpha_{1}, \cdots, \alpha_{K}\right]$进行参数化。
+$$
+D(\mathbf{p} \mid \boldsymbol{\alpha})= \begin{cases}\frac{1}{B(\boldsymbol{\alpha})} \prod_{i=1}^{K} p_{i}^{\alpha_{i}-1} &amp;amp; \text { for } \mathbf{p} \in \mathcal{S}_{K} \ 0 &amp;amp; \text { otherwise }\end{cases}
+$$&lt;/p&gt;
+&lt;h2 id=&#34;method&#34;&gt;Method&lt;/h2&gt;
+&lt;p&gt;文章设计提出了一种神经网络，用于分类，同时提供其不确定性uncertainty。&lt;/p&gt;
+&lt;p&gt;对于任意一个样本$i$，网络输出各个类的概率$\mathbf{p}_i$，显然$\mathbf{p}&lt;em&gt;i$为单纯形。则对于该概率$\mathbf{p}&lt;em&gt;i$，我们有狄利克雷分布$D\left(\mathbf{p}&lt;/em&gt;{i} \mid \boldsymbol{\alpha}&lt;/em&gt;{i}\right)$，用于度量概率$\mathbf{p}_i$的概率密度分布。&lt;/p&gt;
+&lt;p&gt;文章提出的做法是十分简单的，直接将网络输出层前的softmax层换为一个激活层，以保证输出值非负。以输出值作为网络预测的evidence。并以此evidence预测概率$\mathbf{p_i}$的狄利克雷分布的参数$\mathbf{\alpha}&lt;em&gt;i$。有：
+$$
+\boldsymbol{\alpha}&lt;/em&gt;{i}=f\left(\mathbf{x}&lt;em&gt;{i} \mid \Theta\right)+1
+$$
+随后，以此计算概率：$\boldsymbol{\alpha}&lt;/em&gt;{i} / S_{i}$。&lt;/p&gt;
+&lt;h2 id=&#34;loss函数的设计&#34;&gt;Loss函数的设计&lt;/h2&gt;
+&lt;p&gt;作者一共设计了三种Loss函数。&lt;/p&gt;
+&lt;h3 id=&#34;nll-负对数似然函数&#34;&gt;NLL 负对数似然函数&lt;/h3&gt;
+&lt;p&gt;$$
+\mathcal{L}&lt;em&gt;{i}(\Theta)=-\log \left(\int \prod&lt;/em&gt;{j=1}^{K} p_{i j}^{y_{i j}} \frac{1}{B\left(\boldsymbol{\alpha}_{i}\right)} \prod_{j=1}^{K} p_{i j}^{\alpha_{i j}-1} d \mathbf{p}_{i}\right)=\sum_{j=1}^{K} y_{i j}\left(\log \left(S_{i}\right)-\log \left(\alpha_{i j}\right)\right)
+$$&lt;/p&gt;
+&lt;p&gt;观察该Loss损失函数，$-\log \left(\int \prod_{j=1}^{K} p_{i j}^{y_{i j}} \frac{1}{B\left(\boldsymbol{\alpha}_{i}\right)} \prod_{j=1}^{K} p_{i j}^{\alpha_{i j}-1} d \mathbf{p}_{i}\right)$中积分项，前半部分为似然，后半部分为狄利克雷分布，作为先验。随后对$\mathbf{p}_i$进行积分，便得到联合概率分布的边际似然函数。&lt;/p&gt;
+&lt;p&gt;$\sum_{j=1}^{K} y_{i j}\left(\log \left(S_{i}\right)-\log \left(\alpha_{i j}\right)\right)$中，$\hat{p}_{k}=\frac{\alpha_{k}}{S}$，相当于Cross-Entropy交叉熵。&lt;/p&gt;
+&lt;h3 id=&#34;bayes-risk&#34;&gt;Bayes Risk&lt;/h3&gt;
+&lt;h4 id=&#34;risk-function&#34;&gt;Risk Function&lt;/h4&gt;
+&lt;p&gt;Risk function is expected loss.即：风险函数就是loss的期望。&lt;/p&gt;
+&lt;h4 id=&#34;digamma-function&#34;&gt;digamma function&lt;/h4&gt;
+&lt;p&gt;$$
+\psi(x)=\frac{d}{d x} \ln (\Gamma(x))=\frac{\Gamma^{\prime}(x)}{\Gamma(x)} \sim \ln x-\frac{1}{2 x}
+$$
+digamma函数就是对gamma函数取导数求导所得的函数。&lt;/p&gt;
+&lt;p&gt;基于交叉熵损失，我们有：
+$$
+\mathcal{L}&lt;em&gt;{i}(\Theta)=\int\left[\sum&lt;/em&gt;{j=1}^{K}-y_{i j} \log \left(p_{i j}\right)\right] \frac{1}{B\left(\boldsymbol{\alpha}_{i}\right)} \prod_{j=1}^{K} p_{i j}^{\alpha_{i j}-1} d \mathbf{p}_{i}=\sum_{j=1}^{K} y_{i j}\left(\psi\left(S_{i}\right)-\psi\left(\alpha_{i j}\right)\right)
+$$&lt;/p&gt;
+&lt;p&gt;上式很容易理解，对概率的积分即为期望。&lt;/p&gt;
+&lt;p&gt;基于平方差损失，同样有：
+$$
+\begin{aligned}
+\mathcal{L}&lt;em&gt;{i}(\Theta) &amp;amp;=\int\left|\mathbf{y}&lt;/em&gt;{i}-\mathbf{p}&lt;em&gt;{i}\right|&lt;/em&gt;{2}^{2} \frac{1}{B\left(\boldsymbol{\alpha}&lt;em&gt;{i}\right)} \prod&lt;/em&gt;{i=1}^{K} p_{i j}^{\alpha_{i j}-1} d \mathbf{p}_{i} \&lt;br&gt;
+&amp;amp;=\sum_{j=1}^{K} \mathbb{E}\left[y_{i j}^{2}-2 y_{i j} p_{i j}+p_{i j}^{2}\right]=\sum_{j=1}^{K}\left(y_{i j}^{2}-2 y_{i j} \mathbb{E}\left[p_{i j}\right]+\mathbb{E}\left[p_{i j}^{2}\right]\right) .
+\end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;最后一点点还未搞清楚的地方：在原文中，提出三个Loss的时候，有这么一句话：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note that while the above loss in Equation 3 corresponds to the Bayes classifier in the PAC-learning nomenclature, ones we will present below are Gibbs classifiers.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;个人理解是第一个Loss是将网络视作贝叶斯分类器，而第二个Loss、第三个Loss是将网络视为吉布斯分类器的。&lt;/p&gt;
+&lt;h3 id=&#34;kl散度&#34;&gt;KL散度&lt;/h3&gt;
+&lt;p&gt;随后，作者应该是从实验中观察到一个现象。例如手写体识别中，网络会对每个instance生成各个类的evidence，那么自然而然在训练中，当网络观察到一个圆圈出现，它便会在0这一类生成很大的evidence。这在遇到0时没有什么问题，但在遇到6的时候，0同样会生成较大的evidence值，6也会生成较大的evidence值。虽然这些evidence可能对分类判断的最终结果没有影响，（因为我们取最大值的Evidence所属的类作为分类结果），但是对网络的uncertainty有妨害。&lt;/p&gt;
+&lt;p&gt;我们的动机是，对它所属的那一类，evidence很大很大，对不属于的类，evidence便趋近于0. 于是作者设计了一项Loss函数，每个instance所对应的Dirichlet分布的参数$\mathbf{\alpha}$，除去有贡献的evidence后$\tilde{\boldsymbol{\alpha}}&lt;em&gt;{i}=\mathbf{y}&lt;/em&gt;{i}+\left(1-\mathbf{y}&lt;em&gt;{i}\right) \odot \boldsymbol{\alpha}&lt;/em&gt;{i}$所对应的Dirichlet分布与均匀Dirichlet分布（其evidence为0, $\mathbf{\alpha} = [1, &amp;hellip;, 1]$)的KL散度，迫使导致分类错误的evidence接近于0.&lt;/p&gt;
+&lt;p&gt;将两项结合起来，便可以使得对第一项有贡献的evidence变大，其余没有贡献的evidence因受到第二项的惩罚而趋近于0. 同时，引入一项退火参数$\lambda_t$，调节两项Loss之间的比重，从而使得一开始训练时，网络不会被过度惩罚而变为均匀分布。不得不说，这个Loss项设计的十分巧妙。&lt;/p&gt;
+&lt;p&gt;$$
+\mathcal{L}(\Theta)=\sum_{i=1}^{N} \mathcal{L}_{i}(\Theta)+\lambda_{t} \sum_{i=1}^{N} K L\left[D\left(\mathbf{p}_{\mathbf{i}} \mid \tilde{\alpha}_{i}\right) | D\left(\mathbf{p}_{i} \mid\langle 1, \ldots, 1\rangle\right)\right]
+$$&lt;/p&gt;
+&lt;p&gt;第二项Loss可以进一步被处理为：
+$$
+\begin{aligned}
+&amp;amp;K L\left[D\left(\mathbf{p}&lt;em&gt;{i} \mid \tilde{\boldsymbol{\alpha}}&lt;/em&gt;{i}\right) | D\left(\mathbf{p}&lt;em&gt;{i} \mid \mathbf{1}\right)\right] \&lt;br&gt;
+&amp;amp;\quad=\log \left(\frac{\Gamma\left(\sum&lt;/em&gt;{k=1}^{K} \tilde{\alpha}&lt;em&gt;{i k}\right)}{\Gamma(K) \prod&lt;/em&gt;{k=1}^{K} \Gamma\left(\tilde{\alpha}&lt;em&gt;{i k}\right)}\right)+\sum&lt;/em&gt;{k=1}^{K}\left(\tilde{\alpha}&lt;em&gt;{i k}-1\right)\left[\psi\left(\tilde{\alpha}&lt;/em&gt;{i k}\right)-\psi\left(\sum_{j=1}^{K} \tilde{\alpha}_{i j}\right)\right]
+\end{aligned}
+$$&lt;/p&gt;
+&lt;h2 id=&#34;实验部分&#34;&gt;实验部分&lt;/h2&gt;
+&lt;p&gt;实验部分分为两部分进行。一部分是OOD样本的uncertainty。一部分是对抗样本。&lt;/p&gt;
+&lt;p&gt;欢迎指正交流。&lt;/p&gt;
+&lt;h1 id=&#34;存在的问题&#34;&gt;存在的问题&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;网络直接将最后一层Softmax改为激活函数，网络结构上是否能针对uncertainty设计单独模块？&lt;/li&gt;
+&lt;li&gt;在Subjective Logic中，分布的先验可以不为均匀分布，对特定任务下是否有影响？&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
+        <description>&lt;h1 id=&#34;gaussian-processes-高斯过程&#34;&gt;Gaussian Processes 高斯过程&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Lecture Link: &lt;a href=&#34;https://www.youtube.com/watch?v=MfHKW5z-OOA&amp;amp;list=PLE6Wd9FR--EdyJ5lbFl8UuGjecvVw66F6&amp;amp;index=9&#34;&gt;https://www.youtube.com/watch?v=MfHKW5z-OOA&amp;amp;list=PLE6Wd9FR--EdyJ5lbFl8UuGjecvVw66F6&amp;amp;index=9&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;guassian-基础知识&#34;&gt;Guassian 基础知识&lt;/h2&gt;
+&lt;p&gt;首先引入简单的高斯分布。&lt;/p&gt;
+&lt;p&gt;如下图，左右都有很多二元数据$x=\left[\begin{array}{l}x_{1} \ x_{2}\end{array}\right] \in \mathbb{R}^{2}$。我们想要用一个分布去拟合两个变量的分布。所以我们使用一个二元高斯分布。不论左右，其均值都为$\mu=\left[\begin{array}{l}\mu_{1} \ \mu_{2}\end{array}\right] =\left[\begin{array}{l}0 \ 0\end{array}\right]$，但是协方差矩阵却不一样。对于左边的分布，如果我们知道$x$增大，我们并不能获得关于$y$的任何多余信息，也就是说两个变量没有关联，所以对应的协方差为$0$. 对于右边的分布，随着$x$的增大，$y$也在增大，所以右图看起来像一个椭圆。所以两者的协方差为不妨设为$0.5$.&lt;/p&gt;
+&lt;p&gt;协方差covariance某种程度上等价于互相关系数correlation。协方差矩阵中对应位置数值大小反应了两个变量之间的相关关系，协方差为$0$代表没有关联，协方差为正代表正相关。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Gaussian_Process_fig1.png&#34; alt=&#34;fig1&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;这里我们列出一些涉及的公式：&lt;/p&gt;
+&lt;p&gt;协方差：
+$$
+\begin{aligned}
+\operatorname{cov}(X, Y) &amp;amp;=\mathrm{E}[(X-\mathrm{E}[X])(Y-\mathrm{E}[Y])] \&lt;br&gt;
+&amp;amp;=\mathrm{E}[X Y-X \mathrm{E}[Y]-\mathrm{E}[X] Y+\mathrm{E}[X] \mathrm{E}[Y]] \&lt;br&gt;
+&amp;amp;=\mathrm{E}[X Y]-\mathrm{E}[X] \mathrm{E}[Y]-\mathrm{E}[X] \mathrm{E}[Y]+\mathrm{E}[X] \mathrm{E}[Y] \&lt;br&gt;
+&amp;amp;=\mathrm{E}[X Y]-\mathrm{E}[X] \mathrm{E}[Y]
+\end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;相关系数：
+$$
+\rho_{X, Y}=\operatorname{corr}(X, Y)=\frac{\operatorname{cov}(X, Y)}{\sigma_{X} \sigma_{Y}}=\frac{\mathrm{E}\left[\left(X-\mu_{X}\right)\left(Y-\mu_{Y}\right)\right]}{\sigma_{X} \sigma_{Y}}  =\frac{\mathrm{E}(X Y)-\mathrm{E}(X) \mathrm{E}(Y)}{\sqrt{\mathrm{E}\left(X^{2}\right)-\mathrm{E}(X)^{2}} \cdot \sqrt{\mathrm{E}\left(Y^{2}\right)-\mathrm{E}(Y)^{2}}}
+$$&lt;/p&gt;
+&lt;p&gt;现在我们换一种视角来看高斯分布，我们在三维空间里看这个二元高斯分布$\left[\begin{array}{l}x_{1} \ x_{2}\end{array}\right] \sim \mathcal{N}\left(\left[\begin{array}{l}\mu_{1} \ \mu_{2}\end{array}\right],\left[\begin{array}{ll}\Sigma_{11}, &amp;amp; \Sigma_{12} \ \Sigma_{21}, &amp;amp; \Sigma_{22}\end{array}\right]\right)$，z轴代表其两个变量的联合概率密度，那么整个高斯分布在三维空间中的形状是钟形。从随机变量$X_1$的某个特定值处切一刀，可以得到$X = x_1$时，变量$X_2$的条件概率分布。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Gaussian_Process_fig2.png&#34; alt=&#34;fig1&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;但是问题随之出现，已知多元高斯分布的均值、协方差矩阵，如何求条件概率呢？&lt;/p&gt;
+&lt;p&gt;我们可以参照Theorem，进行求解。定理中给出了边缘分布与条件概率分布的求解公式。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Gaussian_Process_fig4.png&#34; alt=&#34;fig1&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;进一步考虑高斯函数的采样。我们往往是通过如下步骤对高斯函数进行采样，首先由高斯函数得到其累积分布函数(CDF)，随后由一个均匀分布出发，在$[0,1]$之间均匀采样，将采样得到的值project到高斯分布的CDF上，便可以得到高斯分布的采样。因为高斯函数的CDF两边平缓中间陡峭，而且关于均值$\mu$中心对称。所以采样大多分布在均值附近，均值附近稠密，尾端稀疏。&lt;/p&gt;
+&lt;p&gt;我们已经将$\mathcal{N}(\mathbf{0}, \mathbf{I})$介绍完毕，如何由其得到任意均值和协方差$\mathcal{N}(\mu, \Sigma)$的分布呢？&lt;/p&gt;
+&lt;p&gt;由一元高斯分布，我们知道，由$\mathcal{N}(0,1)$高斯分布可以得到任意分布$\mathcal{N}(\mu, \sigma^2)$，等价于$\mu + \sigma \mathcal{N}(0,1)$. 同理可推广至多元分布情形，只需我们可以求得矩阵的平方根。&lt;/p&gt;
+&lt;p&gt;我们引入&lt;strong&gt;cholesky decomposition&lt;/strong&gt;，对协方差矩阵进行分解,$\Sigma=L L^{\top}$,等价于原来的平方根。于是可以效仿一元高斯分布，求得任意多元高斯分布的值。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Gaussian_Process_fig5.png&#34; alt=&#34;fig1&#34;  /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;gaussian-process&#34;&gt;Gaussian Process&lt;/h2&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
+        <description>&lt;p&gt;#! &lt;a href=&#34;https://zhuanlan.zhihu.com/p/428553023&#34;&gt;https://zhuanlan.zhihu.com/p/428553023&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;on-calibration-of-modern-neural-networks-论文阅读笔记&#34;&gt;On Calibration of Modern Neural Networks 论文阅读笔记&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;本篇笔记主要记录Calibration的相关知识，以及作者的一些insight。如何使网络calibrating的一些方法并没有涉及。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;摘要&#34;&gt;摘要&lt;/h2&gt;
+&lt;p&gt;作者发现，在深度神经网络盛行的当下，虽然网络的精度(Accuracy)大大提升了，但是网络的标定性（Calibration）很差。&lt;/p&gt;
+&lt;h2 id=&#34;what-is-calibration&#34;&gt;What is Calibration?&lt;/h2&gt;
+&lt;p&gt;$$
+\mathbb{P}(\hat{Y}=Y \mid \hat{P}=p)=p, \quad \forall p \in[0,1]
+$$
+上式中，$\hat Y$是预测输出，$Y$是真实标签。$\hat P$为网络输出该标签的信心confidence。$P(Y|P)$表示网络对输出Y有信心P。&lt;/p&gt;
+&lt;p&gt;即：网络输出的confidence应当等于真实的概率。以二分类问题举例，对于一个分类网络，如果以最终输出预测的值作为信心confidence，它应当等于分类正确的概率。换言之：让模型的softmax输出能真实的反映决策的置信度。&lt;/p&gt;
+&lt;h2 id=&#34;reliability-diagrams&#34;&gt;Reliability Diagrams&lt;/h2&gt;
+&lt;p&gt;可靠性直方图是用来描绘模型可靠性的一类直方图。 完美标定的(perfect calibrated) 模型应当是一条对角线。&lt;/p&gt;
+&lt;p&gt;在有限的样本个数下，我们根据模型输出的prediction将样本分为$M$组，分别计算其Accuracy与confidence。如果我们用$B_m$指代第$m$个样本集合。那么有：
+$$
+\operatorname{acc}\left(B_{m}\right)=\frac{1}{\left|B_{m}\right|} \sum_{i \in B_{m}} \mathbf{1}\left(\hat{y}_{i}=y_{i}\right)
+$$
+其中$\hat y$为预测输出，$y$ 为真实样本标签。
+$$
+\operatorname{conf}\left(B_{m}\right)=\frac{1}{\left|B_{m}\right|} \sum_{i \in B_{m}} \hat{p}_{i}
+$$
+其中$\hat p_i$为第$i$个样本模型预测的信心confidence。&lt;/p&gt;
+&lt;p&gt;那么可以以此画出Reliability Diagrams。如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/calibration_1.png&#34; alt=&#34;Reliability Diagrams&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;中间为gap，即confidence与精度之间的差距。完美的标定模型其可靠性图应当是一条对角线。confidence能够精确反应预测精度。&lt;/p&gt;
+&lt;h2 id=&#34;expected-calibration-errorece-期望标定误差&#34;&gt;Expected Calibration Error(ECE) 期望标定误差&lt;/h2&gt;
+&lt;p&gt;$$
+\mathrm{ECE}=\sum_{m=1}^{M} \frac{\left|B_{m}\right|}{n}\left|\operatorname{acc}\left(B_{m}\right)-\operatorname{conf}\left(B_{m}\right)\right|
+$$&lt;/p&gt;
+&lt;p&gt;可用于度量标定。在图中表现为gap的均值。&lt;/p&gt;
+&lt;h2 id=&#34;maximum-calibration-errormce-最大标定误差&#34;&gt;Maximum Calibration Error(MCE) 最大标定误差&lt;/h2&gt;
+&lt;p&gt;$$
+\mathrm{MCE}=\max &lt;em&gt;{m \in{1, \ldots, M}}\left|\operatorname{acc}\left(B&lt;/em&gt;{m}\right)-\operatorname{conf}\left(B_{m}\right)\right|
+$$&lt;/p&gt;
+&lt;p&gt;MCE为最大标定误差，即图中最大的一个gap。&lt;/p&gt;
+&lt;h2 id=&#34;什么造成了标定错误&#34;&gt;什么造成了标定错误？&lt;/h2&gt;
+&lt;p&gt;作者在文中分析得出结论，很大程度上由于模型容量增大以及缺乏正则化。&lt;/p&gt;
+&lt;h2 id=&#34;model-capacity&#34;&gt;Model Capacity&lt;/h2&gt;
+&lt;p&gt;增加模型的深度和宽度可能减少分类误差，但是这样会增加对模型标定性能的负面影响。ECE会随着模型容量的增加而增加。当模型已经可以几乎正确分类所有类别时，进一步训练仍然可以减少NLL-Loss，但是这样会使网络过于自信，从而增大ECE。&lt;/p&gt;
+&lt;h2 id=&#34;batch-normalization&#34;&gt;Batch Normalization&lt;/h2&gt;
+&lt;p&gt;在实验中，我们观察发现，使用BatchNorm 的网络趋向于更加Miscalibrated.这一观察结论不论超参选取如何，始终成立。这可能是由于batchnorm拉平了层与层之间的distribution shift，从而导致网络使用了更少的正则化手段。&lt;/p&gt;
+&lt;h2 id=&#34;weight-decay&#34;&gt;Weight Decay&lt;/h2&gt;
+&lt;p&gt;Weight Decay 曾经是神经网络最主流的正则化机制，但现在却越来越少被使用。在实验中发现，ECE随着weight decay的增加而越来越少，最后到达某一界限时，ECE又会猛然增加。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/calibration_fig2.png&#34; alt=&#34;img2&#34;  /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;nll-loss&#34;&gt;NLL Loss&lt;/h2&gt;
+&lt;p&gt;网络在训练时，会对NLL Loss过拟合，网络会提高精度，但以标定精度为代价。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/calibration_fig3.png&#34; alt=&#34;img3&#34;  /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;calibration-method-on-binary-model&#34;&gt;Calibration Method On Binary Model&lt;/h2&gt;
+&lt;h3 id=&#34;histogram-binning&#34;&gt;Histogram binning&lt;/h3&gt;
+&lt;p&gt;简而言之，Histogram binning就是将所有未标定的预测$\hat p_i$划分到彼此互斥的bin中：$B_1, &amp;hellip;, B_M$。每个Bin都被赋予了一个标定分数$\theta_m$.也就是说，如果$\hat p_i$被分到bin $B_m$中，则其标定后的预测输出为$\hat q_i = \theta_m$.&lt;/p&gt;
+&lt;p&gt;首先应该选定boundary，然后利用划分好的bin选择合适的$\theta$最小化下式：
+$$
+\min &lt;em&gt;{\theta&lt;/em&gt;{1}, \ldots, \theta_{M}} \sum_{m=1}^{M} \sum_{i=1}^{n} \mathbf{1}\left(a_{m} \leq \hat{p}_{i}&amp;lt;a_{m+1}\right)\left(\theta_{m}-y_{i}\right)^{2}
+$$&lt;/p&gt;
+&lt;p&gt;给定bin的边界，上式的$\theta_m$的解等于对应$B_m$区间中，正例概率的均值。&lt;/p&gt;
+&lt;h3 id=&#34;isotonic-regression-保序回归&#34;&gt;Isotonic regression 保序回归&lt;/h3&gt;
+&lt;p&gt;Isotonic regression或许是最常见的非参数校准方法，它通过学习一个分段的常数函数来转换未经校准的输出，即$\hat q_i = f(\hat p_i)$. 具体而言，isotonic regression通过产生一个函数$f$来最小化平方误差$\sum_{i=1}^{n}\left(f\left(\hat{p}_{i}\right)-y_{i}\right)^{2}$，因为$f$被约束为分段常数函数，则该优化问题可以转换为：
+$$
+\begin{array}{ll}
+\underset{\begin{array}{c}
+M \&lt;br&gt;
+\theta_{1}, \ldots, \theta_{M} \&lt;br&gt;
+a_{1}, \ldots, a_{M+1}
+\end{array}}{\min } &amp;amp; \sum_{m=1}^{M} \sum_{i=1}^{n} \mathbf{1}\left(a_{m} \leq \hat{p}_{i}&amp;lt;a_{m+1}\right)\left(\theta_{m}-y_{i}\right)^{2} \&lt;br&gt;
+\text { subject to } &amp;amp; 0=a_{1} \leq a_{2} \leq \ldots \leq a_{M+1}=1, \&lt;br&gt;
+&amp;amp; \theta_{1} \leq \theta_{2} \leq \ldots \leq \theta_{M} .
+\end{array}
+$$&lt;/p&gt;
+&lt;p&gt;在这种参数化条件下，isotonic regression变为histogram bin的一个严格泛化，同时最优化边界与概率取值。&lt;/p&gt;
+&lt;h3 id=&#34;bayesian-binning-into-quantilesbbq&#34;&gt;Bayesian Binning into Quantiles(BBQ)&lt;/h3&gt;
+&lt;p&gt;To be updated&lt;/p&gt;
+&lt;h3 id=&#34;platt-scaling&#34;&gt;Platt scaling&lt;/h3&gt;
+&lt;p&gt;To be updated&lt;/p&gt;
+&lt;h2 id=&#34;calibration-in-multiclass&#34;&gt;Calibration in Multiclass&lt;/h2&gt;
+&lt;p&gt;对于包含$K &amp;gt; 2$个类的分类任务，将问题形式化描述如下：对每一个输入$\mathbf{x_i}$，网络预测输出其分类预测$\hat y_i$ 与置信度分数$\hat p_i$. 在这种情况下，网络的logits $\mathbf{z_i}$是向量，其中$\hat{y}&lt;em&gt;{i}=\operatorname{argmax}&lt;/em&gt;{k} z_{i}^{(k)}$。 $\hat p_i$往往通过softmax函数引出：
+$$
+\sigma_{\mathrm{SM}}\left(\mathbf{z}_{i}\right)^{(k)}=\frac{\exp \left(z_{i}^{(k)}\right)}{\sum_{j=1}^{K} \exp \left(z_{i}^{(j)}\right)}, \quad \hat{p}_{i}=\max _{k} \sigma_{\mathrm{SM}}\left(\mathbf{z}_{i}\right)^{(k)}
+$$&lt;/p&gt;
+&lt;h3 id=&#34;temperature-scaling&#34;&gt;Temperature scaling&lt;/h3&gt;
+&lt;p&gt;学习并使用一个温度参数$T$，去校准网络。校准后的预测输出为：
+$$
+\hat{q}&lt;em&gt;{i}=\max &lt;em&gt;{k} \sigma&lt;/em&gt;{\mathrm{SM}}\left(\mathbf{z}&lt;/em&gt;{i} / T\right)^{(k)}
+$$
+当$T$趋近于0时，概率$\hat q_i$趋近于$1/K$，代表最大的不确定性。当$T=1$时，为原始的softmax输入。当$T$趋近于0时，概率分布退化为一个点预测($\hat q_i$ =1)。参数T是以NLL损失函数在验证集(validation set)上学习得到的。 由于温度参数$T$并不改变softmax函数的最大值，分类预测值$\hat y_i^{&#39;}$不会变化，即&lt;strong&gt;Temperature scaling 不会影响模型精度&lt;/strong&gt;。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
+        <description>&lt;h1 id=&#34;泛化误差上界定理的证明&#34;&gt;泛化误差上界定理的证明&lt;/h1&gt;
+&lt;h2 id=&#34;马尔科夫不等式&#34;&gt;马尔科夫不等式&lt;/h2&gt;
+&lt;h3 id=&#34;内容&#34;&gt;内容&lt;/h3&gt;
+&lt;p&gt;如果$X$是只取非负值的随机变量，则对于任意$a &amp;gt; 0$，有：
+$$
+P{X \geq a} \leq \frac{E(X)}{a}
+$$&lt;/p&gt;
+&lt;h3 id=&#34;简证&#34;&gt;简证&lt;/h3&gt;
+&lt;p&gt;$$
+\begin{aligned}
+E(X)=\int_{0}^{\infty} x f(x) d x &amp;amp;=\int_{0}^{a} x f(x) d x+\int_{a}^{\infty} x f(x) d x \&lt;br&gt;
+&amp;amp; \geq \int_{a}^{\infty} x f(x) d x \&lt;br&gt;
+&amp;amp; \geq \int_{a}^{\infty} a f(x) d x \&lt;br&gt;
+&amp;amp;=a \int_{a}^{\infty} f(x) d x \ 
+&amp;amp; =a P{X \geq a}
+\end{aligned}
+$$&lt;/p&gt;
+&lt;h2 id=&#34;引理&#34;&gt;引理&lt;/h2&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
+        <description>&lt;p&gt;#! &lt;a href=&#34;https://zhuanlan.zhihu.com/p/425388698&#34;&gt;https://zhuanlan.zhihu.com/p/425388698&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;dirichlet-distribution-狄利克雷分布&#34;&gt;Dirichlet Distribution 狄利克雷分布&lt;/h1&gt;
+&lt;h2 id=&#34;definition-简介&#34;&gt;Definition 简介&lt;/h2&gt;
+&lt;p&gt;狄利克雷分布，又称多元Beta分布，是一类在实数域以正单纯形(standard simplex)为支撑集(support)的高维连续分布，是Beta分布在高维情形的推广。&lt;/p&gt;
+&lt;p&gt;在Bayesian inference里，Dirichlet分布是多项分布的共轭先验。&lt;/p&gt;
+&lt;h2 id=&#34;背景知识beta分布&#34;&gt;背景知识：Beta分布&lt;/h2&gt;
+&lt;p&gt;Beta分布是定义在$[0, 1]$区间内的连续概率分布族，它由两个参数$\alpha, \beta$所指定。这两个参数作为随机变量的指数出现，并且控制分布的形状。Beta分布的多元推广为狄利克雷分布。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Beta分布是伯努利分布，二项分布的共轭先验&lt;/strong&gt;， 如下讨论的分布也称第一类beta分布。&lt;/p&gt;
+&lt;h3 id=&#34;beta-分布的定义&#34;&gt;Beta 分布的定义&lt;/h3&gt;
+&lt;h4 id=&#34;概率密度函数&#34;&gt;概率密度函数&lt;/h4&gt;
+&lt;p&gt;$$
+\begin{aligned}
+f(x ; \alpha, \beta) &amp;amp;=\text { constant } \cdot x^{\alpha-1}(1-x)^{\beta-1} \&lt;br&gt;
+&amp;amp;=\frac{x^{\alpha-1}(1-x)^{\beta-1}}{\int_{0}^{1} u^{\alpha-1}(1-u)^{\beta-1} d u} \&lt;br&gt;
+&amp;amp;=\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha) \Gamma(\beta)} x^{\alpha-1}(1-x)^{\beta-1} \&lt;br&gt;
+&amp;amp;=\frac{1}{\mathrm{~B}(\alpha, \beta)} x^{\alpha-1}(1-x)^{\beta-1}
+\end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;其中$\Gamma(z)$ 是Gamma函数。Beta函数为：$\mathrm{B}(x, y)=\int_{0}^{1} t^{x-1}(1-t)^{y-1} d t$&lt;/p&gt;
+&lt;h4 id=&#34;beta分布与二项分布&#34;&gt;Beta分布与二项分布&lt;/h4&gt;
+&lt;p&gt;Beta分布是二项分布的共轭先验。但除此之外，我们观察Beta分布的概率密度函数，会发现与二项分布的概率质量函数十分相似：
+$$
+P{X=k}=\left(\begin{array}{c}
+n \&lt;br&gt;
+k
+\end{array}\right) p^{k}(1-p)^{n-k}
+$$&lt;/p&gt;
+&lt;p&gt;在二项分布中，概率$p$作为参数，随机变量为$\mathbb{X}$。 但在Beta分布中，概率作为随机变量，而不是参数。&lt;/p&gt;
+&lt;p&gt;也就是说，Beta分布是概率的概率分布。其前面的常数项$\frac{1}{\mathbf{B}(\alpha, \beta)}$,其作用便是为了让整个概率密度函数的积分等于1，满足概率密度函数的积分约束。&lt;/p&gt;
+&lt;h4 id=&#34;关于alpha-beta&#34;&gt;关于$\alpha, \beta$&lt;/h4&gt;
+&lt;p&gt;$\alpha, \beta$是用来控制Beta分布形状的参数，其取值往往与某一事件发生而观测到的evidence有关。&lt;/p&gt;
+&lt;h4 id=&#34;不同参数下的beta分布&#34;&gt;不同参数下的Beta分布&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;该部分内容参引jinzhao的回答。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Beta分布的形状可以是钟形、U形、甚至是直线。
+$\alpha, \beta$ 均大于1， 为钟形；有一值为1，为直线；若均小于1，则为U形。
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Beta_fig1.png&#34; alt=&#34;钟形&#34;  /&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Beta_fig2.png&#34; alt=&#34;直线型&#34;  /&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/Beta_fig3.png&#34; alt=&#34;U形&#34;  /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;dirichlet-分布的定义&#34;&gt;Dirichlet 分布的定义&lt;/h2&gt;
+&lt;h3 id=&#34;概率密度函数-1&#34;&gt;概率密度函数&lt;/h3&gt;
+&lt;p&gt;参数为$\alpha_{1}, \ldots, \alpha_{K}&amp;gt;0$的$K$阶$(K&amp;gt;2)$狄利克雷分布在欧式空间$\mathbf{R}^{K-1}$中，关于勒贝格测度(Lebesgue Measure)有概率密度函数：
+$$
+f\left(x_{1}, \ldots, x_{K} ; \alpha_{1}, \ldots, \alpha_{K}\right)=\frac{1}{\mathrm{~B}(\boldsymbol{\alpha})} \prod_{i=1}^{K} x_{i}^{\alpha_{i}-1}
+$$
+其中$\left{x_{k}\right}_{k=1}^{k=K}$属于标准$K-1$阶单纯形(simplex)，即：$\sum_{i=1}^{K} x_{i}=1$ 且 $x_{i} \geq 0$ 对于全体 $i \in{1, \ldots, K}$&lt;/p&gt;
+&lt;p&gt;概率密度函数中分母上的用于归一化的常数为&lt;strong&gt;多元Beta函数&lt;/strong&gt;，其可以被表达为含Gamma函数的表达式：
+$$\mathrm{B}(\boldsymbol{\alpha})=\frac{\prod_{i=1}^{K} \Gamma\left(\alpha_{i}\right)}{\Gamma\left(\sum_{i=1}^{K} \alpha_{i}\right)}, \quad \boldsymbol{\alpha}=\left(\alpha_{1}, \ldots, \alpha_{K}\right)$$&lt;/p&gt;
+&lt;h3 id=&#34;相关知识&#34;&gt;相关知识&lt;/h3&gt;
+&lt;h4 id=&#34;勒贝格测度lebesgue-measure&#34;&gt;勒贝格测度(Lebesgue measure)&lt;/h4&gt;
+&lt;p&gt;在测度理论中，Lebesgue测度是将测度赋予$n$维欧式子空间的标准方法。对于$n=1, 2 ,3$， Lebesgue测度等价于长度、面积、与体积。Lebesgue测度常又称为n维体积、或体积。&lt;/p&gt;
+&lt;h4 id=&#34;测度measure&#34;&gt;测度(measure)&lt;/h4&gt;
+&lt;p&gt;测度是数学的一个基本概念。测量为一些常见的概念提供了数学抽象，如质量、距离/长度、面积、体积、事件的概率。这些看似截然不同的概念本质上非常相似。测度是概率论的基础。&lt;/p&gt;
+&lt;p&gt;为了将积分推广到任意集合中，人们定义了测度，测度是一个函数，对于一个集合中的子集，赋予其一个值。&lt;/p&gt;
+&lt;h4 id=&#34;gamma函数&#34;&gt;Gamma函数&lt;/h4&gt;
+&lt;p&gt;Gamma函数是阶乘的在复数域上的推广。其定义域为除非正整数外的全体复数。&lt;/p&gt;
+&lt;p&gt;对于任何正整数$n$:
+$$\Gamma(n)=(n-1) !$$&lt;/p&gt;
+&lt;p&gt;对于正实部的复数，其定义为：
+$$\Gamma(z)=\int_{0}^{\infty} x^{z-1} e^{-x} d x, \quad \Re(z)&amp;gt;0$$&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -3747,6 +4220,63 @@ weights can be used to assign probabilities to observation vectors.&lt;/p&gt;
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://codefmeister.github.io/p/</guid>
+        <description>&lt;h1 id=&#34;affinity-layer-仿射变换层&#34;&gt;Affinity Layer 仿射变换层&lt;/h1&gt;
+&lt;h2 id=&#34;definition&#34;&gt;Definition&lt;/h2&gt;
+&lt;p&gt;Affinity layer，即Full-connected layer（仿射层或全连通层）是一层人工神经网络，其中所有包含的节点连接到后续层的所有节点。仿射层通常用于卷积神经网络和递归神经网络。受限玻尔兹曼机是仿射层或全连接层的一个例子。&lt;/p&gt;
+&lt;p&gt;对于每一个到仿射(全连接)层的连接，节点的输入是前一层输出的线性组合，带有附加的偏置。然后通过激活函数传递输入来计算节点的输出。数学上，这表示为:
+$$
+y=f(W x+b)
+$$&lt;/p&gt;
+&lt;p&gt;$f$代表激活函数，$W,b$为可学习参数，$y$是输出，$x$是输入。&lt;/p&gt;
+&lt;h2 id=&#34;总结&#34;&gt;总结&lt;/h2&gt;
+&lt;p&gt;Affinity Layer，就是 Full-connected Layer，就是仿射层，也是我们熟知的全连接层。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
+        <description>&lt;h1 id=&#34;affinity-matrix&#34;&gt;Affinity Matrix&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;reference: DeepAI(Link: &lt;a href=&#34;https://deepai.org/&#34;&gt;https://deepai.org/&lt;/a&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;what-is-an-affinity-matrix&#34;&gt;What is an Affinity Matrix?&lt;/h2&gt;
+&lt;p&gt;Affinity Matrix， 也叫做 Similarity Matrix。即关联矩阵，或称为相似度矩阵，是一项重要的统计学技术，是一种基本的统计技术，用于组织一组数据点之间的彼此相似性。相似度(similarity)类似于距离(distance)，但它不满足度量性质，两个相同的点的similarity scores为1，而在metric下将为0。&lt;/p&gt;
+&lt;p&gt;相似度量的典型例子是余弦相似度(cosine similarity)和Jaccard相似度(Jaccard Similarity)。这些相似性度量可以解释为两个点相关的概率。例如，如果两个数据点的坐标很接近，那么它们的余弦相似度分数(或各自的“相似度”分数)将非常接近于1。&lt;/p&gt;
+&lt;h2 id=&#34;cosine-similarity&#34;&gt;Cosine Similarity&lt;/h2&gt;
+&lt;h3 id=&#34;概念&#34;&gt;概念&lt;/h3&gt;
+&lt;p&gt;余弦相似性度量内积空间中两个非零向量之间夹角的余弦。这种相似性度量特别关注方向，而不是大小。简而言之，在相同方向上对齐的两个余弦向量相似性度量为1，而两个垂直对齐的向量相似性度量为0。如果两个向量是截然相反的，这意味着它们的方向是完全相反的(即背对背)，那么相似性度量是-1。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/Codefmeister/MarkDownResource/master/cosine_similarity_fig1.png&#34; alt=&#34;余弦相似性度量&#34;  /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;计算公式&#34;&gt;&lt;strong&gt;计算公式：&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;$$
+\text { similarity }=\cos (\theta)=\frac{\mathbf{A} \cdot \mathbf{B}}{|\mathbf{A}||\mathbf{B}|}=\frac{\sum_{i=1}^{n} A_{i} B_{i}}{\sqrt{\sum_{i=1}^{n} A_{i}^{2}} \sqrt{\sum_{i=1}^{n} B_{i}^{2}}},
+$$&lt;/p&gt;
+&lt;p&gt;输出将产生一个从-1到1的值，表示相似性。其中-1是不相似的，0是正交的(垂直的)，1表示完全相似。&lt;/p&gt;
+&lt;h2 id=&#34;jaccard-similarity&#34;&gt;Jaccard Similarity&lt;/h2&gt;
+&lt;p&gt;Jaccard指数，也被称为Jaccard相似系数，是用来衡量样本集的相似性和多样性的指标。&lt;strong&gt;即图像目标识别领域非常常见的评价指标IoU&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;计算公式-1&#34;&gt;计算公式&lt;/h3&gt;
+&lt;p&gt;$$
+J(A, B)=\frac{|A \cap B|}{|A \cup B|}=\frac{|A \cap B|}{|A|+|B|-|A \cap B|}
+$$&lt;/p&gt;
+&lt;p&gt;可见集合相似度度量使用IoU(Jaccard Similarity)&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;
 &lt;p&gt;在概率论与统计学中，&lt;strong&gt;狄利克雷分布&lt;/strong&gt; &lt;em&gt;Dirichlet distribution&lt;/em&gt; 常被简记为&lt;code&gt;$Dir(\alpha)$&lt;/code&gt;,是基于一个正实数向量&lt;code&gt;$\alpha&lt;/code&gt;参数的连续多元概率分布族。狄利克雷分布是对&lt;strong&gt;贝塔分布&lt;/strong&gt; &lt;em&gt;beta distribution&lt;/em&gt;的多元泛化，所以它也被称为&lt;strong&gt;多元贝塔分布&lt;/strong&gt; &lt;em&gt;multivariate beta distribution(MBD)&lt;/em&gt;。&lt;br&gt;
 狄利克雷分布被广泛作为贝叶斯统计的先验分布使用。同时，狄利克雷分布也是分类分布&lt;em&gt;Categorical distribution&lt;/em&gt; 和多项分布&lt;em&gt;categorical distribution&lt;/em&gt; 的共轭先验。&lt;br&gt;
@@ -3901,7 +4431,26 @@ $$&lt;/p&gt;
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://codefmeister.github.io/p/</guid>
-        <description></description>
+        <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;h2 id=&#34;image-matching是什么&#34;&gt;Image Matching是什么？&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;As a critical and fundamental problem in these complicated tasks, image matching, also known as image registration or correspondence, aims to identify then correspond the same or similar structure/content fromtwo ormore images.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;图像匹配，也被称为图像配准或图像对应，起目的在于识别出两幅或更多图像中的相同或相似结构/内容，然后将它们对应起来。&lt;/p&gt;
+&lt;h2 id=&#34;image-matching-派生的具体任务&#34;&gt;Image Matching 派生的具体任务&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;sparse feature matching 稀疏特征匹配&lt;/li&gt;
+&lt;li&gt;dense matching（like image registration and stereo matching）    稠密匹配&lt;/li&gt;
+&lt;li&gt;patch matching（retrieval）&lt;/li&gt;
+&lt;li&gt;2-D and 3-D point set registration&lt;/li&gt;
+&lt;li&gt;graph matching&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;image-matching-通常如何构成&#34;&gt;Image Matching 通常如何构成&lt;/h2&gt;
+&lt;p&gt;Image matching 通常由两个部分构成，即陪匹配特征的性质与匹配策略，分别表示用什么特征进行匹配，如何进行匹配。&lt;/p&gt;
+&lt;p&gt;Direct Strategy，即Area-based方法，在预先设定大小的滑动窗口甚至是整个图像中，通过对原始图像像素强度或像素域变换后的信息进行相似性度量来匹配两幅图像，而不尝试检测任何显著的图像结构&lt;/p&gt;
+&lt;p&gt;feature-based method&lt;/p&gt;
+&lt;p&gt;特征检测可以从图像中提取出特征结构，特征描述可以看作是一种广泛应用于图像编码和图像分类检索等相似度度量的图像表示方法&lt;/p&gt;
+</description>
         </item>
         <item>
         <title></title>
@@ -4023,6 +4572,24 @@ P(H)+P(\neg H)=1
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://codefmeister.github.io/p/</guid>
+        <description>&lt;h1 id=&#34;sinkhorn算法&#34;&gt;Sinkhorn算法&lt;/h1&gt;
+&lt;p&gt;Sinkhorn 算法描述了任意一个正矩阵(元素均为正)与双随机矩阵之间的关系。&lt;/p&gt;
+&lt;h2 id=&#34;简略描述&#34;&gt;简略描述&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Relations between arbitrary positive matrices and Doubly stochastic matrices.
+如果A是一个正矩阵，那么通过交替的进行行归一化和列归一化，可以将其转换为一个转移矩阵(双随机矩阵)。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;if A is a positive Matrix, alternately applies row-normalization and column-normalization will convert A to a doubly stochastic matrices.&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>https://codefmeister.github.io/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/</guid>
         <description>&lt;h1 id=&#34;今日收获&#34;&gt;今日收获&lt;/h1&gt;
 &lt;h2 id=&#34;收获&#34;&gt;收获&lt;/h2&gt;
 &lt;ol&gt;
@@ -4030,8 +4597,15 @@ P(H)+P(\neg H)=1
 &lt;/ol&gt;
 &lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
 &lt;p&gt;今天的主要问题还是：KNN的反向传播问题。不论是KNN还是TopK，都无法反向传播梯度，为整体训练带来困难。&lt;/p&gt;
-&lt;p&gt;找到两个非常有用的网页：
-1.&lt;/p&gt;
+&lt;p&gt;找到两个非常有用的网页：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://discuss.pytorch.org/t/use-topk-as-a-selection-but-fail-to-autograd/58004&#34;&gt;https://discuss.pytorch.org/t/use-topk-as-a-selection-but-fail-to-autograd/58004&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://discuss.pytorch.org/t/k-nearest-neighbor-in-pytorch/59695&#34;&gt;https://discuss.pytorch.org/t/k-nearest-neighbor-in-pytorch/59695&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
 </description>
         </item>
         <item>
@@ -4129,6 +4703,30 @@ P(H)+P(\neg H)=1
 &lt;p&gt;其中第&lt;code&gt;$i$&lt;/code&gt;个向量子分布&lt;code&gt;component&lt;/code&gt;被权重为&lt;code&gt;${\phi _i}$&lt;/code&gt;,方差为&lt;code&gt;$\bm{\mu}$&lt;/code&gt;，协方差矩阵为&lt;code&gt;$\bm{\sum _i}$&lt;/code&gt;的正态分布所定义。为了将这个先验分布纳入贝叶斯估计，这个先验要与已知的分布&lt;code&gt;$p(\bm{x}|\bm{\theta})$&lt;/code&gt;相乘，该分布是数据&lt;code&gt;$\bm{x}$&lt;/code&gt;在待估参数&lt;code&gt;$\bm{\theta}$&lt;/code&gt;上的分布。根据如上阐述，那么后验分布&lt;code&gt;$p(\bm{\theta}|\bm{x})$&lt;/code&gt;也是一个高斯混合分布：&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;p(\bm{\theta} |\bm{x}) = \sum\limits_{i = 1}^K {{{\tilde \phi }_i}N({\bm{\tilde \mu }_i},{\bm{\tilde \Sigma }_i})} 
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;其中的参数：&lt;code&gt;${\tilde \phi }_i$&lt;/code&gt;，&lt;code&gt;${\bm{\tilde \mu }_i}$&lt;/code&gt;和&lt;code&gt;${\bm{\tilde \Sigma }_i}$&lt;/code&gt;可以使用&lt;strong&gt;EM&lt;/strong&gt;算法进行更新。虽然关于EM算法的参数更新已经很完善了，但是提供对这些参数的初始估计仍然是一个十分活跃的研究领域。必须说明的是，该公式产生了一个完全后验分布的一个封闭形式的解。随机变量&lt;code&gt;$\bm{\theta}$&lt;/code&gt;的估计值可以通过取其中几个估计量的其中一个来获得，如取后验分布的均值或者最大值。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>强化学习纲要(IntroToRL)笔记</title>
+        <link>https://codefmeister.github.io/p/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%BA%B2%E8%A6%81introtorl%E7%AC%94%E8%AE%B0/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://codefmeister.github.io/p/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%BA%B2%E8%A6%81introtorl%E7%AC%94%E8%AE%B0/</guid>
+        <description>&lt;h1 id=&#34;what-is-reinforcement-learning&#34;&gt;What is reinforcement learning&lt;/h1&gt;
+&lt;p&gt;a computational approach to learning whereby &lt;strong&gt;an agent&lt;/strong&gt; tries to &lt;strong&gt;maximize&lt;/strong&gt; the total amount of &lt;strong&gt;reward&lt;/strong&gt; it receives while interacting with a complex and uncertain &lt;strong&gt;environment&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1 id=&#34;difference-between-reinforcement-learning-and-supervised-learning&#34;&gt;Difference between Reinforcement Learning and Supervised Learning&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Sequential data as input(not i.i.d) 序列化输入&lt;/li&gt;
+&lt;li&gt;The learner is not told which actions to take, but instead must discover which actions yield the most reward by trying them.&lt;/li&gt;
+&lt;li&gt;Trial-and-error exploration(balance between exploration and exploitation)&lt;/li&gt;
+&lt;li&gt;There is no supervisor, only a reward signal, which is also delayed.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;features-of-reinforcement-learning&#34;&gt;Features of Reinforcement Learning&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Trial-and-error exploration&lt;/li&gt;
+&lt;li&gt;Delayed reward&lt;/li&gt;
+&lt;li&gt;Time matters (sequential data, non i.i.d data)&lt;/li&gt;
+&lt;li&gt;Agent’s actions affect the subsequent data it receives (agent’s action changes the environment)&lt;/li&gt;
+&lt;/ul&gt;
 </description>
         </item>
         

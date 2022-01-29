@@ -470,6 +470,16 @@ torch.optim是PyTorch实现的一个包，里面有各种各样的优化算法�
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codefmeister.github.io/p/</guid>
+      <description>Iverson Bracket Iverson Bracket 又称 艾弗森括号。常用方括号来表示。满足括号内的条件则值为1， 不满足条件则值为0.
+Example $$ \hat{\mathbf{R}}, \hat{\mathbf{t}}=\arg \max {\mathbf{R}^{\prime}, \mathbf{t}^{\prime}} \sum{i}^{|C|} \llbracket\left|\mathbf{R}^{\prime} x_{i}+\mathbf{t}^{\prime}-y_{i}\right|&amp;lt;\tau \rrbracket $$</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codefmeister.github.io/p/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>numpy.arange() 语法 x = numpy.arange(start,end,step,dtype=None)
 Parameters说明  start: Optional，起始值，默认值为0。 end: 结束值(不含)。 step: Optional，步长，默认值为1。 dtype：Optional，默认为None，从其他输入值中推测。  功能 [start,end)的左闭右开区间内，每隔一个step取一次值。return值是ndarray。 对于浮点数来说，length = ceil((end - start)/step)，由于浮点数的上溢，此条规则可能会导致在浮点数情况下，最后一个element比end长。
 Note 如果使用非整数步长（譬如0.1），结果往往不一致（原因见上），所以在这种情况下推荐使用numpy.linspace。
@@ -567,6 +577,43 @@ If a is not square or inversion fails.</description>
       
       <guid>https://codefmeister.github.io/p/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codefmeister.github.io/p/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/</guid>
+      <description>#! https://zhuanlan.zhihu.com/p/435196716
+PRML 第一章习题解 1.1 多项式最小二乘法的封闭解 已知： $E=\frac{1}{2} \sum_{n=1}^{N}\left{\left(\sum_{j=0}^{M} \omega_{j} x_{n}^{j}\right)-t_{n}\right}^{2}$ ，由于Sigma函数的特殊性，我们考虑对每一项进行求解：
+对于$E_{n}=\frac{1}{2}\left(\sum_{j=0}^{N} \omega_{j} x_{n}^{j}-t_{n}\right)^{2}$，令$q_{n}=\sum_{j=0}^{n} \omega_{j} x_{n}^{j}-t_{n}$,则有：$E_{n}=\frac{1}{2} q_{n}^{2}$
+则： $$ \begin{aligned} \frac{\partial E_{n}}{\partial \omega_{i}}=\frac{\partial E_{n}}{\partial q_{n}} \cdot \frac{\partial q_{n}}{\partial \omega_{i}} &amp;amp;=q_{n} \cdot x_{n}^{i} \
+&amp;amp;=\left(\sum_{j=0}^{M} \omega_{j} \cdot x_{n}^{j}-t_{n}\right) \cdot x_{n}^{i} \
+&amp;amp;=\sum_{j=0}^{M} \omega_{j} \cdot x_{n}^{i+j}-t_{n} \cdot x_{n}^{i} \end{aligned} $$
+那么对于$ E=\sum_{n=1}^{N} E_{n} $，有：
+$$ \begin{aligned} \frac{\partial E}{\partial \omega_{i}} &amp;amp;=\sum_{n=1}^{N} \frac{\partial E_{n}}{\partial \omega_{i}} \
+&amp;amp;=\sum_{n=1}^{N}\left(\sum_{j=0}^{M} \omega_{j} \cdot x_{n}^{i+j}-t_{n} \cdot x_{n}^{i}\right) \</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codefmeister.github.io/p/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/</guid>
+      <description>标量、向量、矩阵求导 向量对向量求导 对向量进行求导时，除了遵循雅克比矩阵外，常常容易会被矩阵的排列所混淆。
+在做PRML1.9时，遇到了行向量对列向量求导的问题，着实让我迷惑了许久。
+查阅资料后，得出如下结论，记录在此：
+  排列方式均可，但需保持一致。无需太过纠结。
+  可以直接按照如下公式进行求导，因为如果你选择其他排列方式，结果就是差一个转置而已。
+  $$ \frac{\partial A \vec{x}}{\partial \vec{x}}=A^{T} $$ $$ \frac{\partial A \vec{x}}{\partial \vec{x}^{T}}=A $$ $$ \frac{\partial\left(\vec{x}^{T} A\right)}{\partial \vec{x}}=A $$
+可以看出来，多转置则结果也会多一个转置。
+不同文献给出了不同的结果——超越矩阵，存在争议。
+标量对向量求偏导 记$ y=\vec{x}^{T} \cdot A \cdot \vec{x} $， 则有：
+$$ \frac{\partial y}{\partial \vec{x}}=\frac{\partial\left(\vec{x}^{T} \cdot A \cdot \vec{x}\right)}{\partial \vec{x}}=\left(A^{T}+A\right) \cdot \vec{x} $$
+若$A$为对称阵，则： $$ \frac{\partial\left(\vec{x}^{T} A \vec{x}\right)}{\partial \vec{x}}=2 A \vec{x} $$
+标量$det(A)$对方阵$A$求导： $$ \frac{\partial|A|}{\partial A}=\left(A^{*}\right)^{T}=|A| \cdot\left(A^{-1}\right)^{T} $$</description>
     </item>
     
     <item>
@@ -708,6 +755,116 @@ trainLoader = DataLoader(dataset, batch_size=10, shuffle=True) 实验对比发�
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codefmeister.github.io/p/</guid>
+      <description>#! https://zhuanlan.zhihu.com/p/430893923
+A Baseline for detecting misclassified and out-of-distribution examples in nerual networks 论文阅读笔记 本文发表在ICLR2017，作者Dan Hendrycks. 是不确定性最朴素的baseline做法。
+Motivation 为了检测样本是否被误分类以及样本是否属于OOD样本，作者提出了一个简单的baseline做法，即使用softmax输出的最大预测概率作为依据来辨别。实验发现，正确分类的样本输出会拥有比错误分类样本或者OOD样本更大的softmax输出。
+two question:
+ error and success precdiction in- and out-of-distribution detection  Metrics 作者使用AUROC 和 AUPR作为指标。
+AUROC以真阳性率与假阳性率为横纵坐标画图。反应模型的查全率。perfect model 其AUROC应该为100%，一个完全随机模型其AUROC为50%。 当正负例的base rate有很大不同时，AUROC不那么完美。
+而AUPR以精度和召回率为横纵坐标画图，反应模型的查准率。 一个perfect model其AUPR应该为100%。
+Method 对于任意一个样本，计算其softmax的最大输出概率。以此为依据计算AUROC，AUPR，可以发现，正常样本下的AUROC、AUPR显著高于异常样本下的AUROC、AUPR。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codefmeister.github.io/p/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/</guid>
+      <description>#! https://zhuanlan.zhihu.com/p/427073494
+Evidential Deep Learning to Quantify Classification Uncertainty 论文阅读笔记 Motivation 在当下的机器学习以及深度学习领域，重要的不是Accuracy，而是更重要的鲁棒性、安全性等方面。
+问题：当我们在MNIST上训练一个手写体识别网络的时候，网络可以达到很好的分类识别性能，但是当我们给网络输入一个猫的图片的时候，尽管这个样本网络并不熟悉，网络还是会输出一个标签，而不是简单的告诉我们，他不认识或者说他不知道。这类样本称为OOD(out-of-distribution )的样本，由此，我们引入Uncertainty的概念。
+Subjective Logic 主观逻辑  在此我仅就个人理解对主观逻辑在多元分类问题下进行形式化描述，对此有兴趣的读者可以进一步阅读书籍《Subjective Logic》
+ 不同于普通的概率学，我们引入主观逻辑Subjective Logic对模型的不确定性进行度量。
+对于多元分类问题，其有$K$个标签，对于样本$i$，我们预测输出概率$\mathbf{p}=[p_1, p_2, &amp;hellip;,p_k]$，则我们对每个标签所属的概率$p_k$赋予一个belief mass，记为$b_k$，则： $$ u+\sum_{k=1}^{K} b_{k}=1 $$
+其中$u$为uncertainty, 且对于$k = 1, &amp;hellip; ,K$，$u \geq 0$, $b_k \geq 0$。
+如何获得$b_k$此刻便成为了主要问题。为此，我们引入证据evidence，记为$e_k$. 则： $$ b_{k}=\frac{e_{k}}{S} \quad \text { and } \quad u=\frac{K}{S} $$
+其中$S=\sum_{i=1}^{K}\left(e_{i}+1\right)$. 需要注意的是，事实上，$S=\sum_{i=1}^{K}\left(e_{i}+a_i\right)$. $a_i$为先验。在此，其实对先验进行了简化处理。在此处，直接取1，其实代表了没有预知信息，所以取均匀分布。
+对一个样本的belief assignment可以与一个Dirichlet 分布对应起来。$\alpha_{k}=e_{k}+1$. 狄利克雷分布度量了各个概率$p_k$的概率分布，即二阶概率。狄利克雷分布由$\boldsymbol{\alpha}=\left[\alpha_{1}, \cdots, \alpha_{K}\right]$进行参数化。 $$ D(\mathbf{p} \mid \boldsymbol{\alpha})= \begin{cases}\frac{1}{B(\boldsymbol{\alpha})} \prod_{i=1}^{K} p_{i}^{\alpha_{i}-1} &amp;amp; \text { for } \mathbf{p} \in \mathcal{S}_{K} \ 0 &amp;amp; \text { otherwise }\end{cases} $$</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codefmeister.github.io/p/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/</guid>
+      <description>Gaussian Processes 高斯过程  Lecture Link: https://www.youtube.com/watch?v=MfHKW5z-OOA&amp;amp;list=PLE6Wd9FR--EdyJ5lbFl8UuGjecvVw66F6&amp;amp;index=9
+ Guassian 基础知识 首先引入简单的高斯分布。
+如下图，左右都有很多二元数据$x=\left[\begin{array}{l}x_{1} \ x_{2}\end{array}\right] \in \mathbb{R}^{2}$。我们想要用一个分布去拟合两个变量的分布。所以我们使用一个二元高斯分布。不论左右，其均值都为$\mu=\left[\begin{array}{l}\mu_{1} \ \mu_{2}\end{array}\right] =\left[\begin{array}{l}0 \ 0\end{array}\right]$，但是协方差矩阵却不一样。对于左边的分布，如果我们知道$x$增大，我们并不能获得关于$y$的任何多余信息，也就是说两个变量没有关联，所以对应的协方差为$0$. 对于右边的分布，随着$x$的增大，$y$也在增大，所以右图看起来像一个椭圆。所以两者的协方差为不妨设为$0.5$.
+协方差covariance某种程度上等价于互相关系数correlation。协方差矩阵中对应位置数值大小反应了两个变量之间的相关关系，协方差为$0$代表没有关联，协方差为正代表正相关。
+这里我们列出一些涉及的公式：
+协方差： $$ \begin{aligned} \operatorname{cov}(X, Y) &amp;amp;=\mathrm{E}[(X-\mathrm{E}[X])(Y-\mathrm{E}[Y])] \
+&amp;amp;=\mathrm{E}[X Y-X \mathrm{E}[Y]-\mathrm{E}[X] Y+\mathrm{E}[X] \mathrm{E}[Y]] \
+&amp;amp;=\mathrm{E}[X Y]-\mathrm{E}[X] \mathrm{E}[Y]-\mathrm{E}[X] \mathrm{E}[Y]+\mathrm{E}[X] \mathrm{E}[Y] \
+&amp;amp;=\mathrm{E}[X Y]-\mathrm{E}[X] \mathrm{E}[Y] \end{aligned} $$
+相关系数： $$ \rho_{X, Y}=\operatorname{corr}(X, Y)=\frac{\operatorname{cov}(X, Y)}{\sigma_{X} \sigma_{Y}}=\frac{\mathrm{E}\left[\left(X-\mu_{X}\right)\left(Y-\mu_{Y}\right)\right]}{\sigma_{X} \sigma_{Y}} =\frac{\mathrm{E}(X Y)-\mathrm{E}(X) \mathrm{E}(Y)}{\sqrt{\mathrm{E}\left(X^{2}\right)-\mathrm{E}(X)^{2}} \cdot \sqrt{\mathrm{E}\left(Y^{2}\right)-\mathrm{E}(Y)^{2}}} $$
+现在我们换一种视角来看高斯分布，我们在三维空间里看这个二元高斯分布$\left[\begin{array}{l}x_{1} \ x_{2}\end{array}\right] \sim \mathcal{N}\left(\left[\begin{array}{l}\mu_{1} \ \mu_{2}\end{array}\right],\left[\begin{array}{ll}\Sigma_{11}, &amp;amp; \Sigma_{12} \ \Sigma_{21}, &amp;amp; \Sigma_{22}\end{array}\right]\right)$，z轴代表其两个变量的联合概率密度，那么整个高斯分布在三维空间中的形状是钟形。从随机变量$X_1$的某个特定值处切一刀，可以得到$X = x_1$时，变量$X_2$的条件概率分布。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codefmeister.github.io/p/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/</guid>
+      <description>#! https://zhuanlan.zhihu.com/p/428553023
+On Calibration of Modern Neural Networks 论文阅读笔记  本篇笔记主要记录Calibration的相关知识，以及作者的一些insight。如何使网络calibrating的一些方法并没有涉及。
+ 摘要 作者发现，在深度神经网络盛行的当下，虽然网络的精度(Accuracy)大大提升了，但是网络的标定性（Calibration）很差。
+What is Calibration? $$ \mathbb{P}(\hat{Y}=Y \mid \hat{P}=p)=p, \quad \forall p \in[0,1] $$ 上式中，$\hat Y$是预测输出，$Y$是真实标签。$\hat P$为网络输出该标签的信心confidence。$P(Y|P)$表示网络对输出Y有信心P。
+即：网络输出的confidence应当等于真实的概率。以二分类问题举例，对于一个分类网络，如果以最终输出预测的值作为信心confidence，它应当等于分类正确的概率。换言之：让模型的softmax输出能真实的反映决策的置信度。
+Reliability Diagrams 可靠性直方图是用来描绘模型可靠性的一类直方图。 完美标定的(perfect calibrated) 模型应当是一条对角线。
+在有限的样本个数下，我们根据模型输出的prediction将样本分为$M$组，分别计算其Accuracy与confidence。如果我们用$B_m$指代第$m$个样本集合。那么有： $$ \operatorname{acc}\left(B_{m}\right)=\frac{1}{\left|B_{m}\right|} \sum_{i \in B_{m}} \mathbf{1}\left(\hat{y}_{i}=y_{i}\right) $$ 其中$\hat y$为预测输出，$y$ 为真实样本标签。 $$ \operatorname{conf}\left(B_{m}\right)=\frac{1}{\left|B_{m}\right|} \sum_{i \in B_{m}} \hat{p}_{i} $$ 其中$\hat p_i$为第$i$个样本模型预测的信心confidence。
+那么可以以此画出Reliability Diagrams。如下图：
+中间为gap，即confidence与精度之间的差距。完美的标定模型其可靠性图应当是一条对角线。confidence能够精确反应预测精度。
+Expected Calibration Error(ECE) 期望标定误差 $$ \mathrm{ECE}=\sum_{m=1}^{M} \frac{\left|B_{m}\right|}{n}\left|\operatorname{acc}\left(B_{m}\right)-\operatorname{conf}\left(B_{m}\right)\right| $$
+可用于度量标定。在图中表现为gap的均值。
+Maximum Calibration Error(MCE) 最大标定误差 $$ \mathrm{MCE}=\max {m \in{1, \ldots, M}}\left|\operatorname{acc}\left(B{m}\right)-\operatorname{conf}\left(B_{m}\right)\right| $$</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codefmeister.github.io/p/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/</guid>
+      <description>泛化误差上界定理的证明 马尔科夫不等式 内容 如果$X$是只取非负值的随机变量，则对于任意$a &amp;gt; 0$，有： $$ P{X \geq a} \leq \frac{E(X)}{a} $$
+简证 $$ \begin{aligned} E(X)=\int_{0}^{\infty} x f(x) d x &amp;amp;=\int_{0}^{a} x f(x) d x+\int_{a}^{\infty} x f(x) d x \
+&amp;amp; \geq \int_{a}^{\infty} x f(x) d x \
+&amp;amp; \geq \int_{a}^{\infty} a f(x) d x \
+&amp;amp;=a \int_{a}^{\infty} f(x) d x \ &amp;amp; =a P{X \geq a} \end{aligned} $$
+引理 </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codefmeister.github.io/p/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/</guid>
+      <description>#! https://zhuanlan.zhihu.com/p/425388698
+Dirichlet Distribution 狄利克雷分布 Definition 简介 狄利克雷分布，又称多元Beta分布，是一类在实数域以正单纯形(standard simplex)为支撑集(support)的高维连续分布，是Beta分布在高维情形的推广。
+在Bayesian inference里，Dirichlet分布是多项分布的共轭先验。
+背景知识：Beta分布 Beta分布是定义在$[0, 1]$区间内的连续概率分布族，它由两个参数$\alpha, \beta$所指定。这两个参数作为随机变量的指数出现，并且控制分布的形状。Beta分布的多元推广为狄利克雷分布。
+Beta分布是伯努利分布，二项分布的共轭先验， 如下讨论的分布也称第一类beta分布。
+Beta 分布的定义 概率密度函数 $$ \begin{aligned} f(x ; \alpha, \beta) &amp;amp;=\text { constant } \cdot x^{\alpha-1}(1-x)^{\beta-1} \
+&amp;amp;=\frac{x^{\alpha-1}(1-x)^{\beta-1}}{\int_{0}^{1} u^{\alpha-1}(1-u)^{\beta-1} d u} \
+&amp;amp;=\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha) \Gamma(\beta)} x^{\alpha-1}(1-x)^{\beta-1} \
+&amp;amp;=\frac{1}{\mathrm{~B}(\alpha, \beta)} x^{\alpha-1}(1-x)^{\beta-1} \end{aligned} $$
+其中$\Gamma(z)$ 是Gamma函数。Beta函数为：$\mathrm{B}(x, y)=\int_{0}^{1} t^{x-1}(1-t)^{y-1} d t$
+Beta分布与二项分布 Beta分布是二项分布的共轭先验。但除此之外，我们观察Beta分布的概率密度函数，会发现与二项分布的概率质量函数十分相似： $$ P{X=k}=\left(\begin{array}{c} n \
+k \end{array}\right) p^{k}(1-p)^{n-k} $$
+在二项分布中，概率$p$作为参数，随机变量为$\mathbb{X}$。 但在Beta分布中，概率作为随机变量，而不是参数。
+也就是说，Beta分布是概率的概率分布。其前面的常数项$\frac{1}{\mathbf{B}(\alpha, \beta)}$,其作用便是为了让整个概率密度函数的积分等于1，满足概率密度函数的积分约束。
+关于$\alpha, \beta$ $\alpha, \beta$是用来控制Beta分布形状的参数，其取值往往与某一事件发生而观测到的evidence有关。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codefmeister.github.io/p/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>为什么要有Tensor.contiguous() Tensor.contiguous()作用  Returns a contiguous in memory tensor containing the same data as self tensor. If self tensor is already in the specified memory format, this function returns the self tensor.
  作用在官方文档里，描述的看似清晰但又模棱两可。例如x是一个Tensor，x.contiguous()的作用就是返回一个在内存中连续的Tensor，其data与Tensorx一致。如果源x本来就在内存中连续的话，那就返回其本身。
 为什么要有Tensor.contiguous()?  Reference: StackOverflow&amp;ndash;Why do we need contiguous?
@@ -760,6 +917,44 @@ H = \phi(XW_{xh} + b_h) 其中隐藏层权重参数$W_{xh} \in R^{d \times h}$�
 O = HW_{hq} + b_q 其中输出变量$O \in R^{n \times q}$，输出层权重参数$W_{hq} \in R^{h \times q}$，输出层偏差参数$b_q \in R^{1 \times q}$。如果是分类问题，我们可以使用$softmax(O)$来计算输出类别的概率分布。
 含隐藏状态的循环神经网络 现在我们考虑输入数据存在时间相关性的情况，假设$X_t \in R^{n \times d}$是序列中时间步t的小批量输入，$H_t \in R^{n \times h}$是该时间步的隐藏变量。与多层感知机不同的是，这里我们保存上一时间步的隐藏变量$H_{t-1}$，并引入一个新的权重参数$W_{hh} \in R^{h \times h}$，该参数用于描述在当前时间步如何使用上一时间步的隐藏变量。具体来说，时间步t的隐藏变量的计算由当前时间步的输入和上一时间步的隐藏变量共同决定。
 H_t = \phi(X_tW_{xh} + H_{t-1}W_{hh} + b_h) 与多层感知机相比，我们在这里添加了$H_{t-1}W_{hh}$一项。由上式中相邻时间步的隐藏变量$H_t$,$H_{t-1}$之间的关系可知，这里的隐藏变量能够捕捉截止到当前时间步的序列的历史信息，就像是神经网络当前时间步的状态或者记忆一样。因此，该隐藏变量也称为隐藏状态。由于隐藏状态在当前时间步的定义使用了上一时间步的隐藏状态，上式的计算是循环的。使用循环计算的网络即循环神经网络(recurrent neural network)。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codefmeister.github.io/p/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/</guid>
+      <description>Affinity Layer 仿射变换层 Definition Affinity layer，即Full-connected layer（仿射层或全连通层）是一层人工神经网络，其中所有包含的节点连接到后续层的所有节点。仿射层通常用于卷积神经网络和递归神经网络。受限玻尔兹曼机是仿射层或全连接层的一个例子。
+对于每一个到仿射(全连接)层的连接，节点的输入是前一层输出的线性组合，带有附加的偏置。然后通过激活函数传递输入来计算节点的输出。数学上，这表示为: $$ y=f(W x+b) $$
+$f$代表激活函数，$W,b$为可学习参数，$y$是输出，$x$是输入。
+总结 Affinity Layer，就是 Full-connected Layer，就是仿射层，也是我们熟知的全连接层。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codefmeister.github.io/p/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/</guid>
+      <description>Affinity Matrix  reference: DeepAI(Link: https://deepai.org/)
+ What is an Affinity Matrix? Affinity Matrix， 也叫做 Similarity Matrix。即关联矩阵，或称为相似度矩阵，是一项重要的统计学技术，是一种基本的统计技术，用于组织一组数据点之间的彼此相似性。相似度(similarity)类似于距离(distance)，但它不满足度量性质，两个相同的点的similarity scores为1，而在metric下将为0。
+相似度量的典型例子是余弦相似度(cosine similarity)和Jaccard相似度(Jaccard Similarity)。这些相似性度量可以解释为两个点相关的概率。例如，如果两个数据点的坐标很接近，那么它们的余弦相似度分数(或各自的“相似度”分数)将非常接近于1。
+Cosine Similarity 概念 余弦相似性度量内积空间中两个非零向量之间夹角的余弦。这种相似性度量特别关注方向，而不是大小。简而言之，在相同方向上对齐的两个余弦向量相似性度量为1，而两个垂直对齐的向量相似性度量为0。如果两个向量是截然相反的，这意味着它们的方向是完全相反的(即背对背)，那么相似性度量是-1。
+计算公式： $$ \text { similarity }=\cos (\theta)=\frac{\mathbf{A} \cdot \mathbf{B}}{|\mathbf{A}||\mathbf{B}|}=\frac{\sum_{i=1}^{n} A_{i} B_{i}}{\sqrt{\sum_{i=1}^{n} A_{i}^{2}} \sqrt{\sum_{i=1}^{n} B_{i}^{2}}}, $$
+输出将产生一个从-1到1的值，表示相似性。其中-1是不相似的，0是正交的(垂直的)，1表示完全相似。
+Jaccard Similarity Jaccard指数，也被称为Jaccard相似系数，是用来衡量样本集的相似性和多样性的指标。即图像目标识别领域非常常见的评价指标IoU。
+计算公式 $$ J(A, B)=\frac{|A \cap B|}{|A \cup B|}=\frac{|A \cap B|}{|A|+|B|-|A \cap B|} $$
+可见集合相似度度量使用IoU(Jaccard Similarity)</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codefmeister.github.io/p/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/</guid>
+      <description></description>
     </item>
     
     <item>
@@ -828,7 +1023,9 @@ FAST 角点检测 实时性好，不具有旋转不变性。
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codefmeister.github.io/p/</guid>
-      <description></description>
+      <description>Introduction Image Matching是什么？  As a critical and fundamental problem in these complicated tasks, image matching, also known as image registration or correspondence, aims to identify then correspond the same or similar structure/content fromtwo ormore images.
+ 图像匹配，也被称为图像配准或图像对应，起目的在于识别出两幅或更多图像中的相同或相似结构/内容，然后将它们对应起来。
+Image Matching 派生的具体任务  sparse feature matching 稀疏特征匹配 dense matching（like image registration and stereo matching） 稠密匹配 patch matching（retrieval） 2-D and 3-D point set registration graph matching  Image Matching 通常如何构成 Image matching 通常由两个部分构成，即陪匹配特征的性质与匹配策略，分别表示用什么特征进行匹配，如何进行匹配。</description>
     </item>
     
     <item>
@@ -873,8 +1070,23 @@ p(X|\alpha ) = \int_\theta {p(X|\theta )p(\theta |\alpha )d\theta } 上述定义
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codefmeister.github.io/p/</guid>
+      <description>Sinkhorn算法 Sinkhorn 算法描述了任意一个正矩阵(元素均为正)与双随机矩阵之间的关系。
+简略描述  Relations between arbitrary positive matrices and Doubly stochastic matrices. 如果A是一个正矩阵，那么通过交替的进行行归一化和列归一化，可以将其转换为一个转移矩阵(双随机矩阵)。
+  if A is a positive Matrix, alternately applies row-normalization and column-normalization will convert A to a doubly stochastic matrices.
+ </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codefmeister.github.io/p/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/</guid>
       <description>今日收获 收获  可以使用TopK来代替NearestNeighbor，可以加快计算的速度。  问题 今天的主要问题还是：KNN的反向传播问题。不论是KNN还是TopK，都无法反向传播梯度，为整体训练带来困难。
-找到两个非常有用的网页： 1.</description>
+找到两个非常有用的网页：
+  https://discuss.pytorch.org/t/use-topk-as-a-selection-but-fail-to-autograd/58004
+  https://discuss.pytorch.org/t/k-nearest-neighbor-in-pytorch/59695
+  </description>
     </item>
     
     <item>
@@ -884,6 +1096,16 @@ p(X|\alpha ) = \int_\theta {p(X|\theta )p(\theta |\alpha )d\theta } 上述定义
       
       <guid>https://codefmeister.github.io/p/</guid>
       <description>高斯混合模型 混合模型概述  In statistics, a mixture model is a probabilistic model for representing the presence of subpopulations within an overall population, without requiring that an observed data set should identify the sub-population to which an individual observation belongs. Formally a mixture model corresponds to the mixture distribution that represents the probability distribution of observations in the overall population. However, while problems associated with &amp;ldquo;mixture distributions&amp;rdquo; relate to deriving the properties of the overall population from those of the sub-populations, &amp;ldquo;mixture models&amp;rdquo; are used to make statistical inferences about the properties of the sub-populations given only observations on the pooled population, without sub-population identity information.</description>
+    </item>
+    
+    <item>
+      <title>强化学习纲要(IntroToRL)笔记</title>
+      <link>https://codefmeister.github.io/p/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%BA%B2%E8%A6%81introtorl%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codefmeister.github.io/p/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%BA%B2%E8%A6%81introtorl%E7%AC%94%E8%AE%B0/</guid>
+      <description>What is reinforcement learning a computational approach to learning whereby an agent tries to maximize the total amount of reward it receives while interacting with a complex and uncertain environment.
+Difference between Reinforcement Learning and Supervised Learning  Sequential data as input(not i.i.d) 序列化输入 The learner is not told which actions to take, but instead must discover which actions yield the most reward by trying them. Trial-and-error exploration(balance between exploration and exploitation) There is no supervisor, only a reward signal, which is also delayed.</description>
     </item>
     
   </channel>
