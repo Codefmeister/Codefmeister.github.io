@@ -9,7 +9,9 @@
 
     <style>
         /*抽奖大转盘开始*/
-
+        body{
+            background-color: black;
+        }
         .wheel {
             position: relative;
             /* display: block; */
@@ -63,25 +65,36 @@
 
 
     <div class="wheel">
-        <canvas class="item" id="wheelCanvas" width="844px" height="844px"></canvas>
+        <canvas class="item" id="wheelCanvas" width="1000px" height="1000px"></canvas>
         <img class="pointer" src="./wheel-pointer.png" id="pointer" />
     </div>
 
+    <div>
+        <img src="city.png" style="width: 100%; bottom: 0px;">
+    </div>
     <script src="./luckDraw.js"></script>
     <script>
         var data = [
-            { goods: 19, name: "花生", pics: './huasheng.jpg' },
-            { goods: 39, name: "瓜子", pics: './huasheng.jpg' },
-            { goods: 30, name: "啤酒", pics: './huasheng.jpg' },
-            { goods: 40, name: "饮料", pics: './huasheng.jpg' },
-            { goods: 16, name: "矿泉水", pics: './huasheng.jpg' },
-            { goods: 19, name: "花生", pics: './huasheng.jpg' }]
+            { goods: 1, name: "易烊千玺抱枕", pics: './No1.jpg' },
+            { goods: 2, name: "呆呆手写签名", pics: './No3.png' },
+            { goods: 3, name: "名牌口红", pics: './No4.png' },
+            { goods: 4, name: "雅诗兰黛粉底液", pics: './No5.png' },
+            { goods: 5, name: "SKII 神仙水套装", pics: './No6.png' },
+            { goods: 6, name: "88元现金大奖", pics: './No7.png' },
+            { goods: 7, name: "原创情诗一首", pics: './No8.png' },
+            { goods: 8, name: "任选JK套装", pics: './No9.jpg' },
+            { goods: 9, name: "AirPods Pro", pics: './No10.jpg' },
+            { goods: 10, name: "扫拖地机器人", pics: './No2.png' },
+            ]
 
         var luck = new luckdraw(document.getElementById("wheelCanvas"), data);
 
         document.getElementById('pointer').onclick = function () {
             console.log(luck)
-            luck.start(39, function (err, res) {
+            var lucknum = Math.round(Math.random()*10);
+            console.log("LuckNum");
+            console.log(lucknum)
+            luck.start(lucknum, function (err, res) {
                 if (err) {
                     return alert(err)
                 }
@@ -91,14 +104,18 @@
 
         document.getElementById('reset').onclick = function () {
             console.log(luck)
-            luck.setData([{ goods: 19, name: "花生", pics: './huasheng.jpg' },
-            { goods: 39, name: "瓜子", pics: './huasheng.jpg' },
-            { goods: 30, name: "啤酒", pics: './huasheng.jpg' },
-            { goods: 40, name: "饮料", pics: './huasheng.jpg' },
-            { goods: 19, name: "花生", pics: './huasheng.jpg' },
-            { goods: 39, name: "瓜子", pics: './huasheng.jpg' },
-            { goods: 30, name: "啤酒", pics: './huasheng.jpg' },
-            { goods: 40, name: "饮料", pics: './huasheng.jpg' },], function (err) {
+            luck.setData([
+            { goods: 1, name: "易烊千玺抱枕", pics: './No1.jpg' },
+            { goods: 2, name: "呆呆手写签名", pics: './No3.png' },
+            { goods: 3, name: "名牌口红", pics: './huasheng.jpg' },
+            { goods: 4, name: "雅诗兰黛粉底液", pics: './huasheng.jpg' },
+            { goods: 5, name: "SKII 神仙水套装", pics: './huasheng.jpg' },
+            { goods: 6, name: "88元现金大奖", pics: './huasheng.jpg' },
+            { goods: 7, name: "原创情诗一首", pics: './huasheng.jpg' },
+            { goods: 8, name: "任选JK套装", pics: './huasheng.jpg' },
+            { goods: 9, name: "AirPods Pro", pics: './huasheng.jpg' },
+            { goods: 10, name: "扫拖地机器人", pics: './No2.png' },
+            ], function (err) {
                 console.log(err)
                 alert(err)
             })

@@ -11,8 +11,8 @@ function luckdraw(canvas, data) {
 		"#FE339F"
 	]; //转盘奖品区块对应背景颜色
 
-	this.outsideRadius = 340; //转盘外圆的半径
-	this.textRadius = 320; //转盘奖品位置距离圆心的距离
+	this.outsideRadius = 380; //转盘外圆的半径
+	this.textRadius = 370; //转盘奖品位置距离圆心的距离
 	this.insideRadius = 10; //转盘内圆的半径
 	this.startAngle = 0; //开始角度
 	this.bRotate = false;//false:停止;ture:旋转
@@ -126,6 +126,9 @@ function luckdraw(canvas, data) {
 		this.bRotate = true;//设置转动中
 
 		for (var i = 0; i < this.data.length; i++) {
+			console.log("looping")
+			console.log(id)
+			console.log(this.data[i])
 			var element = this.data[i];
 			if (element.goods == id) {
 				index = i;
