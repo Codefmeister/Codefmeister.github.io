@@ -1,0 +1,75 @@
+.cjd-top-left span, .cjd-bot span {
+        line-height: 2;
+    }
+    .cjd-bot-txt div strong {
+        margin-top: 7px;
+    }
+    /*.cjd-bot-txt .cjd-score {
+        margin-top: 7px;
+    }*/
+    hr {
+        width: 450px;
+        line-height: 0;
+        padding: 0;
+        border: none!important;
+        //border-bottom: 1px solid #eee!important;
+        border-bottom: 1px solid #ccc!important;
+        clear: both;
+        background: 0 0;
+    }
+    .query-remarks {
+        width: 600px;
+        margin: 30px auto;
+    }
+    .cjd-remark {
+        width: 415px;
+        margin: 10px auto;
+    }
+    .layui-elem-quote {
+        margin-bottom: 10px;
+        padding: 15px;
+        line-height: 1.6;
+        border-left: 5px solid #5FB878;
+        border-radius: 0 2px 2px 0;
+        background-color: #FAFAFA;
+    }
+    .layui-quote-nm {
+        border-color: #eee;
+    }
+    .layui-elem-lightBlue {
+        border-left: 5px solid #D0E0EE;
+    }
+    .layui-elem-lightBlue p {
+        line-height: 1.8;
+    }
+    .layui-elem-lightBlue a {
+        color: #01adef;
+    }
+    .layui-elem-lightBlue a {
+        color: #01adef;
+    }
+    .layui-elem-lightBlue a:hover {
+        text-decoration: underline;
+        color: #01adef;
+    }
+    .condition-right {
+        width: 317px;
+        margin-left: 20px;
+    }
+    .problem li {
+        padding-left: 15px;
+        cursor: default;
+    }
+    .problem li .problem_tit i{
+        font-style: normal;
+    }
+    .problem .problem_answer {
+        padding: 10px 15px;
+        background-color: #FAFAFA;
+    }
+
+.cx_dh {
+    position: absolute;
+    left: 578px;
+    top: 128px;
+}

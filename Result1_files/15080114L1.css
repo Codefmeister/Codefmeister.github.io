@@ -1,0 +1,47 @@
+body {margin:0; padding:0;font-size:14px;font-family:'Microsoft yahei', Arial, "Times New Roman", Times, serif;text-align:left;background:#fff;color:#404040}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,input,p{padding:0; margin:0;}
+ul,li{list-style:None;}
+table,td,tr,th{}
+img{border:0;margin:0px;}
+h1,h2,h3,h4,h5,h6 {font-weight:normal;}
+a{text-decoration:none;color:#000;}
+a:hover{text-decoration:underline;color:#ff8000}
+a br{display:none;}
+input{outline:none}
+.clear{clear:both}
+.left{float:left;}
+.right{float:right}
+/*页眉*/
+#Header{;position: relative;}
+.header-top{height:120px;margin:0 auto;position:relative;}
+.headerBgImg{position: absolute;left: 50%;top: 0px;margin-left: -245px;}
+.txt{position:absolute;left:383px;top:58px;}
+.header-top-right{float:right;width:500px;position:relative;color:#313F61;line-height:18px;padding-top:10px;font-size:12px;}
+.header-top-right em{font-style:normal}
+.log-btn{display:block;position:absolute;background:url(/res/Home/structure/indexsprite.png) no-repeat left top;padding-left:22px;right:182px;z-index:9}
+.welcome{position: absolute;right: 105px;}
+.reg-btn{display:block;position:absolute;right:104px;background:url(/res/Home/structure/indexsprite.png) no-repeat -80px top;padding-left:25px;}
+.header-top-right span{position:absolute;right:0;}
+.header-top-right a{color:#313F61;}
+.navAll {position: absolute;left: 50%;top: 60px;margin-left: 168px;overflow:hidden;zoom:1}
+.navAllIn #menu{float:left;margin-top:5px;width:420px;}
+.navAllIn #menu li{float:left;font-size:14px;}
+.navAllIn #menu li a{color:#0C4471;display:block;padding:0 55px;height:17px;line-height:17px;border-left:#99B7CE solid 1px;font-weight:bold;}
+.navAllIn #menu li a:hover{ text-decoration:none;}
+.navAllIn #menu li.active a{font-weight:600;color:#FE8500}
+#fullPage-nav li .active span, .fullPage-slidesNav .active span{background:#DE5082}
+#fullPage-nav span, .fullPage-slidesNav span{border:1px solid #DDDDDD;background:#eee;}
+.searchBox input{color:#AAAAAA}
+.ov{overflow:hidden;zoom:1;clear:both}
+.wenjian span{display:block;}
+#container_certi{padding:0 0 0;font-size: 12px;}
+.outlogin {text-align:right;margin:-24px 10px 0 0;position:absolute;width:50%;font-weight:bold;right:0}
+.queryTitle{padding-top:0px !important;}
+.right_sider dd em{font-style:normal;}
+/* 事业单位图标 */
+.addicon{position: absolute;top: 17px;left: -14px;width:80px;height:80px;background:url(/res/Home/structure/170814213.png) center no-repeat;}
+.folderdiv #CurrentlyText:after{
+content:"";
+display:block;
+clear:both;
+overflow:hidden}

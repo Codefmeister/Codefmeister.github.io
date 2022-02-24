@@ -1,0 +1,279 @@
+serv.dcverifyInputEvent = function () {
+        if ($("#verifysDiv").css("display") == "none") {
+            serv.dcverifys();
+        }
+    };
+
+    /**
+     * 获取验证码
+     * @param t 图片元素
+     */
+    serv.dcverifys = function () {
+        var checkTimeErr = serv.checkTime(dq.qt);
+        if (checkTimeErr) {
+            layer.msg(checkTimeErr);
+            return;
+        }
+        var xm = $("#xm").val();
+        var no = $("#no").val();
+        if (!xm || !no) {
+            //layer.msg("请先输入正确的姓名和证件号码/准考证号，<br>再点击获取验证码！", {icon: 5,time: 3*1000,shift: 6});
+            layer.msg("请先输入正确的姓名和证件号码/准考证号，<br>再点击获取验证码！");
+            return;
+        }
+        var $verifysImg = $("#img_verifys");
+
+        $("#verifysLoading").show();
+        $verifysImg.hide().attr("src", serv.requestDcUrl + "/api/verify/get?c=CET-D&ik=" + no + "&t=" + Math.random()).fadeIn();
+        $verifysImg.load(function(){
+            $("#verifysLoading").hide();
+            $("#verifysDiv").show();
+        });
+        $verifysImg.error(function () {
+            layer.msg("网络超时，验证码获取失败，请稍后再试！");
+            $("#verifysLoading").hide();
+            $("#verifysDiv").hide();
+        });
+
+    };
+
+    serv.checkTime = function(startTime){
+        if (startTime) {
+            var startDate = new Date(startTime);
+            var t = startDate.getTime();
+            var d=new Date().getTime();
+            if(d>=t){
+                return "";
+            }
+            return "未到查询时间，请于"+serv.showtime(startDate)+"再来查询！";
+        }
+        return "";
+    };
+
+    serv.showtime=function(d) {
+        var hours = d.getHours();
+        var minutes = d.getMinutes();
+        var timeValue = d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日"+((hours >= 12)?"下午":"上午");
+        timeValue += ((hours >12) ? hours -12 :hours);
+        timeValue += ((minutes < 10) ? ":0" : ":") + minutes;
+        return timeValue;
+    };
+
+    /**
+     * 校验验证码
+     * @returns boolean{校验通过？}
+     */
+    serv.checkVerify = function () {
+        if (serv.showVerify) {
+            var verify = $("#verify").val();
+            $("#verify_err").html("");
+            if(!verify || verify.length!=4){
+                $("#verify_err").html("请输入四位有效验证码！");
+                return false;
+            }
+        }
+        return true;
+    };
+
+    serv.kmJo = {"1":"全国大学英语四级考试(CET4)",
+        "2":"全国大学英语六级考试(CET6)",
+        "3":"全国大学日语四级考试(CJT4)",
+        "4":"全国大学日语六级考试(CJT6)",
+        "5":"全国大学德语四级考试(PHS4)",
+        "6":"全国大学德语六级考试(PHS6)",
+        "7":"全国大学俄语四级考试(CRT4)",
+        "8":"全国大学俄语六级考试(CRT6)",
+        "9":"全国大学法语四级考试(TFU4)"};
+
+    serv.cjdJo = {"-1":"您在报名期间未选择是否需要纸质成绩报告单（证书），2月24日9时-2月28日17时可再次登录<a href=\"http://cet-bm.neea.edu.cn/\" target=\"_blank\">报名网站</a>进行修改。",
+        "0":"您在报名期间已选择需要纸质成绩报告单（证书），2月24日9时-2月28日17时可再次登录<a href=\"http://cet-bm.neea.edu.cn/\" target=\"_blank\">报名网站</a>进行修改。",
+        "1":"您在报名期间已选择不需要纸质成绩报告单（证书），2月24日9时-2月28日17时可再次登录<a href=\"http://cet-bm.neea.edu.cn/\" target=\"_blank\">报名网站</a>进行修改。"};
+
+    serv.remarksJo = {
+        "firstHalfRemarks" : ["若考生的口试成绩为D等，则成绩报告单上不报道其口试成绩。", "以上查询包含日语四级、六级，德语四级、六级，俄语四级、六级和法语四级考试成绩。"],
+        "secondHalfRemarks" : ["若考生的口试成绩为D等，则成绩报告单上不报道其口试成绩。"]
+    };
+    /**
+     * cet最新查询
+     */
+    serv.dcInit = function (params) {
+        if (!window.dq) {
+            layer.msg("对不起，数据错误！");
+            return false;
+        }
+        window.dq = window.dq || {};
+
+        $("#xm,#no").click(function() {
+            var checkTimeErr = serv.checkTime(dq.qt);
+            if (checkTimeErr) {
+                layer.msg(checkTimeErr);
+                return;
+            }
+        });
+        serv.showVerify = params.showVerify || false;
+        serv.queryType = params.queryType || "query";
+        serv.requestDcUrl = params.requestDcUrl || "//cache.neea.edu.cn";
+        serv.requestDcTjUrl = params.requestDcTjUrl || "//tj.neea.edu.cn";
+        if (serv.showVerify) {
+            $("#query_rand").show();
+            $("#no").change(function() {
+                serv.dcverifys();
+            });
+        } else {
+            $("#query_rand").hide();
+        }
+        if (dq.sn) {
+            $("#parm_sn").html(dq.sn);
+            if(dq.subn)
+                $("#parm_subn").html(dq.subn);
+            var remarks;
+            if (dq.sn.indexOf("上半年") > -1) {
+                //$("#firstHalfRemarks").show();
+                remarks = serv.remarksJo["firstHalfRemarks"];
+            } else {
+                //$("#secondHalfRemarks").show();
+                remarks = serv.remarksJo["secondHalfRemarks"];
+            }
+            $.each(remarks, function (index,remark) {
+                $("#remarks").append("<p>"+(index+1)+". "+remark+"</p>");
+            });
+        }
+    };
+
+    /**
+     * 查看cet最新成绩详情
+     */
+    serv.queryLastestCetResult = function () {
+        if (!serv.checkCondion($("#xm")) || !serv.checkCondion($("#no")) || !serv.checkVerify()) {
+            return false;
+        }
+        if (!dq.tab) {
+            layer.msg("对不起，数据错误！");
+            return false;
+        }
+        var url = serv.requestDcUrl + '/api/latest/results/cet';
+        //获取参数
+        var e = dq.tab;
+        var km = $("#km").val();
+        var xm = $("#xm").val();
+        var no = $("#no").val();
+        var v = $("#verify").val();
+        var params = {"e": e, "km": km,"xm": xm, "no": no, "v": v};
+        var loadIndex = layer.load(0, {shade: 0.1});
+
+        _hmt.push(['_setAccount', 'dc1d69ab90346d48ee02f18510292577']);
+        _hmt.push(['_trackEvent', serv.queryType, 'click', 'CET-D-q', 1]);
+
+        serv.nec("q", e);
+
+        $ajax("get", url, params, true, function (result) {
+            layer.close(loadIndex);
+            if (serv.showVerify) {
+                $("#verify").val("");
+                serv.dcverifys();
+            }
+            if(!result){
+                layer.msg("获取数据错误！");
+                return;
+            }
+            if (result.code && result.code != 200) {
+                layer.msg(result.msg);
+                return;
+            }
+            var dataBean = result;
+            if ($.isEmptyObject(dataBean)) {
+                layer.msg("获取数据为空错误！");
+                return;
+            }
+            var km = dataBean.km;
+            var cjdObjName = km == 1 || km ==2 ? "cjd-b" : "cjd-s";//dataBean.CJD_TEMPL;
+            var cjdObj = $("#" + cjdObjName);
+            if (cjdObj) {
+                var sn = serv.kmJo[km];
+                $("#schrep-sn").html(sn);
+                $.each(dataBean, function (key, val) {
+                    var obj = $("[code=" + key + "]", cjdRmarkObj);
+                    if (obj.length) {
+                        obj.html(val);
+                    }
+                });
+                //字段[KY_SCO]“口语等级”（英语四六级）特殊处理
+                var kySco = $("[code=ky_sco]", cjdObj);
+                if (kySco.length) {
+                    if(dataBean["ky_sco"] != '--'){
+                        kySco.html("<strong>"+dataBean["ky_sco"]+"</strong>");
+                    } else {
+                        kySco.html("--");
+                    }
+                }
+                //是否显示[成绩报告单编号和听力免考提示]div
+                var showCjdOtherDivFlag = false;
+                //字段[tlmk]“听力免考提示”特殊处理
+                var beizhuObj = $("[code=BEIZHU]", cjdObj);
+                if (beizhuObj.length) {
+                    if (dataBean["tlmk"] && dataBean["tlmk"] == 1) {
+                        beizhuObj.show();
+                        showCjdOtherDivFlag = true;
+                    } else {
+                        beizhuObj.hide();
+                    }
+                }
+                //字段[id]“证书编号”或“成绩报告单编号”特殊处理
+                var idObj = $("[code=id]", cjdObj);
+                if (idObj.length) {
+                    if (dataBean["id"]) {
+                        idObj.parent().show();
+                        showCjdOtherDivFlag = true;
+                    } else {
+                        idObj.parent().hide();
+                    }
+                }
+                if (showCjdOtherDivFlag) {
+                    $(".cjd-other", cjdObj).show();
+                }
+                //字段[cjd]“是否需要纸质成绩报告单（证书）说明”特殊处理
+                var cjdRmarkObj = $("[code=CJD]", cjdObj);
+                if (cjdRmarkObj.length && dataBean.hasOwnProperty("cjd")) {
+                    var cjd = serv.cjdJo[dataBean.cjd];
+                    if (cjd) {
+                        $("[code=CJD]", cjdObj).html(cjd);
+                        $("[code=CJD]", cjdObj).show();
+                    }
+                }
+
+                $(".schrep").show();
+                cjdObj.show();
+                $(".condition").hide();
+                //查询成功统计
+                _hmt.push(['_trackEvent', serv.queryType+'Success', 'result', 'CET-D-qs', 1]);
+
+                serv.nec("qs", e);
+                serv.nec("qsg", e, dataBean.zkzh, dataBean.xx, dataBean.score);
+            }
+            //layer.alert("<textarea cols=40 rows=8>"+JSON.stringify(result,null,2)+"</textarea>");
+        });
+        return false;
+    };
+
+    serv.nec = function (ca, e, daz, dax, das) {
+        var tjUrl = serv.requestDcTjUrl;
+        var p = [];
+        p.push("ca=" + ca);
+        p.push("e=" + e);
+        if (daz) {
+            p.push("daz=" + daz);
+            p.push("dax=" + encodeURIComponent(dax));
+            p.push("das=" + das);
+        }
+        var h = tjUrl + "/tj.gif?" + p.join("&") + "&t=" + (+new Date);
+        serv.necLoad(h);
+    };
+
+    serv.necLoad = function (h) {
+        var img = new Image;
+        img.onload = img.onerror = img.onabort = function () {
+            img.onload = img.onerror = img.onabort = null;
+            img = null;
+        };
+        img.src = h;
+    };

@@ -1,0 +1,15 @@
+#Header,#Content{width:1200px;margin:0 auto;text-align:left;overflow:hidden;clear:both}
+
+#Content3{float:right;width:950px;}
+.conlist ul{padding-bottom:35px;border-bottom:solid 1px #eee;margin-bottom:35px}
+.conlist li{background:url(/res/Home/structure/listicon.jpg) no-repeat left 11px;padding:0 0 5px 15px;height:25px;overflow:hidden;clear:both;line-height:25px;font-size:14px;}
+.conlist li a{}
+.conlist li #ReportIDname{float:left;}
+.conlist li #ReportIDIssueTime{float:right;color:#aaa;font-size:12px}
+.conlist ul.page{border:none;}
+.conlist ul.page li{background:none;text-align:right}
+.conlist ul.page span{background:#FF8000;color:#fff;display:inline-block;padding:0 8px}
+.conlist ul.page a{display:inline-block;padding:0 5px}
+.conlist ul.page span#go{background:none;display:none}
+
+#Footer{background:#ddd;margin-top:0}
